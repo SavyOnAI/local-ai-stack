@@ -69,6 +69,6 @@ if __name__ == "__main__":
     chunks = chunk_documents(docs)
 
     print(f"\nTotal chunks: {len(chunks)}")
-    print(f"\nFirst chunk preview:")
+    print("\nFirst chunk preview:")
     print(f"  ID: {chunks[0]['chunk_id']}")
     print(f"  Text: {chunks[0]['text'][:200]}...")
