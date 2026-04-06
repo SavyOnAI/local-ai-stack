@@ -51,7 +51,6 @@ def ask_ollama(prompt: str) -> str:
 
 # Only runs when executing this file directly — not when imported
 if __name__ == "__main__":
-    test_response = ask_ollama("In one sentence, what is the capital of Australia?")
-    # Used below for testing raw response from Ollama
-    # print(f"Raw response: {repr(test_response)}")
+    test_response = ask_ollama("What does Sun Tzu say about the importance of victory in war?")
     print(f"Model says: {test_response}")
+

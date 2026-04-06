@@ -7,9 +7,16 @@ load_dotenv()
 TOP_K = int(os.getenv("TOP_K", "5"))
 
 
+# common words that add noise to scoring — filter these out
+STOP_WORDS = {
+    "what", "does", "the", "is", "a", "an", "and", "or", "to",
+    "in", "of", "it", "that", "this", "for", "on", "are", "was",
+    "say", "says", "about", "how", "why", "who", "do", "did"
+}
+
 def score_chunk(chunk_text: str, query: str) -> float:
     """
-    Score a chunk by how many query words appear in it.
+    Score a chunk by how many meaningful query words appear in it.
 
     Args:
         chunk_text: The chunk's text content.
@@ -17,16 +24,21 @@ def score_chunk(chunk_text: str, query: str) -> float:
     Returns:
         Float score — higher means more relevant.
     """
-    chunk_lower = chunk_text.lower()         # normalise case
-    query_words = query.lower().split()      # split question into words
+    chunk_lower = chunk_text.lower()
+    query_words = query.lower().split()
 
-    # count matching words — simple term frequency
-    score = sum(1 for word in query_words if word in chunk_lower)
+    # filter out stop words — only score on meaningful words
+    meaningful_words = [w for w in query_words if w not in STOP_WORDS]
+
+    # fall back to all words if everything got filtered out
+    words_to_score = meaningful_words if meaningful_words else query_words
+
+    score = sum(1 for word in words_to_score if word in chunk_lower)
     return float(score)
 
 
 def retrieve(query: str, chunks: list[dict],
-             top_k: int = TOP_K) -> list[dict]:
+            top_k: int = TOP_K) -> list[dict]:
     """
     Return the top_k most relevant chunks for a query.
 

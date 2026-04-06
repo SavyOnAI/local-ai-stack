@@ -3,9 +3,10 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Controls how Gemma behaves — stay in context, admit gaps, be concise
-SYSTEM_PROMPT = """You are a helpful assistant that answers questions using only the context provided below.
-If the answer is not found in the context, say "I don't have enough information to answer that."
-Always be concise and factual. Reference the source filename when possible."""
+SYSTEM_PROMPT = """You are a helpful assistant answering questions about documents provided below.
+Use the context to form your answer. If the context is relevant but incomplete, summarise what you can see.
+Only say "I don't have enough information" if the context contains absolutely nothing related to the question.
+Always be concise and reference the source filename when possible."""
 
 
 def format_context(chunks: list[dict]) -> str:
