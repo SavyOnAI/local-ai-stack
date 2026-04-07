@@ -1,0 +1,10 @@
+name: Eval Gate (placeholder)
+
+on: [push]
+
+jobs:
+  placeholder:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Not yet implemented
+        run: echo "Eval gate not yet configured"
