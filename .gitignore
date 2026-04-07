@@ -1,5 +1,5 @@
 .env
-venv/
+local-ai-stack-venv/
 __pycache__/
 *.pyc
 .DS_Store
