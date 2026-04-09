@@ -67,9 +67,10 @@ def query_collection(collection, query_vector: list[float], n_results: int = 5) 
 
 
 if __name__ == "__main__":
-    import sys, os
-    sys.path.append(os.path.join(os.path.dirname(__file__), "..", "ingestion"))  # add ingestion folder to path
-    from embedder import embed_text  # now Python can find it
+    import os
+    import sys
+    sys.path.append(os.path.join(os.path.dirname(__file__), "..", "ingestion"))
+    from embedder import embed_text
 
     # set up collection
     collection = get_collection()
