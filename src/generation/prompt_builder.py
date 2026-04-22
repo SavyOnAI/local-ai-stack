@@ -1,75 +1,55 @@
-from dotenv import load_dotenv
+"""
+prompt_builder.py — Assembles the LLM prompt from retrieved chunks.
 
-load_dotenv()
+Formats context chunks with their IDs so the model can cite them,
+then builds the full prompt: system instructions + context + question.
+"""
 
-# Controls how Gemma behaves — stay in context, admit gaps, be concise
-SYSTEM_PROMPT = """You are a helpful assistant answering questions about documents provided below.
-Use the context to form your answer. If the context is relevant but incomplete, summarise what you can see.
-Only say "I don't have enough information" if the context contains absolutely nothing related to the question.
-Always be concise and reference the source filename when possible."""
+SYSTEM_PROMPT = """You are a precise document assistant. Answer the user's question using ONLY the context provided below.
+
+Rules:
+- Every factual claim MUST cite its source using the chunk ID in square brackets, e.g. [chunk_id_here].
+- If the context does not contain the answer, say: "I could not find this in the provided documents."
+- Do not use your training knowledge. Only use the context.
+- Be concise and direct."""
 
 
 def format_context(chunks: list[dict]) -> str:
     """
-    Format retrieved chunks into a readable context block.
+    Format retrieved chunks into a labelled context block.
 
     Args:
-        chunks: List of chunk dicts from retrieve().
+        chunks: List of chunk dicts, each with 'chunk_id' and 'text' keys.
     Returns:
-        Single formatted string with all chunks labelled by source.
+        A single string with each chunk labelled by its ID.
     """
-    context_parts = []
-
-    for i, chunk in enumerate(chunks):
-        # label each chunk with index and source filename
-        context_parts.append(
-            f"[{i+1}] Source: {chunk['filename']}\n{chunk['text']}"
-        )
-
-    # separator makes chunk boundaries visible to the model
-    return "\n\n---\n\n".join(context_parts)
+    lines = []
+    for chunk in chunks:
+        chunk_id = chunk["id"]
+        text = chunk["text"].strip()
+        lines.append(f"[{chunk_id}]\n{text}")
+    return "\n\n".join(lines)
 
 
 def build_prompt(query: str, chunks: list[dict]) -> str:
     """
-    Assemble the full prompt: system instruction + context + question.
+    Assemble the full prompt sent to the LLM.
 
     Args:
         query: The user's question.
-        chunks: Retrieved chunks from retrieve().
+        chunks: Retrieved chunks from the retrieval pipeline.
     Returns:
-        Complete prompt string ready to send to the LLM.
+        A formatted prompt string: system prompt + context + question.
     """
-    context = format_context(chunks)  # chunks → labelled context block
-
-    # three sections in order — system, context, question
-    prompt = f"""{SYSTEM_PROMPT}
-
-CONTEXT:
-{context}
-
-QUESTION:
-{query}
-
-ANSWER:"""
-
-    return prompt
+    context = format_context(chunks)
+    return f"{SYSTEM_PROMPT}\n\n---\nCONTEXT:\n{context}\n\n---\nQUESTION: {query}\n\nANSWER:"
 
 
-# Only runs when executing this file directly
 if __name__ == "__main__":
-    from loader import load_documents
-    from chunker import chunk_documents
-    from retriever import retrieve
-
-    docs = load_documents()
-    chunks = chunk_documents(docs)
-
-    query = "What is the best strategy in war?"
-    top_chunks = retrieve(query, chunks)
-    prompt = build_prompt(query, top_chunks)
-
-    print(f"Prompt length: {len(prompt)} characters")
-    print("\n--- PROMPT PREVIEW ---\n")
-    print(prompt[:800])
-    print("\n[... truncated ...]")
+    # smoke test — fake chunks to verify formatting
+    test_chunks = [
+        {"chunk_id": "notes_md__chunk_001", "text": "RAG stands for Retrieval-Augmented Generation."},
+        {"chunk_id": "notes_md__chunk_002", "text": "ChromaDB is a local vector database."},
+    ]
+    prompt = build_prompt("What is RAG?", test_chunks)
+    print(prompt)

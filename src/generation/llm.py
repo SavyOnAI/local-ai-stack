@@ -1,56 +1,59 @@
-# HTTP requests library — how Python talks to APIs
-import requests
-# Built-in — reads environment variables
+"""
+llm.py — Sends a prompt to Gemma 4 26B via Ollama and returns the response.
+
+Returns response text plus token counts for observability.
+"""
+
 import os
-# Reads .env file into environment
+
+import requests
 from dotenv import load_dotenv
 
-
-# Load .env values — must run before os.getenv()
 load_dotenv()
 
-# Model name from .env, with fallback
+OLLAMA_URL = os.getenv("OLLAMA_URL", "http://localhost:11434/api/generate")
 MODEL_NAME = os.getenv("MODEL_NAME", "gemma4:26b")
-# Ollama's local chat endpoint — same on every Mac
-OLLAMA_URL = "http://localhost:11434/api/chat"
 
 
-def ask_ollama(prompt: str) -> str:
+def ask_ollama(prompt: str) -> dict:
     """
-    Send a prompt to Ollama, return the model's text response.
+    Send a prompt to the local Ollama model and return the response.
 
     Args:
-        prompt: Full prompt string (system + context + question).
+        prompt: The fully assembled prompt string from prompt_builder.py.
     Returns:
-        Model response as a string, or an error message.
+        Dict with 'response' (str), 'prompt_tokens' (int), 'response_tokens' (int).
     """
-    # JSON body Ollama expects — model name + message list + no streaming
     payload = {
         "model": MODEL_NAME,
-        "messages": [
-            {"role": "user", "content": prompt}  # role: user | assistant
-        ],
-        "stream": False  # True = stream tokens live (Phase 6)
+        "prompt": prompt,
+        "stream": False,
     }
 
     try:
-        # POST to Ollama — json= auto-converts dict, timeout prevents hanging
         response = requests.post(OLLAMA_URL, json=payload, timeout=120)
-        # Raises exception on HTTP errors (404, 500 etc.)
         response.raise_for_status()
-        # Dig into response JSON: {"message": {"content": "..."}}
-        return response.json()["message"]["content"]
-
     except requests.exceptions.ConnectionError:
-        return "Error: Could not connect to Ollama. Is it running?"
+        raise RuntimeError("Could not connect to Ollama. Is it running? Try: ollama serve")
     except requests.exceptions.Timeout:
-        return "Error: Ollama took too long. Try a shorter prompt."
-    except Exception as e:
-        return f"Error: {e}"
+        raise RuntimeError("Ollama timed out. The model may still be loading — try again.")
+
+    data = response.json()
+
+    return {
+        "response": data["response"].strip(),
+        "prompt_tokens": data.get("prompt_eval_count", 0),
+        "response_tokens": data.get("eval_count", 0),
+    }
 
 
-# Only runs when executing this file directly — not when imported
 if __name__ == "__main__":
-    test_response = ask_ollama("What does Sun Tzu say about the importance of victory in war?")
-    print(f"Model says: {test_response}")
+    # smoke test — single hardcoded question, no retrieval
+    print(f"Model: {MODEL_NAME}")
+    print("Sending test prompt...\n")
 
+    result = ask_ollama("In one sentence, what is the capital of France?")
+
+    print(f"Response:         {result['response']}")
+    print(f"Prompt tokens:    {result['prompt_tokens']}")
+    print(f"Response tokens:  {result['response_tokens']}")
