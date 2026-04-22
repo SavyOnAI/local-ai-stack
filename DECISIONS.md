@@ -322,7 +322,8 @@ The following decisions are noted but not yet made. They will be logged here whe
 | Whether to upgrade ChromaDB to Qdrant | 4 | Revisit when corpus exceeds 10,000 chunks |
 | OpenTelemetry backend (Jaeger vs Grafana Tempo) | 4 | Decide when observability phase begins |
 | Speed-tier benchmark model for Phase 3 | 3 | Gemma 3 4B likely — pull with `ollama pull gemma3` when Phase 3 begins |
-
+| OCR for scanned/image-only PDFs | 2+ | Deferred to Phase 3+. pypdf skips image-only pages and returns empty string. loader.py warns and skips these files. Manual conversion via macOS Preview or Acrobat as interim workaround. Tesseract OCR is the likely solution when addressed. |
+| Slide images and shapes in PPTX files | 2+ | Images and flowchart relationships are not extractable with python-pptx alone. Text inside shapes is extracted but arrow relationships and flow direction are lost. Images skipped silently. Pytesseract OCR on exported slide images is the likely solution for image text. Flowchart relationships may never be worth addressing for a RAG use case. |
 ---
 
 ## What I'd Do Differently (Running Notes)

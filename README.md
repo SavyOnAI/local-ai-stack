@@ -183,4 +183,63 @@ Every significant decision — tool selection, model choice, retrieval strategy 
 
 ---
 
+## Function Reference
+
+A quick index of every function in the codebase. Updated as new files are added.
+
+### src/ingestion/
+| File | Function | Purpose |
+|---|---|---|
+| `loader.py` | `find_documents(docs_dir)` | Walk directory, return list of supported file paths |
+| `loader.py` | `load_document(file_path)` | Route a single file to its extractor, return text |
+| `loader.py` | `load_all_documents(docs_dir)` | Find and extract all documents, return dict of path → text |
+| `chunker.py` | `chunk_text(text, chunk_size, overlap)` | Split text into overlapping chunks, return list of strings |
+| `chunker.py` | `chunk_document(file_path, text, chunk_size, overlap)` | Chunk text and attach source metadata, return list of dicts |
+| `embedder.py` | `embed_text(text, mode)` | Generate embedding vector via nomic-embed-text. mode: "document" or "query" |
+| `index_documents.py` | `index_documents(docs_dir, chunk_size, overlap)` | Run full ingestion pipeline: extract → chunk → embed → store |
+
+### src/ingestion/extractors/
+| File | Function | Purpose |
+|---|---|---|
+| `text_extractor.py` | `extract(file_path)` | Extract text from .txt and .md files |
+| `pdf_extractor.py` | `extract(file_path)` | Extract text from .pdf files page by page |
+| `docx_extractor.py` | `extract(file_path)` | Extract paragraphs and table cells from .docx files |
+| `pptx_extractor.py` | `extract(file_path)` | Extract title, body, and notes per slide from .pptx files |
+| `csv_extractor.py` | `extract(file_path)` | Convert CSV rows to natural language sentences using header labels |
+| `xlsx_extractor.py` | `extract(file_path)` | Convert Excel rows to sentences across all sheets using header labels |
+| `html_extractor.py` | `extract(file_path)` | Strip HTML tags and return clean readable text |
+
+### src/retrieval/
+| File | Function | Purpose |
+|---|---|---|
+| `vector_store.py` | `get_collection(persist_dir, collection_name)` | Connect to or create a ChromaDB collection |
+| `vector_store.py` | `add_chunks(collection, chunks)` | Store chunks with embeddings in ChromaDB |
+| `vector_store.py` | `query_collection(collection, query_vector, n_results)` | Search ChromaDB by vector similarity |
+| `bm25_index.py` | `build_bm25_index(chunks)` | Build BM25 keyword index from list of chunk dicts |
+| `bm25_index.py` | `save_bm25_index(index, chunks, path)` | Persist BM25 index and chunks to disk |
+| `bm25_index.py` | `load_bm25_index(path)` | Load BM25 index and chunks from disk |
+| `bm25_index.py` | `query_bm25(...)` | Search BM25 index by keyword |
+| `hybrid_retriever.py` | `reciprocal_rank_fusion(...)` | Merge BM25 and vector ranked lists using RRF scoring |
+| `hybrid_retriever.py` | `hybrid_retrieve(...)` | Run full hybrid retrieval: BM25 + vector + RRF fusion |
+| `reranker.py` | `get_reranker()` | Load the cross-encoder model |
+| `reranker.py` | `rerank(...)` | Score and reorder candidate chunks against the query |
+| `retriever.py` | `score_chunk(chunk_text, query)` | Score a single chunk against a query |
+| `retriever.py` | `retrieve(query, chunks, ...)` | Select top-k chunks for a query |
+
+### src/generation/
+| File | Function | Purpose |
+|---|---|---|
+| `prompt_builder.py` | `format_context(chunks)` | Format retrieved chunks into a context block |
+| `prompt_builder.py` | `build_prompt(query, chunks)` | Assemble full prompt: system + context + question |
+| `llm.py` | `ask_ollama(prompt)` | Send prompt to Gemma 4 26B via Ollama, return response |
+
+### src/
+| File | Function | Purpose |
+|---|---|---|
+| `main.py` | `initialise()` | Load documents and prepare chunk list for querying |
+| `main.py` | `answer_question(query, chunks)` | Run full RAG pipeline for a single question |
+| `main.py` | `run()` | Start the terminal Q&A conversation loop |
+
+---
+
 *github.com/SavyOnAI/local-ai-stack · Python · Ollama · Apple Silicon · 2026*

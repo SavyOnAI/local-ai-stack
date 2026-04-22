@@ -1,74 +1,117 @@
-import os
-from dotenv import load_dotenv
+"""
+chunker.py — Overlap chunker for Phase 2.
 
-load_dotenv()
+Splits extracted document text into overlapping chunks so that
+sentences at chunk boundaries are not lost. Each chunk is returned
+with metadata identifying its source file and position.
+"""
 
-# Chunk size and overlap from .env — int() converts string to number
-CHUNK_SIZE = int(os.getenv("CHUNK_SIZE", "500"))
-CHUNK_OVERLAP = int(os.getenv("CHUNK_OVERLAP", "100"))
+from pathlib import Path
+
+# defaults match Phase 2 PRD spec — override via .env if needed
+CHUNK_SIZE = 800
+OVERLAP    = 150
 
 
-def chunk_text(text: str, filename: str,
-               chunk_size: int = CHUNK_SIZE,
-               overlap: int = CHUNK_OVERLAP) -> list[dict]:
+def chunk_text(
+    text: str,
+    chunk_size: int = CHUNK_SIZE,
+    overlap: int = OVERLAP,
+) -> list[str]:
     """
-    Split a document's text into overlapping chunks.
+    Split text into overlapping chunks.
 
     Args:
-        text: Full document text to split.
-        filename: Source filename — stored with each chunk for traceability.
+        text:       The full document text to chunk.
         chunk_size: Maximum characters per chunk.
-        overlap: Characters repeated between consecutive chunks.
+        overlap:    Characters shared between adjacent chunks.
+
     Returns:
-        List of dicts with 'chunk_id', 'filename', 'text', and 'char_start' keys.
+        List of text chunk strings.
     """
+    if not text or not text.strip():
+        return []
+
+    if overlap >= chunk_size:
+        raise ValueError(f"overlap ({overlap}) must be less than chunk_size ({chunk_size})")
+
+    stride = chunk_size - overlap              # how far to advance each step
     chunks = []
-    start = 0       # cursor position in the document
-    chunk_index = 0  # increments with each chunk
+    start  = 0
 
     while start < len(text):
-        end = start + chunk_size             # end boundary of this chunk
-        chunk_text_slice = text[start:end]   # slice characters from text
+        end = start + chunk_size
 
-        chunks.append({
-            "chunk_id": f"{filename}_{chunk_index}",  # unique ID for citation tracking
-            "filename": filename,
-            "text": chunk_text_slice,
-            "char_start": start   # position in original doc — useful for debugging
-        })
+        if end >= len(text):
+            # last chunk — take whatever remains
+            chunk = text[start:].strip()
+        else:
+            # find nearest whitespace before hard boundary to avoid mid-word cuts
+            boundary = text.rfind(" ", start, end)
+            if boundary == -1:
+                boundary = end                 # no whitespace found — cut hard
+            chunk = text[start:boundary].strip()
 
-        chunk_index += 1
-        start += chunk_size - overlap  # move forward minus overlap to create repeat region
+        if chunk:
+            chunks.append(chunk)
+
+        start += stride
 
     return chunks
 
 
-def chunk_documents(documents: list[dict]) -> list[dict]:
+def chunk_document(
+    file_path: str,
+    text: str,
+    chunk_size: int = CHUNK_SIZE,
+    overlap: int = OVERLAP,
+) -> list[dict]:
     """
-    Chunk all documents from loader output.
+    Chunk a document and attach source metadata to each chunk.
 
     Args:
-        documents: List of dicts from load_documents().
+        file_path:  Path to the source file (used as metadata).
+        text:       Extracted text from the document.
+        chunk_size: Maximum characters per chunk.
+        overlap:    Characters shared between adjacent chunks.
+
     Returns:
-        Flat list of all chunks across all documents.
+        List of dicts, each with keys:
+            text       — the chunk string
+            source     — the source file path
+            chunk_index — position of this chunk within the document
     """
-    all_chunks = []
-    for doc in documents:
-        # Chunk each doc and add results to the master list
-        doc_chunks = chunk_text(doc["text"], doc["filename"])
-        all_chunks.extend(doc_chunks)
-        print(f"Chunked: {doc['filename']} → {len(doc_chunks)} chunks")
-    return all_chunks
+    chunks = chunk_text(text, chunk_size, overlap)
+
+    return [
+        {
+            "text":        chunk,
+            "source":      file_path,
+            "chunk_index": i,
+        }
+        for i, chunk in enumerate(chunks)
+    ]
 
 
-# Only runs when executing this file directly
 if __name__ == "__main__":
-    from loader import load_documents
+    import sys
 
-    docs = load_documents()
-    chunks = chunk_documents(docs)
+    if len(sys.argv) < 2:
+        print("Usage: python -m src.ingestion.chunker <file.txt>")
+        sys.exit(1)
 
-    print(f"\nTotal chunks: {len(chunks)}")
-    print("\nFirst chunk preview:")
-    print(f"  ID: {chunks[0]['chunk_id']}")
-    print(f"  Text: {chunks[0]['text'][:200]}...")
+    target = Path(sys.argv[1])
+
+    if not target.exists():
+        print(f"Error: file not found — {target}")
+        sys.exit(1)
+
+    # read the file directly for smoke test
+    raw_text = target.read_text(encoding="utf-8")
+    chunks   = chunk_document(str(target), raw_text)
+
+    print(f"--- {len(chunks)} chunks from {target.name} ---\n")
+    for c in chunks[:3]:                       # show first 3 chunks only
+        print(f"[Chunk {c['chunk_index']}] ({len(c['text'])} chars)")
+        print(c["text"][:200])
+        print()
