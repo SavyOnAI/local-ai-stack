@@ -50,7 +50,7 @@ def index_documents(
     docs_dir: str  = DOCS_DIR,
     chunk_size: int = CHUNK_SIZE,
     overlap: int    = OVERLAP,
-) -> None:
+) -> dict:
     """
     Run the full ingestion pipeline for all documents in docs_dir.
 
@@ -60,7 +60,7 @@ def index_documents(
         overlap:    Characters shared between adjacent chunks.
     """
     print(f"\n{'='*50}")
-    print(f"  Indexing pipeline starting")
+    print("  Indexing pipeline starting")
     print(f"  Docs dir:   {docs_dir}")
     print(f"  Chunk size: {chunk_size}  |  Overlap: {overlap}")
     print(f"{'='*50}\n")
@@ -70,7 +70,7 @@ def index_documents(
 
     if not documents:
         print("No documents found. Add files to the docs/ folder and try again.")
-        return
+        return {"documents_indexed": 0, "chunks_created": 0}
 
     # ── step 2: chunk every document ────────────────────────────────
     all_chunks = []
@@ -115,6 +115,11 @@ def index_documents(
     bm25_index = build_bm25_index(chroma_chunks)
     save_bm25_index(bm25_index, chroma_chunks)
     print(f"  ✓ BM25 index built and saved — {len(chroma_chunks)} chunks indexed")
+
+    return {
+        "documents_indexed": len(documents),
+        "chunks_created": len(chroma_chunks),
+    }
 
 
 if __name__ == "__main__":

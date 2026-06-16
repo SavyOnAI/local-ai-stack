@@ -17,8 +17,11 @@ def extract_cited_ids(response: str) -> list[str]:
     Returns:
         List of chunk ID strings found in the response.
     """
-    return re.findall(r'\[([^\[\]]+_chunk_\d+)\]', response)
-
+    raw_matches = re.findall(r'\[([^\[\]]+_chunk_\d+(?:,\s*[^\[\]]+_chunk_\d+)*)\]', response)
+    ids = []
+    for match in raw_matches:
+        ids.extend(part.strip() for part in match.split(","))
+    return ids
 
 def validate_citations(response: str, chunks: list[dict]) -> dict:
     """

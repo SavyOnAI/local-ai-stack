@@ -4,14 +4,14 @@ query_pipeline.py — End-to-end RAG query: retrieve, rerank, generate, validate
 Load indexes once with load_indexes(), then call query() for each question.
 """
 
-from ingestion.embedder import embed_text
-from retrieval.bm25_index import load_bm25_index
-from retrieval.vector_store import get_collection
-from retrieval.hybrid_retriever import hybrid_retrieve
-from retrieval.reranker import rerank
-from generation.prompt_builder import build_prompt
-from generation.llm import ask_ollama
-from generation.citation_validator import validate_citations
+from src.ingestion.embedder import embed_text
+from src.retrieval.bm25_index import load_bm25_index
+from src.retrieval.vector_store import get_collection
+from src.retrieval.hybrid_retriever import hybrid_retrieve
+from src.retrieval.reranker import rerank
+from src.generation.prompt_builder import build_prompt
+from src.generation.llm import ask_ollama
+from src.generation.citation_validator import validate_citations
 
 
 def load_indexes() -> tuple:
