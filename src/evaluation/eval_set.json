@@ -1,0 +1,102 @@
+[
+  {
+    "question": "How many calories does one gram of carbohydrate provide?",
+    "ground_truth": "One gram of carbohydrate provides 4 calories.",
+    "source_document": "nutrition_macronutrients.md"
+  },
+  {
+    "question": "What is the recommended daily protein intake for adults per kilogram of body weight?",
+    "ground_truth": "The recommended daily protein intake for adults is 0.8 grams per kilogram of body weight.",
+    "source_document": "nutrition_macronutrients.md"
+  },
+  {
+    "question": "What percentage of total daily energy intake should come from free sugars according to WHO?",
+    "ground_truth": "According to WHO, free sugars should be limited to less than 10 percent of total energy intake.",
+    "source_document": "nutrition_macronutrients.md"
+  },
+  {
+    "question": "What does RAG stand for and what problem does it solve?",
+    "ground_truth": "RAG stands for Retrieval-Augmented Generation. It solves the problem of LLMs not knowing your private or recent documents by giving the model relevant context at query time instead of relying on training data alone.",
+    "source_document": "ai_rag_notes.md"
+  },
+  {
+    "question": "What are the three parts of a RAG prompt?",
+    "ground_truth": "A RAG prompt has three parts: a system instruction that tells the model how to behave, retrieved context chunks pasted in, and the user question.",
+    "source_document": "ai_rag_notes.md"
+  },
+  {
+    "question": "Why is overlap used between chunks in a RAG pipeline?",
+    "ground_truth": "Overlap between chunks prevents important sentences from being split at a boundary.",
+    "source_document": "ai_rag_notes.md"
+  },
+  {
+    "question": "What are the three underrated AI career roles described in the document?",
+    "ground_truth": "The three underrated AI career roles are AI Infrastructure Engineers, Customer-Facing AI Engineers, and AI UX Engineers.",
+    "source_document": "3_underrated_AI_roles.md"
+  },
+  {
+    "question": "Why do AI Infrastructure Engineers matter according to the document?",
+    "ground_truth": "AI Infrastructure Engineers matter because AI is shifting from training-heavy to inference-heavy workloads, and performance, latency, and cost now define real-world success.",
+    "source_document": "3_underrated_AI_roles.md"
+  },
+  {
+    "question": "What is the recommended maximum intake of saturated fat as a percentage of total energy intake?",
+    "ground_truth": "Saturated fat intake should be less than 10 percent of total energy intake.",
+    "source_document": "healthy-diet-fact-sheet-394.pdf"
+  },
+  {
+    "question": "How much salt does WHO recommend adults consume per day?",
+    "ground_truth": "WHO recommends adults consume less than 5 grams of salt per day.",
+    "source_document": "healthy-diet-fact-sheet-394.pdf"
+  },
+  {
+    "question": "How many portions of fruit and vegetables does WHO recommend eating per day?",
+    "ground_truth": "WHO recommends eating at least 400 grams, or five portions, of fruit and vegetables per day.",
+    "source_document": "healthy-diet-fact-sheet-394.pdf"
+  },
+  {
+    "question": "What percentage of total energy intake should trans fats be limited to?",
+    "ground_truth": "Trans fat intake should be limited to less than 1 percent of total energy intake.",
+    "source_document": "healthy-diet-fact-sheet-394.pdf"
+  },
+  {
+    "question": "What role does dietary fibre play in the body?",
+    "ground_truth": "Dietary fibre slows digestion, supports gut health, controls blood sugar, and reduces cholesterol.",
+    "source_document": "nutrition_macronutrients.md"
+  },
+  {
+    "question": "What are the health risks associated with overconsumption of saturated fats and refined carbohydrates?",
+    "ground_truth": "Overconsumption of saturated fats and refined carbohydrates is associated with obesity, type 2 diabetes, and cardiovascular disease.",
+    "source_document": "nutrition_macronutrients.md"
+  },
+  {
+    "question": "What are examples of complete protein sources?",
+    "ground_truth": "Complete protein sources include meat, fish, eggs, dairy, and soy.",
+    "source_document": "nutrition_macronutrients.md"
+  },
+  {
+    "question": "What is the recommended minimum daily fibre intake for adults?",
+    "ground_truth": "The recommended minimum daily fibre intake for adults is at least 25 grams per day.",
+    "source_document": "nutrition_macronutrients.md"
+  },
+  {
+    "question": "What foods are considered sources of unsaturated fats?",
+    "ground_truth": "Unsaturated fats are found in olive oil, avocados, nuts, and fish.",
+    "source_document": "nutrition_macronutrients.md"
+  },
+  {
+    "question": "What is the difference between simple and complex carbohydrates?",
+    "ground_truth": "Simple carbohydrates are found in fruits, milk, and processed foods, while complex carbohydrates are found in whole grains, legumes, and vegetables.",
+    "source_document": "nutrition_macronutrients.md"
+  },
+  {
+    "question": "What is the purpose of the Australian Government National Health and Medical Research Council educator guide?",
+    "ground_truth": "The guide provides nutrition information and resources for educators to help communicate healthy eating guidelines to the public.",
+    "source_document": "Sample_docx_file.docx"
+  },
+  {
+    "question": "According to Sun Tzu, what are the five constant factors that govern the art of war?",
+    "ground_truth": "According to Sun Tzu, the five constant factors that govern the art of war are the Moral Law, Heaven, Earth, the Commander, and Method and Discipline.",
+    "source_document": "art_of_war.txt"
+  }
+]
