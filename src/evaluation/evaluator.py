@@ -39,7 +39,7 @@ JUDGE_MODEL = "gemma4:26b"
 
 # ── Section 2: Ollama LLM wrapper for RAGAS ───────────────────────────────────
 
-def build_ragas_llm() -> LangchainLLMWrapper:
+def build_ragas_llm() -> LangchainLLMWrapper: # type: ignore
     """
     Wrap the local Ollama model so RAGAS can use it as a judge.
 
@@ -256,9 +256,16 @@ def evaluate_pipeline(limit: int | None = None) -> dict:
     )
     elapsed_ragas = time.time() - start
 
+    import math
+
     def _mean(values) -> float:
-        # result[metric] is a list of per-question scores — average them
-        vals = [v for v in values if v is not None]
+        # result[metric] is a list of per-question scores — average them.
+        # RAGAS uses np.nan (not None) for failed/timed-out scores, so we
+        # must filter both None and NaN or one bad value poisons the average.
+        vals = [v for v in values if v is not None and not math.isnan(v)]
+        skipped = len(values) - len(vals)
+        if skipped:
+            print(f"    ⚠ {skipped} question(s) had no valid score for this metric — excluded from average")
         return round(sum(vals) / len(vals), 4) if vals else 0.0
 
     scores = {
