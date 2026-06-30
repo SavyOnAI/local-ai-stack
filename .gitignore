@@ -6,3 +6,6 @@ __pycache__/
 chroma_db/
 bm25_index.pkl
 logs/.DS_Store
+.DS_Store
+chroma_db/
+bm25_index.pkl
