@@ -27,8 +27,8 @@
 
 | Phase | Name | Status | Started | Completed |
 |---|---|---|---|---|
-| 1 | Local RAG Pipeline | 🟡 In Progress | April 2026 | — |
-| 2 | Production RAG Application | ⬜ Planned | — | — |
+| 1 | Local RAG Pipeline | ✅ Complete | April 2026 | April 2026 |
+| 2 | Production RAG Application | 🟡 In Progress | April 2026 | — |
 | 3 | Local SLM Benchmarking | ⬜ Planned | — | — |
 | 4 | Monitoring & Observability | ⬜ Planned | — | — |
 | 5 | Fine-Tuning with LoRA & DPO | ⬜ Planned | — | — |
@@ -309,6 +309,48 @@ pyenv manages Python versions cleanly on macOS without touching the system Pytho
 
 ---
 
+### DEC-016 — Citation Extraction Regex Fix — Multi-ID Brackets
+
+**Date:** June 2026
+**Phase:** 2
+**Decision:** Extended the citation extraction regex in `citation_validator.py` to correctly split multi-ID citation brackets, rather than enforcing single-ID-per-bracket via the prompt only.
+
+**Alternatives considered:**
+- Leave the model free to cite multiple chunk IDs per bracket with no parser support for it
+- Change `prompt_builder.py` to force one ID per bracket only
+
+**Reason chosen:**
+`extract_cited_ids()` used the pattern `\[([^\[\]]+_chunk_\d+)\]`, which captured everything between brackets as a single group — including internal commas. When Gemma 4 26B cited multiple sources in one bracket (e.g. `[chunk_a, chunk_b]`), the entire string was treated as one malformed ID, which never matched any real chunk ID in the index. The result: `citations_valid` came back `false` even when retrieval and the answer itself were correct — a false negative, not a real citation failure. Caught while testing the new `/query` FastAPI endpoint on Day 7, via a live query about macronutrients where both cited chunk IDs were valid but got fused into one unmatched string.
+
+Fixed by extending the regex to match comma-separated IDs inside a single bracket, then explicitly splitting and stripping each match into separate IDs before validation runs. Chose defensive parsing over prompt-only enforcement so the validator stays correct regardless of how consistently the model formats citations — relying solely on the model to never produce a multi-ID bracket is fragile and was already disproven this session.
+
+**Lesson:** A validator returning `false` doesn't always mean the thing being validated is wrong — sometimes the validator itself has a parsing bug. Worth checking the extraction logic before assuming the model or retrieval is at fault.
+
+---
+
+### DEC-017 — RAGAS Faithfulness `nan` Bug — Root Cause and Fix
+
+**Date:** June 2026
+**Phase:** 2
+**Decision:** Fixed `_mean()` in `evaluator.py` to filter both `None` and `NaN` when averaging per-question RAGAS scores, rather than only `None`.
+
+**Alternatives considered:**
+- Suspected Gemma's markdown-fenced JSON output (` ```json ... ``` `) was breaking RAGAS's parser — built a `_CleanOutputOllama` subclass to strip fences before ruling this out. Verified directly that LangChain's `parse_json_markdown` already handles fenced JSON correctly, so the subclass was removed — it solved a problem that didn't exist.
+- Suspected `RunConfig` timeouts were too short — raised from 120s to 300s. This reduced but did not fully eliminate isolated per-question timeouts (expected behaviour for a local 26B judge model making chained calls), and was not the root cause.
+
+**Reason chosen:**
+RAGAS returns `np.nan` (not `None`) for any question where the LLM judge fails to produce a parseable score — typically from a timeout during faithfulness's two-step process (decompose the answer into statements, then verify each statement against the retrieved context). The original `_mean()` filter (`v is not None`) did not catch `np.nan`, and Python's `sum()` propagates `nan` across an entire list. This meant a single failed question out of 20 silently poisoned the whole faithfulness average to `nan` — even when 18–19 questions had scored correctly.
+
+Diagnosed by writing a per-question isolation script that scored faithfulness one question at a time across all 20 questions. This produced 18 real scores (mostly 1.0, with one genuine 0.0 on Q11) and exactly 2 timeouts (Q7, Q17) — confirming the pipeline, retrieval, and judge model were all working correctly, and that the bug was isolated entirely to the score-averaging logic in `_mean()`, not the evaluation itself.
+
+Fixed by changing the filter to `v is not None and not math.isnan(v)`, and added a print statement reporting how many questions were excluded per metric, so future data loss is visible in the terminal output rather than silently collapsing the average to `nan`.
+
+**Result:** Faithfulness = 0.95 on the full 20-question eval set after the fix, with 19/20 questions scoring valid faithfulness values (the 20th, Q7 or Q17, still timed out but was correctly excluded rather than corrupting the average).
+
+**Lesson:** `nan` is not `None` in Python — `v is not None` does not filter out `float('nan')`. This single distinction caused three separate ~4-hour full evaluation runs to silently fail before being traced to one filtering condition. Worth remembering for any future code that averages scores from an external library: check what sentinel value it actually uses for "missing," don't assume it's `None`.
+
+---
+
 ## Decisions Pending
 
 The following decisions are noted but not yet made. They will be logged here when resolved.
@@ -324,6 +366,9 @@ The following decisions are noted but not yet made. They will be logged here whe
 | Speed-tier benchmark model for Phase 3 | 3 | Gemma 3 4B likely — pull with `ollama pull gemma3` when Phase 3 begins |
 | OCR for scanned/image-only PDFs | 2+ | Deferred to Phase 3+. pypdf skips image-only pages and returns empty string. loader.py warns and skips these files. Manual conversion via macOS Preview or Acrobat as interim workaround. Tesseract OCR is the likely solution when addressed. |
 | Slide images and shapes in PPTX files | 2+ | Images and flowchart relationships are not extractable with python-pptx alone. Text inside shapes is extracted but arrow relationships and flow direction are lost. Images skipped silently. Pytesseract OCR on exported slide images is the likely solution for image text. Flowchart relationships may never be worth addressing for a RAG use case. |
+| Corpus swap — nutrition → AI/agentic AI domain | 2 | Curated link list saved to Notion ("🗂️ AI Corpus — New Test Dataset Links"). Pending: download files, delete chroma_db/ and bm25_index.pkl, re-index, rewrite eval_set.json with 20 AI-domain questions, re-run full evaluator. |
+| Q11 faithfulness=0.0 investigation | 2 | One genuine (non-timeout) faithfulness failure on the nutrition eval set — fruit/vegetable portions question. Worth checking whether this is a real model hallucination or a ground_truth mismatch against the source PDF before the corpus swap. |
+
 ---
 
 ## What I'd Do Differently (Running Notes)
@@ -341,6 +386,9 @@ The following decisions are noted but not yet made. They will be logged here whe
 |---|---|---|
 | 1.0 | April 2026 | Initial log — pre-code decisions documented |
 | 1.1 | April 2026 | Updated DEC-003 for Gemma 4 26B; added DEC-015 for repo name; updated repository URL; noted xz fix in DEC-014 |
+| 1.2 | June 2026 | Added DEC-016 — citation extraction regex fix found while testing the Day 7 FastAPI /query endpoint |
+| 1.3 | June 2026 | Fixed stale Phase Overview table — Phase 1 marked Complete, Phase 2 marked In Progress |
+| 1.4 | June 2026 | Added DEC-017 — RAGAS faithfulness `nan` bug traced to `np.nan` not being filtered in `_mean()`; added corpus swap and Q11 investigation to Decisions Pending |
 
 ---
 
