@@ -243,7 +243,17 @@ def evaluate_pipeline(limit: int | None = None) -> dict:
     print(f"\nPipeline calls done in {elapsed_pipeline:.1f}s. Running RAGAS scoring...\n")
 
     start = time.time()
-    result = evaluate(dataset, metrics=metrics, embeddings=LocalEmbeddings())
+    run_config = RunConfig(
+        timeout=300,   # 5 min per LLM call — faithfulness makes 2 chained calls per question
+        max_retries=2,
+        max_workers=1, # sequential — Ollama can't handle parallel requests
+    )
+    result = evaluate(
+        dataset,
+        metrics=metrics,
+        embeddings=LocalEmbeddings(),
+        run_config=run_config,
+    )
     elapsed_ragas = time.time() - start
 
     def _mean(values) -> float:
