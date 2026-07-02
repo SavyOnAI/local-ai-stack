@@ -4,6 +4,7 @@ evaluator.py — Score the RAG pipeline using RAGAS metrics.
 Loads eval_set.json, runs each question through the full pipeline,
 then scores faithfulness, answer relevancy, context precision, and recall.
 Results are printed to terminal and saved to eval_results.json.
+Per-question breakdown is saved to eval_results_per_question.csv.
 """
 
 import json
@@ -133,8 +134,7 @@ def run_pipeline_for_question(
         collection=collection,
     )
 
-    # RAGAS needs chunk text, not chunk IDs — pull text from chunks_used
-    # chunks_used is a list of IDs; we need to find matching text in bm25_chunks
+    # match chunk IDs back to their text
     chunks_used_ids = set(result["chunks_used"])
     context_texts = [
         c["text"] for c in bm25_chunks if c["id"] in chunks_used_ids
@@ -300,6 +300,12 @@ def evaluate_pipeline(limit: int | None = None) -> dict:
     with open(RESULTS_PATH, "w") as f:
         json.dump(output, f, indent=2)
     print(f"\nResults saved to {RESULTS_PATH}")
+
+    # per-question breakdown — averages hide individual failures
+    df = result.to_pandas()
+    per_question_path = RESULTS_PATH.parent / "eval_results_per_question.csv"
+    df.to_csv(per_question_path, index=False)
+    print(f"Per-question results saved to {per_question_path}")
 
     return scores
 
