@@ -319,7 +319,7 @@ if __name__ == "__main__":
 
     if limit:
         print("SMOKE TEST — running 2 questions only.")
-        print("Pass --full to evaluate all 20.\n")
+        print("Pass --full to evaluate all 30.\n")
 
     scores = evaluate_pipeline(limit=limit)
 

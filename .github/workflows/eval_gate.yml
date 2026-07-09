@@ -1,10 +1,21 @@
-name: Eval Gate (placeholder)
+name: RAGAS Eval Gate
 
-on: [push]
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
 
 jobs:
-  placeholder:
-    runs-on: ubuntu-latest
+  eval-gate:
+    runs-on: self-hosted
+
     steps:
-      - name: Not yet implemented
-        run: echo "Eval gate not yet configured"
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Activate venv and run RAGAS eval
+        run: |
+          source local-ai-stack-venv/bin/activate
+          python src/evaluation/evaluator.py --full
