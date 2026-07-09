@@ -15,6 +15,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Copy existing indexes into workspace
+        run: |
+          cp -r /Users/saravanansankar/Developer/local-ai-stack/chroma_db .
+          cp /Users/saravanansankar/Developer/local-ai-stack/bm25_index.pkl .
+
       - name: Activate venv and run RAGAS eval
         run: |
           source /Users/saravanansankar/Developer/local-ai-stack/local-ai-stack-venv/bin/activate
