@@ -18,4 +18,4 @@ jobs:
       - name: Activate venv and run RAGAS eval
         run: |
           source /Users/saravanansankar/Developer/local-ai-stack/local-ai-stack-venv/bin/activate
-          python src/evaluation/evaluator.py --full
+          python -m src.evaluation.evaluator --full
