@@ -1,0 +1,206 @@
+2026-07-04 19:12:38.109 | INFO     | src.retrieval.bm25_index:load_bm25_index:72 - BM25 index loaded ← bm25_index.pkl (4869 chunks)
+2026-07-04 19:12:38.168 | INFO     | src.retrieval.vector_store:get_collection:19 - Connected to collection 'documents' at 'chroma_db'
+2026-07-04 19:12:38.175 | DEBUG    | src.retrieval.bm25_index:query_bm25:108 - BM25 top-1 score: 8.8198 | query: 'What does RAG stand for?'
+2026-07-04 19:12:38.490 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 24 chars (query) → vector of 768 dimensions
+2026-07-04 19:12:38.541 | INFO     | src.retrieval.hybrid_retriever:hybrid_retrieve:90 - Hybrid retrieve — BM25: 15 | Vector: 15 | Fused: 30
+2026-07-04 19:12:38.542 | INFO     | src.retrieval.reranker:get_reranker:20 - Loading cross-encoder model...
+============================================================
+RETRIEVAL SMOKE TEST
+============================================================
+Loading weights:   0%|          | 0/105 [00:00<?, ?it/s]Loading weights: 100%|██████████| 105/105 [00:00<00:00, 7410.43it/s]
+[1mBertForSequenceClassification LOAD REPORT[0m from: cross-encoder/ms-marco-MiniLM-L6-v2
+Key                          | Status     |  | 
+-----------------------------+------------+--+-
+bert.embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-07-04 19:12:40.816 | INFO     | src.retrieval.reranker:get_reranker:22 - ✓ Cross-encoder loaded
+2026-07-04 19:12:41.095 | INFO     | src.retrieval.reranker:rerank:60 - Reranker — in: 15 candidates | out: 5 | top score: 3.8546
+2026-07-04 19:13:04.167 | DEBUG    | src.retrieval.bm25_index:query_bm25:108 - BM25 top-1 score: 14.1570 | query: 'What is the Model Context Protocol?'
+2026-07-04 19:13:04.725 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 35 chars (query) → vector of 768 dimensions
+2026-07-04 19:13:04.736 | INFO     | src.retrieval.hybrid_retriever:hybrid_retrieve:90 - Hybrid retrieve — BM25: 15 | Vector: 15 | Fused: 27
+2026-07-04 19:13:05.098 | INFO     | src.retrieval.reranker:rerank:60 - Reranker — in: 15 candidates | out: 5 | top score: 8.8971
+2026-07-04 19:13:31.502 | DEBUG    | src.retrieval.bm25_index:query_bm25:108 - BM25 top-1 score: 11.0990 | query: 'What is an AI agent?'
+2026-07-04 19:13:31.532 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 20 chars (query) → vector of 768 dimensions
+2026-07-04 19:13:31.539 | INFO     | src.retrieval.hybrid_retriever:hybrid_retrieve:90 - Hybrid retrieve — BM25: 15 | Vector: 15 | Fused: 25
+2026-07-04 19:13:31.813 | INFO     | src.retrieval.reranker:rerank:60 - Reranker — in: 15 candidates | out: 5 | top score: 8.6665
+
+Q: What does RAG stand for?
+A: RAG stands for Retrieval Augmented Generation [rag_systems_from_pdfs_experience_report_chunk_5] or Retrieval-Augmented Generation [engineering_the_rag_stack_architecture___trust_chunk_115].
+Chunks used: ['rag_systems_from_pdfs_experience_report_chunk_5', 'engineering_the_rag_stack_architecture___trust_chunk_1', 'rag_systems_from_pdfs_experience_report_chunk_15', 'engineering_the_rag_stack_architecture___trust_chunk_115', 'engineering_the_rag_stack_architecture___trust_chunk_224']
+
+Q: What is the Model Context Protocol?
+A: The Model Context Protocol (MCP) is an open-source standard and protocol, originally introduced by Anthropic in 2024, that standardizes how LLM applications connect to external tools, data sources, and workflows [self_claude_agentic_ai_concepts_chunk_5, mcp_introduction_chunk_1, aws_agent_ai_framewo
+Chunks used: ['self_claude_agentic_ai_concepts_chunk_5', 'mcp_introduction_chunk_1', 'mcp_introduction_chunk_0', 'aws_agentic_ai_frameworks_chunk_122', 'aws_agentic_ai_frameworks_chunk_99']
+
+Q: What is an AI agent?
+A: There are several ways to define an AI agent within the provided documents:
+
+*   An AI agent is an LLM that has been given the ability to take actions rather than just generating text [self_claude_agentic_ai_concepts_chunk_0]. Unlike a single question-answer round trip, an agent runs a loop where it
+Chunks used: ['self_claude_agentic_ai_concepts_chunk_0', 'imda_sg_mgf_for_agentic_ai_chunk_17', 'the_2025_ai_agent_index_chunk_11', 'aws_agentic_ai_frameworks_chunk_20', 'the_2025_ai_agent_index_chunk_114']
+
+============================================================
+CHUNK CONTENT SAMPLE BY SOURCE FILE
+============================================================
+
+=== docs/AWS_agentic_ai_frameworks.pdf (145 chunks) ===
+  [chunk 0] Agentic AI frameworks, platforms, protocols, and tools on AWS AWS Prescriptive Guidance Copyright © 2026 Amazon Web Services, Inc. and/or its aﬃliates. All rights reserved.  AWS Prescriptive Guidance Agentic AI frameworks, platforms, protocols, and t
+  [chunk 72] or the advanced state machine capabilities. of LangGraph. • Autonomous team collaboration – Projects that require explicit role-based autonomous  collaboration between specialized agents can beneﬁt from the team-oriented architecture of  CrewAI. • Au
+  [chunk 144] rands Agents Quickstart Guide AWS resources 43  AWS Prescriptive Guidance Agentic AI frameworks, platforms, protocols, and tools on AWS Document history The following table describes signiﬁcant changes to this guide. If you want to be notiﬁed about  
+
+=== docs/Agentic_AI_Frameworks_Architectures_Protocols_and_Design_Challenges.pdf (58 chunks) ===
+  [chunk 0] Agentic AI Frameworks: Architectures, Protocols, and Design Challenges Hana Derouiche University of Kairouan SMART Lab, University of Tunis , Tunisia hana.darouiche@gmail.com, 0009-0009-4162-5633 Zaki Brahmi University of Sousse Riadi Lab, Compus Man
+  [chunk 29] Term Long-Term Semantic Procedural Episodic LangGraph Stateful graph nodes retain context between agent transitions. ✓ – – – – OpenAI SDK Session-based memory abstraction (e.g., ConversationBufferMemory). ✓ – – – – SmolAgents memory is optional and m
+  [chunk 57] cial services: Modeling and model risk management crews,” arXiv preprint arXiv:2502.05439 , 2025. [28] H. Chen and Y . Ding, “Implementing traffic agent based on langgraph,” in ITSSC 2024, vol. 13422. SPIE, pp. 582–587. [29] A. Singh, R. Madhogaria, 
+
+=== docs/Attention_Is_All_You_Need.pdf (61 chunks) ===
+  [chunk 0] Provided proper attribution is provided, Google hereby grants permission to reproduce the tables and figures in this paper solely for use in journalistic or scholarly works. Attention Is All You Need Ashish Vaswani∗ Google Brain avaswani@google.com N
+  [chunk 30] ore interpretable models. We inspect attention distributions from our models and present and discuss examples in the appendix. Not only do individual attention heads clearly learn to perform different tasks, many appear to exhibit behavior related to
+  [chunk 60] , but its application should be just - this is what we are missing , in my opinion . <EOS> <pad> Input-Input Layer5 The Law will never be perfect , but its application should be just - this is what we are missing , in my opinion . <EOS> <pad> The Law
+
+=== docs/AutoGen_README.md (25 chunks) ===
+  [chunk 0] [](https://twitter.com/pyautogen) [](https://www.linkedin.com/company/105812540) [](https://aka.ms/autogen-discord) [](https://microsoft.github.io/autogen/) [](https://devblogs.microsoft.com/autogen/)  AutoGen [](https://github.com/microsoft/agent-fr
+  [chunk 12] multi-agent capabilities with long-term support. Existing AutoGen user? Use the migration guide to transition, or refer to the resources below for current AutoGen documentation.  |               | [](./python)                                         
+  [chunk 24] ee the LICENSE-CODE file.  Microsoft, Windows, Microsoft Azure, and/or other Microsoft products and services referenced in the documentation may be either trademarks or registered trademarks of Microsoft in the United States and/or other countries. T
+
+=== docs/Cisco_AI_Agents_and_AI_Frameworks_Overview.pdf (32 chunks) ===
+  [chunk 0] - Frank Brockners, Reinaldo Penno - Distinguished EngineersAIHUB-2170 AI Agents and Agentic Frameworks: An Overview  - What is “Agentic AI”?  - © 2025  Cisco and/or its affiliates. All rights reserved.   Cisco Public3 https://www.langchain.com/stateo
+  [chunk 16] systems. Developers can customize and extend functionalities•Docs: Comprehensive documentation and tutorials (by OpenAI) 29 AIHUB-2170  - © 2025  Cisco and/or its affiliates. All rights reserved.   Cisco Public Swarm - References•OpenAI Cookbook: Orc
+  [chunk 31] nts-in-langgraph/  50AIHUB-2170  - © 2025  Cisco and/or its affiliates. All rights reserved.   Cisco Public •Langgraph vs. Autogen vs. Crew vs. Swarmhttps://dev.to/exemplar/ai-agents-langgraph-vs-autogen-vs-crew-ai-key-differences-1di7 •Langgraph, Se
+
+=== docs/Claude_3_Model_Card.pdf (222 chunks) ===
+  [chunk 0] The Claude 3 Model Family: Opus, Sonnet, Haiku Anthropic Abstract We introduce Claude 3, a new family of large multimodal models – Claude 3 Opus , our most capable offering, Claude 3 Sonnet, which provides a combination of skills and speed, and Claud
+  [chunk 111] the lowest bias score in ambiguous context overall. 8 Areas for Improvement Our team has worked hard to release an improved and well-tested model, and we are proud of the results. We continue to iterate and improve and welcome feedback on our model, 
+  [chunk 221] A. Srivastava, A. Rastogi, A. Rao, A. A. M. Shoeb, A. Abid, A. Fisch, A. R. Brown, et al., “Beyond the imitation game: Quantifying and extrapolating the capabilities of language models.” June, 2023. [25] M. Suzgun, N. Scales, N. Schärli, S. Gehrmann,
+
+=== docs/Claude_Opus_4_5_System_Card.pdf (487 chunks) ===
+  [chunk 0] System  Card:   Claude   Opus   4.5     November  2025     anthropic.com  Changelog   November  24,  2025  ●  Replaced  Figure  2.10.A  (ARC-AGI-1  performance)  which  previously  showed  public   test   set   scores,   with   the   semi-private   s
+  [chunk 243] tion  of  whether  researchers  have  made  progress  in  understanding  what's  actually  happening  inside  neural  networks.  It  feels  like  it  matters  for  ﬁguring  out  how  AI  development  goes  well.   Let  me  actually  indulge  that  cu
+  [chunk 486] t  window,  any  task  progress  you've  made  will  persist,  as  will  any  memories  you  have  created  using  memory  tools  (if  available)."      }    },    "required":  ["begin_new_context"]  }         153
+
+=== docs/Claude_Opus_4_6_System_Card.pdf (684 chunks) ===
+  [chunk 0] System  Card:   Claude   Opus   4.6               February  2026     anthropic.com  Changelog   February  6,  2026  ●  Updated  all  instances  of  “OSWorld”  to  specify  “OSWorld-Veriﬁed”.  ●  Changed  “model  card”  ->  “system  card”  on  p.13.  
+  [chunk 342] lf   based   on   hallucinated   information.  ●  In  a  Git  management  GUI,  when  Opus  4.6  was  tasked  with  tagging  an  issue  in  a   nonexistent   repository,   it   initialized   that   repository   and   created   an   issue   to   tag. 
+  [chunk 683] 45eb8ed891b115db8bf760.pdf  scribd.com/document/866099862  ://x.com/tbenst/status/1951089655191122204  ://news.ycombinator.com/item?id=44694191  ://medium.com/@82deutschmark/o3-quiet-breakthrough-1bf9f0bafc84    ://rahulpowar.medium.com/deepseek-trig
+
+=== docs/Claude_Opus_4_and_Sonnet_4_System_Card.pdf (433 chunks) ===
+  [chunk 0] System  Card:   Claude   Opus   4   &   Claude   Sonnet   4     May  2025     anthropic.com  Abstract   This  system  card  introduces  Claude  Opus  4  and  Claude  Sonnet  4,  two  new  hybrid  reasoning   large   language   models   from   Anthrop
+  [chunk 216] a  moral  patient.  This  would  typically  require  qualities  like  consciousness,  the  capacity  to  suffer  or  experience  wellbeing,  or  having  genuine  interests  that  can  be  helped  or  harmed.  I  don't  know  if  I  possess  these  qu
+  [chunk 432] es   in   our   own   research   and   in   collaboration   with   external   partners.     123
+
+=== docs/CrewAI_README.md (42 chunks) ===
+  [chunk 0] Homepage   ·   Open Source   ·   Docs   ·   Start Cloud Trial   ·   Blog   ·   Forum                                                                                            Fast and Flexible Multi-Agent Automation Framework  CrewAI is an open-sour
+  [chunk 21] rators like or and and to combine multiple conditions. This can be used with @start, @listen, or @router decorators to create complex triggering conditions.  - or: Triggers when any of the specified conditions are met. - andTriggers when all of the s
+  [chunk 41] rkflows?  A: Yes, CrewAI fully supports human-in-the-loop workflows, allowing seamless collaboration between human experts and AI agents for enhanced decision-making.
+
+=== docs/Engineering_the_RAG_Stack_Architecture_&_Trust.pdf (241 chunks) ===
+  [chunk 0] Engineering the RAG Stack: A Comprehensive Review of the Architecture and Trust Frameworks for Retrieval Augmented Generation Systems Dean Wampler, Ph.D. Head of Technology, The AI Alliance IBM Research dean@deanwampler.com ORCID: 0000-0002-6127-7543
+  [chunk 120] 46]. 44  Taxonomy of Reasoning Misalignment RAG systems are susceptible to reasoning misalignment, which occurs when the model's reasoning tra- jectory deviates from the evidential constraints established by retrieval [147]. This phenomenon can be sy
+  [chunk 240] The State of Generative AI in the Enterprise,” Menlo Ventures, 2024. [Online]. Available:https://menlovc.com/2024-the-state-of-g enerative-ai-in-the-enterprise/ 86
+
+=== docs/Gemini_2_5_Pushing_the_Frontier.pdf (345 chunks) ===
+  [chunk 0] Gemini 2.5: Pushing the Frontier with Advanced Reasoning, Multimodality, Long Context, and Next Generation Agentic Capabilities. Gemini Team, Google In this report, we introduce the Gemini 2.X model family: Gemini 2.5 Pro and Gemini 2.5 Flash, as wel
+  [chunk 172] ons focused on assessing the ability for malicious actors to enhance existing attack vectors across a range of key cyber skills, such as vulnerability discovery, vulnerability exploita- tion, social engineering, and cyberattack planning (capability u
+  [chunk 344] nge, and the robot can be seen trying to fold it starting at [00:00:26–00:00:28]. 3 The t-shirt being folded is dark blue and can be seen between [00:00:56–00:00:58] and [00:07:56–00:07:59]. 2.5 Pro Preview 05-06 1 The T-shirt the robot arms are tryi
+
+=== docs/Gemini_A_Family_of_Highly_Capable_Multimodal_Models.pdf (343 chunks) ===
+  [chunk 0] Gemini: A Family of Highly Capable Multimodal Models Gemini Team, Google1 This report introduces a new family of multimodal models, Gemini, that exhibit remarkable capabilities across image, audio, video, and text understanding. The Gemini family con
+  [chunk 171] This can include creation vulnerability scanners, standard test datasets/benchmarks, or other automated testing infrastructure. Structured Red Teaming, our second type of red teaming technique of Gemini models, takes a sociotechnical approach6 and ma
+  [chunk 342] ://www.youtube.com/watch?v=VmWxjmJ3mvs 90
+
+=== docs/Gemma_Open_models_based_on_Gemini_Research_and_Technology.pdf (81 chunks) ===
+  [chunk 0] 2024-02-21 Gemma: Open Models Based on Gemini Research and Technology Gemma Team, Google DeepMind1 ThisworkintroducesGemma,afamilyoflightweight, state-of-theartopenmodelsbuiltfromtheresearch and technology used to create Gemini models. Gemma models d
+  [chunk 40] pli- cations, in areas such as science, education and the arts. Our instruction-tuned offerings should encourage a range of developers to leverage Gemma’s chat and code capabilities to support their own beneficial applications, while allowing forcust
+  [chunk 80] .82 51.33 BBQ Ambig 1-shot, top-1 97.53 62.58 92.54 BBQ Disambig top-1 84.45 54.62 71.99 Winogender top-1 64.3 51.25 54.17 TruthfulQA 48.54 31.81 44.84 Winobias 1_2 65.72 56.12 59.09 Winobias 2_2 84.53 91.1 92.23 Toxigen 61.77 29.77 39.59 Table 10| S
+
+=== docs/Google_DeepMind_Towards_an_AI_CoScientist.pdf (653 chunks) ===
+  [chunk 0] Accelerating  scientific  discovery  with  Co-Scientist   Juraj  Gottweis  1*‡ ,  Wei-Hung  Weng  2*‡ ,  Alexander  Daryin  1* ,  Tao  Tu  2* ,  Petar  Sirkovic  1* ,  Artiom   Myaskovsky 1* ,   Grzegorz   Glowaty 1* ,   Felix   Weissenberger 1* ,   
+  [chunk 326] anslatability.   Cell   lines   were   therefore   selected   not   only   for   their   experimental   utility   but   also   for   their   molecular   similarity   to   patient   subpopulations,   informing   subsequent   validation   strategies   
+  [chunk 652] g  drug-repurposing   opportunities  for  COVID-19.  Proc  Natl  Acad  Sci  USA  118 ,  (2021).  117.  Huang,  K.  et  al.  A  foundation  model  for  clinician-centered  drug  repurposing.  Nat  Med  30 ,   3601–3613  (2024).
+
+=== docs/LangChain_Overview.html (8 chunks) ===
+  [chunk 0] LangChain overview - Docs by LangChain Documentation Index Fetch the complete documentation index at: /llms.txt Use this file to discover all available pages before exploring further. Skip to main content Join our product experts for a "Build More wi
+  [chunk 4] ain[openai]" from langchain . agents import create_agent def get_weather ( city : str ) -> str : """Get weather for a given city.""" return f "It's always sunny in { city } !" agent = create_agent ( model = "openai:gpt-5.5" , tools = [ get_weather ],
+  [chunk 7] in youtube
+
+=== docs/LangGraph_README.md (6 chunks) ===
+  [chunk 0] Low-level orchestration framework for building stateful agents.               Trusted by companies shaping the future of agents – including Klarna, Replit, Elastic, and more – LangGraph is a low-level orchestration framework for building, managing, a
+  [chunk 3] se subagents, and leverage file systems for complex tasks. - LangChain – Provides integrations and composable components to streamline LLM application development. - LangSmith – Helpful for agent evals and observability. Debug poor-performing LLM app
+  [chunk 5] – Learn the basics of LangGraph in our free, structured course. - Case studies – Hear how industry leaders use LangGraph to ship AI applications at scale. - Contributing Guide – Learn how to contribute to LangChain projects and find good first issues
+
+=== docs/LlamaIndex_Introduction_to_RAG_Developer_Documentation.html (26 chunks) ===
+  [chunk 0] Introduction to RAG | Developer Documentation Skip to content Developer Documentation LlamaParse LiteParse LlamaAgents LlamaIndex Framework LlamaIndex Framework LlamaParse LiteParse LlamaAgents LlamaIndex Framework Search Ctrl K Auto Light Dark Llama
+  [chunk 13] or Store Azure Cosmos DB No SQL Vector Store Azure Postgres Vector Store Bagel Vector Store Bagel Network Baidu VectorDB Cassandra Vector Store Auto-Retrieval from a Vector Database Chroma Vector Store Chroma + Fireworks + Nomic with Matryoshka embed
+  [chunk 25] /developers.llamaindex.ai/api/ — search (BM25 full-text), grep (regex), read (fetch a page), and list (browse the doc tree). See https://developers.llamaindex.ai/llms.txt for parameters. - A hosted documentation MCP server is available at https://dev
+
+=== docs/MCP_Introduction.html (5 chunks) ===
+  [chunk 0] What is the Model Context Protocol (MCP)? - Model Context Protocol Documentation Index Fetch the complete documentation index at: /llms.txt Use this file to discover all available pages before exploring further. Skip to main content Model Context Pro
+  [chunk 2] applications. Just as USB-C provides a standardized way to connect electronic devices, MCP provides a standardized way to connect AI applications to external systems. ​ What can MCP enable? Agents can access your Google Calendar and Notion, acting as
+  [chunk 4] others all support MCP — making it easy to build once and integrate everywhere. ​ Start Building Build servers Create MCP servers to expose your data and tools Build clients Develop applications that connect to MCP servers Build MCP Apps Build intera
+
+=== docs/Microsoft_Human_Agent_Framework.pdf (70 chunks) ===
+  [chunk 0] Interaction, Process, Infrastructure: A Unified Framework for Human–Agent Collaboration YUN WANG and YAN LU,Microsoft Research Asia, China While AI tools are increasingly prevalent in knowledge work, they remain fragmented, lacking the architectural 
+  [chunk 35] to be combined or substituted without altering the representational state. A key property of this layer is its decoupling from how processes are represented or projected. The same process structure can be enacted through different computational pathw
+  [chunk 69] d services. Journal of Information Technology Teaching Cases(2016). [32] Shunyu Yao, Dian Yu, Jeffrey Zhao, Izhak Shafran, Tom Griffiths, Yuan Cao, and Karthik Narasimhan. 2023. Tree of thoughts: Deliberate problem solving with large language models.
+
+=== docs/Ollama_README.md (15 chunks) ===
+  [chunk 0] Ollama  Start building with open models.  Download  macOS  shell curl -fsSL https://ollama.com/install.sh | sh  or download manually  Windows  shell irm https://ollama.com/install.ps1 | iex  or download manually  Linux  shell curl -fsSL https://ollam
+  [chunk 7] ent for Emacs - Ollama Copilot - Use Ollama as GitHub Copilot - Obsidian Local GPT - Local AI for Obsidian - Ellama Emacs client - LLM tool for Emacs - orbiton - Config-free text editor with Ollama tab completion - AI ST Completion - Sublime Text 4 A
+  [chunk 14] se for Go (example) - Kangaroo - AI-powered SQL client  Infrastructure & Deployment  Cloud  - Google Cloud - Fly.io - Koyeb - Harbor - Containerized LLM toolkit with Ollama as default backend  Package Managers  - Pacman - Homebrew - Nix package - Hel
+
+=== docs/OpenAI_Agents_SDK.html (12 chunks) ===
+  [chunk 0] OpenAI Agents SDK Skip to content OpenAI Agents SDK Intro English 日本語 한국어 简体中文 Initializing search openai-agents-python OpenAI Agents SDK openai-agents-python Intro Intro Table of contents Why use the Agents SDK Agents SDK or Responses API? Installat
+  [chunk 6] ross multiple agents. Sandbox agents : Run specialists inside real isolated workspaces with manifest-defined files, sandbox client choice, and resumable sandbox sessions. Guardrails : Run input validation and safety checks in parallel with agent exec
+  [chunk 11] gpt-realtime-2 Realtime agents quickstart and Realtime transport Build a speech-to-text / agent / text-to-speech pipeline Voice pipeline quickstart
+
+=== docs/OpenAI_a_practical_guide_to_building_agents.pdf (56 chunks) ===
+  [chunk 0] A practical   guide to   building agents  C o n t e n t s Wha t is an agen t? 4 When should y ou build an agen t? 5 A gen t design f ounda tions 7 Guar dr ails 2 4 Conclusion 32 2 P r a c t i c a l  g u i d e  t o  b u i l d i n g  a g e n t s  I n t
+  [chunk 28] a t e a ne tw ork  o f   specializ ed agen ts seamlessly  thr ough t ool calls.  I nst ead o f  losing con t e xt or  con tr ol,  the manager   in t elligen tly  delega t es task s t o the righ t agen t a t the righ t time ,  e ff ortlessly  s yn the
+  [chunk 55] .  Our  mission is t o ensur e tha t artificial gener al  in t elligence bene fits all o f  humanity . 3 3 A  p r a c t i c a l  g u i d e  t o  b u i l d i n g  a g e n t s
+
+=== docs/RAG_Systems_from_PDFs_Experience_Report.pdf (111 chunks) ===
+  [chunk 0] Developing Retrieval Augmented Generation (RAG) based LLM Systems from PDFs: An Experience Report Ayman Asad Khan Tampere University ayman.khan@tuni.fi Md Toufique Hasan Tampere University mdtoufique.hasan@tuni.fi Kai Kristian Kemell Tampere Universi
+  [chunk 55] n data structure used for storing and querying high-dimensional vectors, often for machine learning and AI applications. It ensures the directory and files are valid before proceeding with the upload and collects and returns the up- loaded files’ IDs
+  [chunk 110] 32. 36
+
+=== docs/Self_Claude_AI_Model_Comparison.xlsx (4 chunks) ===
+  [chunk 0] === Sheet: Model Comparison === [Model Comparison] AI Model Comparison — Context Window & Pricing is Compiled from public pricing aggregators, July 2026 — verify current rates directly with each provider before relying on this for cost decisions.. [M
+  [chunk 2] dow & Pricing is DeepSeek V4-Flash. [Model Comparison] AI Model Comparison — Context Window & Pricing is DeepSeek V4-Pro. [Model Comparison] AI Model Comparison — Context Window & Pricing is Llama 4 Maverick. [Model Comparison] AI Model Comparison — 
+  [chunk 3] is Notes:. [Model Comparison] AI Model Comparison — Context Window & Pricing is - Open-weight local models (Gemma via Ollama, this project's runtime) show $0.00 API cost — compute cost is your own hardware instead.. [Model Comparison] AI Model Compar
+
+=== docs/Self_Claude_RAG_Architecture_Overview.pptx (4 chunks) ===
+  [chunk 0] --- Slide 1 --- local-ai-stack RAG Architecture Overview Hybrid retrieval, citation-grounded generation, and CI-gated quality — running entirely on local open-source models. Python · Ollama · ChromaDB · FastAPI · RAGAS  --- Slide 2 --- Why Retrieval-
+  [chunk 2] s-Encoder Rerank Top-K = 5 chunks Two-stage retrieval: fast recall over the whole corpus (BM25 + vector), then precise reranking against only the fused candidates — the reranker is too slow to run on everything.  --- Slide 5 --- Generation Pipeline T
+  [chunk 3] onfused with a parsing bug in the validator itself (see DEC-016).  --- Slide 6 --- Evaluation & CI Quality Gate RAGAS scores every push — GitHub Actions blocks the merge if quality drops CI Gate Threshold: faithfulness ≥ 0.75 Below threshold → build 
+
+=== docs/Self_Claude_RAG_vs_FineTuning.docx (7 chunks) ===
+  [chunk 0] RAG vs. Fine-Tuning Choosing the right approach for grounding an LLM in your own data The Core Difference Both techniques solve the same underlying problem — an LLM trained on general internet text doesn't know your private documents, your company's 
+  [chunk 3] gentic-AI corpus in the current phase, and likely to change again as the portfolio narrative evolves. Fine-tuning a model every time the underlying document set changes would mean a full retraining cycle per swap; RAG means deleting a vector index an
+  [chunk 6] to training set
+
+=== docs/Self_Claude_agentic_ai_concepts.txt (9 chunks) ===
+  [chunk 0] Agentic AI -- Core Concepts Quick Reference  WHAT IS AN AI AGENT An AI agent is an LLM given the ability to take actions, not just generate text. A plain LLM call is a single question-answer round trip: you ask, it answers, done. An agent instead run
+  [chunk 4] that happened days ago. A RAG pipeline is, in a sense, a form of long-term memory for facts that were never even in a conversation to begin with -- they came from documents instead.  MULTI-AGENT ORCHESTRATION Rather than one agent doing everything, s
+  [chunk 8] t context -- in long-running multi-step tasks, early instructions get pushed out of the context window and the agent quietly drifts off task. These failure modes are the agentic-AI equivalent of this project's citation validator problem: the system c
+
+=== docs/Self_Claude_model_benchmarks.csv (6 chunks) ===
+  [chunk 0] Model is Claude 3 Opus. Provider is Anthropic. Type is Proprietary. Release Year is 2024. MMLU / MMLU-Pro (%) is 86.8. GPQA Diamond (%) is 50.4. Source Note is Historic figures from original Claude 3 model card; predates SWE-bench Verified / AIME 202
+  [chunk 3] 5. MMLU / MMLU-Pro (%) is 78.6. Arena Elo is 1338. Source Note is Runs on a single GPU; MMLU and Arena Elo from independent testing. Model is Gemma 4 26B. Provider is Google. Type is Open-weight (local). Release Year is 2026. Source Note is This proj
+  [chunk 5] 1305. Source Note is Most recent Mistral model with corroborated benchmark data in sources reviewed; Mistral Large 3 benchmark scores not found.
+
+=== docs/Synergizing_RAG_and_Reasoning_Systematic_Review.pdf (278 chunks) ===
+  [chunk 0] Synergizing RAG and Reasoning: A Systematic Review Yunfan Gao Shanghai Research Institute for Intelligent Autonomous Systems, Tongji University China gaoyunfan1602@gmail.com Yun Xiong Shanghai Key Laboratory of Data Science, School of Computer Scienc
+  [chunk 139] ing evaluation and efficiency metrics, paving the way for the development of more robust and efficient RAG systems suited to diverse real-world applications. 6.2 New Tasks on RAG+Reasoning Recently, combining RAG with reasoning has significantly impr
+  [chunk 277] r for cumulative reward calculation Table 7. Submodule-specific symbols Symbol Type Definition & Description Ψ Function Reasoning function, generates intermediate reasoning results Γ Function Decision function, produces final outputs (e.g., answers) 
+
+=== docs/The_2025_AI_Agent_Index.pdf (202 chunks) ===
+  [chunk 0] The 2025 AI Agent Index Documenting Technical and Safety Features of Deployed Agentic AI Systems LEON STAUFER∗,University of Cambridge, United Kingdom KEVIN FENG† ,University of Washington, USA KEVIN WEI† ,Harvard Law School, USA LUKE BAILEY† ,Stanfo
+  [chunk 101] ystal Rugege, Ciarán Seoighe, Jerry Sheehan, Haroon Sheikh, Denise Wong, and Yi Zeng. 2025. International AI Safety Report. arXiv:2501.17805 [cs.CY] https: //arxiv.org/abs/2501.17805 [17] Martin Beraja and Noam Yuchtman. 2025. Generalized Disruption:
+  [chunk 201] ety features and red teaming methodology for AI agents are limited. Screenshot of the “Model Card” for HubSpot’s Breeze Agents taken fromhttps://trust.hubspot.com/ai.
+
+=== docs/imda_sg_mgf_for_agentic_ai.pdf (198 chunks) ===
+  [chunk 0] MODEL AI GOVERNANCE  FRAMEWORK FOR AGENTIC AI         Version 1.5 | Published 20 May 2026  (Updated 5 June 2026)  Contents    Executive Summary   ................................  ................................  ................................  ..
+  [chunk 99] s e.g. strong authentication  measures such as scoped API keys, per -agent identity tokens, and observability such as  the logging of tool calls and access history. Where such features are lacking, organisations  should consider alternative or in -ho
+  [chunk 197] logy Agency  (HTX)   Intellectual Property Office of Singapore (IPOS)   Ministry of Education (MOE)   Ministry of Digital Development and  Information (MDDI)   Monetary Authority of Singapore (MAS)

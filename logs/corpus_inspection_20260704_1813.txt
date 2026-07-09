@@ -1,0 +1,13 @@
+============================================================
+RETRIEVAL SMOKE TEST
+============================================================
+Traceback (most recent call last):
+  File "/Users/saravanansankar/Developer/local-ai-stack/inspect_corpus.py", line 10, in <module>
+    bm25_index, bm25_chunks, collection = load_indexes()
+                                          ^^^^^^^^^^^^^^
+  File "/Users/saravanansankar/Developer/local-ai-stack/src/generation/query_pipeline.py", line 24, in load_indexes
+    bm25_index, bm25_chunks = load_bm25_index()
+                              ^^^^^^^^^^^^^^^^^
+  File "/Users/saravanansankar/Developer/local-ai-stack/src/retrieval/bm25_index.py", line 65, in load_bm25_index
+    raise FileNotFoundError(
+FileNotFoundError: No BM25 index found at bm25_index.pkl. Run build_bm25_index() first.

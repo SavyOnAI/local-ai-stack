@@ -314,8 +314,6 @@ def evaluate_pipeline(limit: int | None = None) -> dict:
 
 if __name__ == "__main__":
     import sys
-
-    # pass --full to run all 20 questions; default is 2 for a quick smoke test
     full_run = "--full" in sys.argv
     limit = None if full_run else 2
 
@@ -323,4 +321,8 @@ if __name__ == "__main__":
         print("SMOKE TEST — running 2 questions only.")
         print("Pass --full to evaluate all 20.\n")
 
-    evaluate_pipeline(limit=limit)
+    scores = evaluate_pipeline(limit=limit)
+
+    if scores["faithfulness"] < 0.75:
+        print(f"\n❌ FAITHFULNESS GATE FAILED: {scores['faithfulness']:.4f} < 0.75")
+        sys.exit(1)  # non-zero exit = CI marks the job failed

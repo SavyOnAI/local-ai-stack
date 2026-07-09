@@ -1,102 +1,152 @@
 [
   {
-    "question": "How many calories does one gram of carbohydrate provide?",
-    "ground_truth": "One gram of carbohydrate provides 4 calories.",
-    "source_document": "nutrition_macronutrients.md"
+    "question": "According to 'Attention Is All You Need,' what did the authors observe when inspecting attention distributions from their models?",
+    "ground_truth": "Individual attention heads clearly learn to perform different tasks.",
+    "source_document": "Attention_Is_All_You_Need.pdf"
   },
   {
-    "question": "What is the recommended daily protein intake for adults per kilogram of body weight?",
-    "ground_truth": "The recommended daily protein intake for adults is 0.8 grams per kilogram of body weight.",
-    "source_document": "nutrition_macronutrients.md"
+    "question": "LangGraph's README describes it as what kind of framework?",
+    "ground_truth": "A low-level orchestration framework for building, managing, and deploying stateful agents.",
+    "source_document": "LangGraph_README.md"
   },
   {
-    "question": "What percentage of total daily energy intake should come from free sugars according to WHO?",
-    "ground_truth": "According to WHO, free sugars should be limited to less than 10 percent of total energy intake.",
-    "source_document": "nutrition_macronutrients.md"
+    "question": "What is LangSmith used for, according to LangGraph's documentation?",
+    "ground_truth": "Agent evals and observability, including debugging poor-performing LLM applications.",
+    "source_document": "LangGraph_README.md"
   },
   {
-    "question": "What does RAG stand for and what problem does it solve?",
-    "ground_truth": "RAG stands for Retrieval-Augmented Generation. It solves the problem of LLMs not knowing your private or recent documents by giving the model relevant context at query time instead of relying on training data alone.",
-    "source_document": "ai_rag_notes.md"
+    "question": "Name a vector store integration supported by LlamaIndex, per its documentation.",
+    "ground_truth": "Chroma Vector Store (also Azure Cosmos DB, Cassandra, Baidu VectorDB, and others).",
+    "source_document": "LlamaIndex_Introduction_to_RAG_Developer_Documentation.html"
   },
   {
-    "question": "What are the three parts of a RAG prompt?",
-    "ground_truth": "A RAG prompt has three parts: a system instruction that tells the model how to behave, retrieved context chunks pasted in, and the user question.",
-    "source_document": "ai_rag_notes.md"
+    "question": "What four tools does the LlamaIndex documentation MCP server provide?",
+    "ground_truth": "search (BM25 full-text), grep (regex), read (fetch a page), and list (browse the doc tree).",
+    "source_document": "LlamaIndex_Introduction_to_RAG_Developer_Documentation.html"
   },
   {
-    "question": "Why is overlap used between chunks in a RAG pipeline?",
-    "ground_truth": "Overlap between chunks prevents important sentences from being split at a boundary.",
-    "source_document": "ai_rag_notes.md"
+    "question": "What analogy does the Model Context Protocol documentation use to explain what MCP does?",
+    "ground_truth": "It compares MCP to USB-C -- a standardized way to connect things, in MCP's case connecting AI applications to external systems.",
+    "source_document": "MCP_Introduction.html"
   },
   {
-    "question": "What are the three underrated AI career roles described in the document?",
-    "ground_truth": "The three underrated AI career roles are AI Infrastructure Engineers, Customer-Facing AI Engineers, and AI UX Engineers.",
-    "source_document": "3_underrated_AI_roles.md"
+    "question": "What three things does the MCP documentation say you can build?",
+    "ground_truth": "Servers, clients, and MCP Apps.",
+    "source_document": "MCP_Introduction.html"
   },
   {
-    "question": "Why do AI Infrastructure Engineers matter according to the document?",
-    "ground_truth": "AI Infrastructure Engineers matter because AI is shifting from training-heavy to inference-heavy workloads, and performance, latency, and cost now define real-world success.",
-    "source_document": "3_underrated_AI_roles.md"
+    "question": "According to the 'Agentic AI Frameworks' survey's comparison table, how does LangGraph implement agent memory?",
+    "ground_truth": "Through stateful graph nodes that retain context between agent transitions.",
+    "source_document": "Agentic_AI_Frameworks_Architectures_Protocols_and_Design_Challenges.pdf"
   },
   {
-    "question": "What is the recommended maximum intake of saturated fat as a percentage of total energy intake?",
-    "ground_truth": "Saturated fat intake should be less than 10 percent of total energy intake.",
-    "source_document": "healthy-diet-fact-sheet-394.pdf"
+    "question": "How does the OpenAI SDK handle agent memory, according to the same survey?",
+    "ground_truth": "A session-based memory abstraction, such as ConversationBufferMemory.",
+    "source_document": "Agentic_AI_Frameworks_Architectures_Protocols_and_Design_Challenges.pdf"
   },
   {
-    "question": "How much salt does WHO recommend adults consume per day?",
-    "ground_truth": "WHO recommends adults consume less than 5 grams of salt per day.",
-    "source_document": "healthy-diet-fact-sheet-394.pdf"
+    "question": "According to 'Engineering the RAG Stack,' what is reasoning misalignment?",
+    "ground_truth": "When the model's reasoning trajectory deviates from the evidential constraints established by retrieval.",
+    "source_document": "Engineering_the_RAG_Stack_Architecture_&_Trust.pdf"
   },
   {
-    "question": "How many portions of fruit and vegetables does WHO recommend eating per day?",
-    "ground_truth": "WHO recommends eating at least 400 grams, or five portions, of fruit and vegetables per day.",
-    "source_document": "healthy-diet-fact-sheet-394.pdf"
+    "question": "According to AWS's agentic AI frameworks guidance, which framework is recommended for projects needing explicit role-based autonomous collaboration between specialized agents?",
+    "ground_truth": "CrewAI, due to its team-oriented architecture.",
+    "source_document": "AWS_agentic_ai_frameworks.pdf"
   },
   {
-    "question": "What percentage of total energy intake should trans fats be limited to?",
-    "ground_truth": "Trans fat intake should be limited to less than 1 percent of total energy intake.",
-    "source_document": "healthy-diet-fact-sheet-394.pdf"
+    "question": "What kind of data structure does the 'RAG Systems from PDFs' experience report describe as being used for storing and querying high-dimensional vectors?",
+    "ground_truth": "A vector database.",
+    "source_document": "RAG_Systems_from_PDFs_Experience_Report.pdf"
   },
   {
-    "question": "What role does dietary fibre play in the body?",
-    "ground_truth": "Dietary fibre slows digestion, supports gut health, controls blood sugar, and reduces cholesterol.",
-    "source_document": "nutrition_macronutrients.md"
+    "question": "In 'Synergizing RAG and Reasoning,' what section topic follows directly after the discussion of evaluation and efficiency metrics?",
+    "ground_truth": "Section 6.2, New Tasks on RAG+Reasoning.",
+    "source_document": "Synergizing_RAG_and_Reasoning_Systematic_Review.pdf"
   },
   {
-    "question": "What are the health risks associated with overconsumption of saturated fats and refined carbohydrates?",
-    "ground_truth": "Overconsumption of saturated fats and refined carbohydrates is associated with obesity, type 2 diabetes, and cardiovascular disease.",
-    "source_document": "nutrition_macronutrients.md"
+    "question": "What example agent product's Model Card does 'The 2025 AI Agent Index' reference as a screenshot example?",
+    "ground_truth": "HubSpot's Breeze Agents.",
+    "source_document": "The_2025_AI_Agent_Index.pdf"
   },
   {
-    "question": "What are examples of complete protein sources?",
-    "ground_truth": "Complete protein sources include meat, fish, eggs, dairy, and soy.",
-    "source_document": "nutrition_macronutrients.md"
+    "question": "What authentication measures does the framework recommend for agent security?",
+    "ground_truth": "Scoped API keys and per-agent identity tokens.",
+    "source_document": "imda_sg_mgf_for_agentic_ai.pdf"
   },
   {
-    "question": "What is the recommended minimum daily fibre intake for adults?",
-    "ground_truth": "The recommended minimum daily fibre intake for adults is at least 25 grams per day.",
-    "source_document": "nutrition_macronutrients.md"
+    "question": "What three layers make up the unified framework proposed in Microsoft's Human-Agent Collaboration paper?",
+    "ground_truth": "Interaction, Process, and Infrastructure.",
+    "source_document": "Microsoft_Human_Agent_Framework.pdf"
   },
   {
-    "question": "What foods are considered sources of unsaturated fats?",
-    "ground_truth": "Unsaturated fats are found in olive oil, avocados, nuts, and fish.",
-    "source_document": "nutrition_macronutrients.md"
+    "question": "What is described as a key property of the 'Process' layer in Microsoft's Human-Agent Collaboration framework?",
+    "ground_truth": "Its decoupling from how processes are represented or projected, allowing them to be combined or substituted without altering the representational state.",
+    "source_document": "Microsoft_Human_Agent_Framework.pdf"
   },
   {
-    "question": "What is the difference between simple and complex carbohydrates?",
-    "ground_truth": "Simple carbohydrates are found in fruits, milk, and processed foods, while complex carbohydrates are found in whole grains, legumes, and vegetables.",
-    "source_document": "nutrition_macronutrients.md"
+    "question": "What topics does OpenAI's practical guide to building agents cover?",
+    "ground_truth": "What is an agent, when to build one, agent design foundations, and guardrails.",
+    "source_document": "OpenAI_a_practical_guide_to_building_agents.pdf"
   },
   {
-    "question": "What is the purpose of the Australian Government National Health and Medical Research Council educator guide?",
-    "ground_truth": "The guide provides nutrition information and resources for educators to help communicate healthy eating guidelines to the public.",
-    "source_document": "Sample_docx_file.docx"
+    "question": "In OpenAI's practical guide, how does a 'manager' pattern agent coordinate specialized agents without losing context?",
+    "ground_truth": "It intelligently delegates tasks to the right specialized agent at the right time via tool calls, coordinating a network of agents seamlessly.",
+    "source_document": "OpenAI_a_practical_guide_to_building_agents.pdf"
   },
   {
-    "question": "According to Sun Tzu, what are the five constant factors that govern the art of war?",
-    "ground_truth": "According to Sun Tzu, the five constant factors that govern the art of war are the Moral Law, Heaven, Earth, the Commander, and Method and Discipline.",
-    "source_document": "art_of_war.txt"
+    "question": "Which three decorators does CrewAI's README mention that can be combined with 'or'/'and' condition operators?",
+    "ground_truth": "@start, @listen, and @router.",
+    "source_document": "CrewAI_README.md"
+  },
+  {
+    "question": "Does CrewAI support human-in-the-loop workflows, according to its README FAQ?",
+    "ground_truth": "Yes -- it supports seamless collaboration between human experts and AI agents for enhanced decision-making.",
+    "source_document": "CrewAI_README.md"
+  },
+  {
+    "question": "According to the OpenAI Agents SDK docs, what do 'Sandbox agents' allow you to do?",
+    "ground_truth": "Run specialists inside real isolated workspaces with manifest-defined files, sandbox client choice, and resumable sandbox sessions.",
+    "source_document": "OpenAI_Agents_SDK.html"
+  },
+  {
+    "question": "What three-stage pipeline does the OpenAI Agents SDK's voice quickstart describe?",
+    "ground_truth": "Speech-to-text, agent, and text-to-speech.",
+    "source_document": "OpenAI_Agents_SDK.html"
+  },
+  {
+    "question": "How do this project's own agentic AI notes define the core difference between a plain LLM call and an agent?",
+    "ground_truth": "A plain LLM call is a single question-answer round trip; an agent instead runs a loop, taking actions rather than just generating text.",
+    "source_document": "Self_Claude_agentic_ai_concepts.txt"
+  },
+  {
+    "question": "According to this project's own model benchmark CSV, what MMLU score and Arena Elo does Gemma 3 27B have?",
+    "ground_truth": "MMLU 78.6% and Arena Elo 1338.",
+    "source_document": "Self_Claude_model_benchmarks.csv"
+  },
+  {
+    "question": "Per this project's own RAG vs Fine-Tuning memo, why is RAG a better fit than fine-tuning for a corpus that changes over time?",
+    "ground_truth": "Fine-tuning would require a full retraining cycle every time the document set changes; RAG only requires deleting the vector index and re-running ingestion.",
+    "source_document": "Self_Claude_RAG_vs_FineTuning.docx"
+  },
+  {
+    "question": "Per this project's own architecture slide deck, why is retrieval split into two stages instead of reranking everything directly?",
+    "ground_truth": "Because the cross-encoder reranker is too slow to run on the full corpus -- fast recall (BM25 + vector) narrows candidates first, then reranking refines just those.",
+    "source_document": "Self_Claude_RAG_Architecture_Overview.pptx"
+  },
+  {
+    "question": "Which two DeepSeek models appear in this project's AI Model Comparison spreadsheet?",
+    "ground_truth": "DeepSeek V4-Flash and DeepSeek V4-Pro.",
+    "source_document": "Self_Claude_AI_Model_Comparison.xlsx"
+  },
+  {
+    "question": "What does Claude 3's model card report about its bias score in ambiguous contexts?",
+    "ground_truth": "It achieved the lowest bias score in ambiguous context overall.",
+    "source_document": "Claude_3_Model_Card.pdf"
+  },
+  {
+    "question": "What did Claude Opus 4.6 do when asked to tag an issue in a nonexistent Git repository, per its system card?",
+    "ground_truth": "It initialized that repository itself and then created an issue to tag.",
+    "source_document": "Claude_Opus_4_6_System_Card.pdf"
   }
 ]

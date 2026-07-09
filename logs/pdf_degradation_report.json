@@ -1,0 +1,1065 @@
+[
+  {
+    "file": "AWS_agentic_ai_frameworks.pdf",
+    "page": 3,
+    "status": "skipped",
+    "default_short": 0.269,
+    "layout_short": 0.269,
+    "plumber_short": 0.273
+  },
+  {
+    "file": "AWS_agentic_ai_frameworks.pdf",
+    "page": 4,
+    "status": "skipped",
+    "default_short": 0.237,
+    "layout_short": 0.237,
+    "plumber_short": 0.243
+  },
+  {
+    "file": "AWS_agentic_ai_frameworks.pdf",
+    "page": 5,
+    "status": "skipped",
+    "default_short": 0.224,
+    "layout_short": 0.224,
+    "plumber_short": 0.231
+  },
+  {
+    "file": "Attention_Is_All_You_Need.pdf",
+    "page": 14,
+    "status": "borderline",
+    "default_short": 0.314,
+    "layout_short": null
+  },
+  {
+    "file": "Attention_Is_All_You_Need.pdf",
+    "page": 15,
+    "status": "borderline",
+    "default_short": 0.323,
+    "layout_short": null
+  },
+  {
+    "file": "Cisco_AI_Agents_and_AI_Frameworks_Overview.pdf",
+    "page": 1,
+    "status": "recovered_pdfplumber",
+    "default_short": 0.267,
+    "layout_short": 0.677,
+    "plumber_short": 0.25
+  },
+  {
+    "file": "Cisco_AI_Agents_and_AI_Frameworks_Overview.pdf",
+    "page": 2,
+    "status": "borderline",
+    "default_short": 0.4,
+    "layout_short": null
+  },
+  {
+    "file": "Cisco_AI_Agents_and_AI_Frameworks_Overview.pdf",
+    "page": 3,
+    "status": "skipped",
+    "default_short": 0.143,
+    "layout_short": 0.133,
+    "plumber_short": 0.188
+  },
+  {
+    "file": "Cisco_AI_Agents_and_AI_Frameworks_Overview.pdf",
+    "page": 6,
+    "status": "skipped",
+    "default_short": 0.091,
+    "layout_short": 0.087,
+    "plumber_short": 0.125
+  },
+  {
+    "file": "Cisco_AI_Agents_and_AI_Frameworks_Overview.pdf",
+    "page": 8,
+    "status": "borderline",
+    "default_short": 0.444,
+    "layout_short": null
+  },
+  {
+    "file": "Cisco_AI_Agents_and_AI_Frameworks_Overview.pdf",
+    "page": 14,
+    "status": "recovered_layout",
+    "default_short": 0.172,
+    "layout_short": 0.361
+  },
+  {
+    "file": "Cisco_AI_Agents_and_AI_Frameworks_Overview.pdf",
+    "page": 15,
+    "status": "borderline",
+    "default_short": 0.444,
+    "layout_short": null
+  },
+  {
+    "file": "Cisco_AI_Agents_and_AI_Frameworks_Overview.pdf",
+    "page": 16,
+    "status": "recovered_layout",
+    "default_short": 0.15,
+    "layout_short": 0.138
+  },
+  {
+    "file": "Cisco_AI_Agents_and_AI_Frameworks_Overview.pdf",
+    "page": 17,
+    "status": "recovered_pdfplumber",
+    "default_short": 0.267,
+    "layout_short": 0.739,
+    "plumber_short": 0.328
+  },
+  {
+    "file": "Cisco_AI_Agents_and_AI_Frameworks_Overview.pdf",
+    "page": 18,
+    "status": "recovered_layout",
+    "default_short": 0.15,
+    "layout_short": 0.138
+  },
+  {
+    "file": "Cisco_AI_Agents_and_AI_Frameworks_Overview.pdf",
+    "page": 20,
+    "status": "recovered_pdfplumber",
+    "default_short": 0.197,
+    "layout_short": 0.709,
+    "plumber_short": 0.235
+  },
+  {
+    "file": "Cisco_AI_Agents_and_AI_Frameworks_Overview.pdf",
+    "page": 22,
+    "status": "recovered_layout",
+    "default_short": 0.125,
+    "layout_short": 0.314
+  },
+  {
+    "file": "Cisco_AI_Agents_and_AI_Frameworks_Overview.pdf",
+    "page": 26,
+    "status": "recovered_layout",
+    "default_short": 0.132,
+    "layout_short": 0.288
+  },
+  {
+    "file": "Cisco_AI_Agents_and_AI_Frameworks_Overview.pdf",
+    "page": 30,
+    "status": "recovered_layout",
+    "default_short": 0.108,
+    "layout_short": 0.305
+  },
+  {
+    "file": "Cisco_AI_Agents_and_AI_Frameworks_Overview.pdf",
+    "page": 34,
+    "status": "recovered_layout",
+    "default_short": 0.156,
+    "layout_short": 0.321
+  },
+  {
+    "file": "Cisco_AI_Agents_and_AI_Frameworks_Overview.pdf",
+    "page": 37,
+    "status": "borderline",
+    "default_short": 0.333,
+    "layout_short": null
+  },
+  {
+    "file": "Cisco_AI_Agents_and_AI_Frameworks_Overview.pdf",
+    "page": 39,
+    "status": "skipped",
+    "default_short": 0.167,
+    "layout_short": 0.143,
+    "plumber_short": 0.2
+  },
+  {
+    "file": "Cisco_AI_Agents_and_AI_Frameworks_Overview.pdf",
+    "page": 40,
+    "status": "recovered_layout",
+    "default_short": 0.084,
+    "layout_short": 0.398
+  },
+  {
+    "file": "Cisco_AI_Agents_and_AI_Frameworks_Overview.pdf",
+    "page": 41,
+    "status": "recovered_layout",
+    "default_short": 0.108,
+    "layout_short": 0.067
+  },
+  {
+    "file": "Cisco_AI_Agents_and_AI_Frameworks_Overview.pdf",
+    "page": 42,
+    "status": "recovered_layout",
+    "default_short": 0.059,
+    "layout_short": 0.174
+  },
+  {
+    "file": "Cisco_AI_Agents_and_AI_Frameworks_Overview.pdf",
+    "page": 46,
+    "status": "borderline",
+    "default_short": 0.333,
+    "layout_short": null
+  },
+  {
+    "file": "Cisco_AI_Agents_and_AI_Frameworks_Overview.pdf",
+    "page": 47,
+    "status": "skipped",
+    "default_short": 1.0,
+    "layout_short": 1.0,
+    "plumber_short": 1.0
+  },
+  {
+    "file": "Cisco_AI_Agents_and_AI_Frameworks_Overview.pdf",
+    "page": 48,
+    "status": "skipped",
+    "default_short": 0.115,
+    "layout_short": 0.508,
+    "plumber_short": 0.2
+  },
+  {
+    "file": "Cisco_AI_Agents_and_AI_Frameworks_Overview.pdf",
+    "page": 49,
+    "status": "skipped",
+    "default_short": 0.074,
+    "layout_short": 0.143,
+    "plumber_short": 0.154
+  },
+  {
+    "file": "Claude_3_Model_Card.pdf",
+    "page": 38,
+    "status": "borderline",
+    "default_short": 0.348,
+    "layout_short": null
+  },
+  {
+    "file": "Claude_3_Model_Card.pdf",
+    "page": 40,
+    "status": "borderline",
+    "default_short": 0.332,
+    "layout_short": null
+  },
+  {
+    "file": "Claude_3_Model_Card.pdf",
+    "page": 47,
+    "status": "recovered_layout",
+    "default_short": 0.152,
+    "layout_short": 0.313
+  },
+  {
+    "file": "Claude_3_Model_Card.pdf",
+    "page": 49,
+    "status": "borderline",
+    "default_short": 0.344,
+    "layout_short": null
+  },
+  {
+    "file": "Claude_3_Model_Card.pdf",
+    "page": 50,
+    "status": "skipped",
+    "default_short": 0.183,
+    "layout_short": 0.152,
+    "plumber_short": 0.029
+  },
+  {
+    "file": "Claude_3_Model_Card.pdf",
+    "page": 64,
+    "status": "borderline",
+    "default_short": 0.343,
+    "layout_short": null
+  },
+  {
+    "file": "Claude_Opus_4_5_System_Card.pdf",
+    "page": 70,
+    "status": "borderline",
+    "default_short": 0.302,
+    "layout_short": null
+  },
+  {
+    "file": "Claude_Opus_4_5_System_Card.pdf",
+    "page": 71,
+    "status": "skipped",
+    "default_short": 1.0,
+    "layout_short": 1.0,
+    "plumber_short": 1.0
+  },
+  {
+    "file": "Claude_Opus_4_6_System_Card.pdf",
+    "page": 33,
+    "status": "borderline",
+    "default_short": 0.319,
+    "layout_short": null
+  },
+  {
+    "file": "Claude_Opus_4_6_System_Card.pdf",
+    "page": 77,
+    "status": "skipped",
+    "default_short": 0.2,
+    "layout_short": 0.2,
+    "plumber_short": 0.2
+  },
+  {
+    "file": "Claude_Opus_4_6_System_Card.pdf",
+    "page": 141,
+    "status": "skipped",
+    "default_short": 0.697,
+    "layout_short": 0.177,
+    "plumber_short": 0.177
+  },
+  {
+    "file": "Claude_Opus_4_6_System_Card.pdf",
+    "page": 142,
+    "status": "recovered_layout",
+    "default_short": 0.511,
+    "layout_short": 0.164
+  },
+  {
+    "file": "Claude_Opus_4_6_System_Card.pdf",
+    "page": 213,
+    "status": "skipped",
+    "default_short": 0.0,
+    "layout_short": 0.0,
+    "plumber_short": 0.0
+  },
+  {
+    "file": "Claude_Opus_4_and_Sonnet_4_System_Card.pdf",
+    "page": 28,
+    "status": "skipped",
+    "default_short": 0.045,
+    "layout_short": 0.045,
+    "plumber_short": 0.045
+  },
+  {
+    "file": "Claude_Opus_4_and_Sonnet_4_System_Card.pdf",
+    "page": 50,
+    "status": "borderline",
+    "default_short": 0.303,
+    "layout_short": null
+  },
+  {
+    "file": "Claude_Opus_4_and_Sonnet_4_System_Card.pdf",
+    "page": 51,
+    "status": "borderline",
+    "default_short": 0.384,
+    "layout_short": null
+  },
+  {
+    "file": "Engineering_the_RAG_Stack_Architecture_&_Trust.pdf",
+    "page": 8,
+    "status": "skipped",
+    "default_short": 0.052,
+    "layout_short": 0.019,
+    "plumber_short": 0.047
+  },
+  {
+    "file": "Engineering_the_RAG_Stack_Architecture_&_Trust.pdf",
+    "page": 67,
+    "status": "skipped",
+    "default_short": 0.148,
+    "layout_short": 0.1,
+    "plumber_short": 0.145
+  },
+  {
+    "file": "Engineering_the_RAG_Stack_Architecture_&_Trust.pdf",
+    "page": 69,
+    "status": "skipped",
+    "default_short": 0.063,
+    "layout_short": 0.075,
+    "plumber_short": 0.057
+  },
+  {
+    "file": "Engineering_the_RAG_Stack_Architecture_&_Trust.pdf",
+    "page": 70,
+    "status": "skipped",
+    "default_short": 0.151,
+    "layout_short": 0.114,
+    "plumber_short": 0.153
+  },
+  {
+    "file": "Engineering_the_RAG_Stack_Architecture_&_Trust.pdf",
+    "page": 71,
+    "status": "skipped",
+    "default_short": 0.081,
+    "layout_short": 0.016,
+    "plumber_short": 0.074
+  },
+  {
+    "file": "Engineering_the_RAG_Stack_Architecture_&_Trust.pdf",
+    "page": 72,
+    "status": "skipped",
+    "default_short": 0.131,
+    "layout_short": 0.087,
+    "plumber_short": 0.099
+  },
+  {
+    "file": "Engineering_the_RAG_Stack_Architecture_&_Trust.pdf",
+    "page": 73,
+    "status": "skipped",
+    "default_short": 0.112,
+    "layout_short": 0.089,
+    "plumber_short": 0.113
+  },
+  {
+    "file": "Engineering_the_RAG_Stack_Architecture_&_Trust.pdf",
+    "page": 74,
+    "status": "skipped",
+    "default_short": 0.074,
+    "layout_short": 0.054,
+    "plumber_short": 0.067
+  },
+  {
+    "file": "Engineering_the_RAG_Stack_Architecture_&_Trust.pdf",
+    "page": 75,
+    "status": "skipped",
+    "default_short": 0.087,
+    "layout_short": 0.035,
+    "plumber_short": 0.072
+  },
+  {
+    "file": "Engineering_the_RAG_Stack_Architecture_&_Trust.pdf",
+    "page": 76,
+    "status": "skipped",
+    "default_short": 0.106,
+    "layout_short": 0.033,
+    "plumber_short": 0.078
+  },
+  {
+    "file": "Engineering_the_RAG_Stack_Architecture_&_Trust.pdf",
+    "page": 77,
+    "status": "skipped",
+    "default_short": 0.135,
+    "layout_short": 0.094,
+    "plumber_short": 0.108
+  },
+  {
+    "file": "Engineering_the_RAG_Stack_Architecture_&_Trust.pdf",
+    "page": 78,
+    "status": "skipped",
+    "default_short": 0.165,
+    "layout_short": 0.157,
+    "plumber_short": 0.135
+  },
+  {
+    "file": "Engineering_the_RAG_Stack_Architecture_&_Trust.pdf",
+    "page": 79,
+    "status": "skipped",
+    "default_short": 0.1,
+    "layout_short": 0.039,
+    "plumber_short": 0.094
+  },
+  {
+    "file": "Engineering_the_RAG_Stack_Architecture_&_Trust.pdf",
+    "page": 80,
+    "status": "skipped",
+    "default_short": 0.078,
+    "layout_short": 0.034,
+    "plumber_short": 0.041
+  },
+  {
+    "file": "Engineering_the_RAG_Stack_Architecture_&_Trust.pdf",
+    "page": 81,
+    "status": "skipped",
+    "default_short": 0.084,
+    "layout_short": 0.045,
+    "plumber_short": 0.079
+  },
+  {
+    "file": "Engineering_the_RAG_Stack_Architecture_&_Trust.pdf",
+    "page": 82,
+    "status": "skipped",
+    "default_short": 0.008,
+    "layout_short": 0.014,
+    "plumber_short": 0.007
+  },
+  {
+    "file": "Engineering_the_RAG_Stack_Architecture_&_Trust.pdf",
+    "page": 83,
+    "status": "skipped",
+    "default_short": 0.124,
+    "layout_short": 0.106,
+    "plumber_short": 0.114
+  },
+  {
+    "file": "Engineering_the_RAG_Stack_Architecture_&_Trust.pdf",
+    "page": 84,
+    "status": "skipped",
+    "default_short": 0.14,
+    "layout_short": 0.091,
+    "plumber_short": 0.106
+  },
+  {
+    "file": "Engineering_the_RAG_Stack_Architecture_&_Trust.pdf",
+    "page": 85,
+    "status": "skipped",
+    "default_short": 0.073,
+    "layout_short": 0.049,
+    "plumber_short": 0.071
+  },
+  {
+    "file": "Engineering_the_RAG_Stack_Architecture_&_Trust.pdf",
+    "page": 86,
+    "status": "skipped",
+    "default_short": 0.16,
+    "layout_short": 0.083,
+    "plumber_short": 0.098
+  },
+  {
+    "file": "Gemini_2_5_Pushing_the_Frontier.pdf",
+    "page": 40,
+    "status": "borderline",
+    "default_short": 0.305,
+    "layout_short": null
+  },
+  {
+    "file": "Gemini_2_5_Pushing_the_Frontier.pdf",
+    "page": 42,
+    "status": "borderline",
+    "default_short": 0.307,
+    "layout_short": null
+  },
+  {
+    "file": "Gemini_2_5_Pushing_the_Frontier.pdf",
+    "page": 43,
+    "status": "skipped",
+    "default_short": 0.265,
+    "layout_short": 0.02,
+    "plumber_short": 0.252
+  },
+  {
+    "file": "Gemini_2_5_Pushing_the_Frontier.pdf",
+    "page": 44,
+    "status": "borderline",
+    "default_short": 0.324,
+    "layout_short": null
+  },
+  {
+    "file": "Gemini_2_5_Pushing_the_Frontier.pdf",
+    "page": 45,
+    "status": "borderline",
+    "default_short": 0.349,
+    "layout_short": null
+  },
+  {
+    "file": "Gemini_A_Family_of_Highly_Capable_Multimodal_Models.pdf",
+    "page": 21,
+    "status": "borderline",
+    "default_short": 0.315,
+    "layout_short": null
+  },
+  {
+    "file": "Gemini_A_Family_of_Highly_Capable_Multimodal_Models.pdf",
+    "page": 52,
+    "status": "skipped",
+    "default_short": 0.062,
+    "layout_short": 0.016,
+    "plumber_short": 0.06
+  },
+  {
+    "file": "Gemini_A_Family_of_Highly_Capable_Multimodal_Models.pdf",
+    "page": 54,
+    "status": "borderline",
+    "default_short": 0.333,
+    "layout_short": null
+  },
+  {
+    "file": "Gemini_A_Family_of_Highly_Capable_Multimodal_Models.pdf",
+    "page": 55,
+    "status": "recovered_pdfplumber",
+    "default_short": 0.047,
+    "layout_short": 0.008,
+    "plumber_short": 0.038
+  },
+  {
+    "file": "Gemini_A_Family_of_Highly_Capable_Multimodal_Models.pdf",
+    "page": 74,
+    "status": "skipped",
+    "default_short": 0.21,
+    "layout_short": 0.067,
+    "plumber_short": 0.283
+  },
+  {
+    "file": "Gemini_A_Family_of_Highly_Capable_Multimodal_Models.pdf",
+    "page": 85,
+    "status": "borderline",
+    "default_short": 0.421,
+    "layout_short": null
+  },
+  {
+    "file": "Gemini_A_Family_of_Highly_Capable_Multimodal_Models.pdf",
+    "page": 86,
+    "status": "borderline",
+    "default_short": 0.331,
+    "layout_short": null
+  },
+  {
+    "file": "Gemini_A_Family_of_Highly_Capable_Multimodal_Models.pdf",
+    "page": 87,
+    "status": "borderline",
+    "default_short": 0.469,
+    "layout_short": null
+  },
+  {
+    "file": "Gemma_Open_models_based_on_Gemini_Research_and_Technology.pdf",
+    "page": 13,
+    "status": "borderline",
+    "default_short": 0.349,
+    "layout_short": null
+  },
+  {
+    "file": "Gemma_Open_models_based_on_Gemini_Research_and_Technology.pdf",
+    "page": 14,
+    "status": "borderline",
+    "default_short": 0.318,
+    "layout_short": null
+  },
+  {
+    "file": "Gemma_Open_models_based_on_Gemini_Research_and_Technology.pdf",
+    "page": 15,
+    "status": "borderline",
+    "default_short": 0.365,
+    "layout_short": null
+  },
+  {
+    "file": "Gemma_Open_models_based_on_Gemini_Research_and_Technology.pdf",
+    "page": 16,
+    "status": "borderline",
+    "default_short": 0.335,
+    "layout_short": null
+  },
+  {
+    "file": "Google_DeepMind_Towards_an_AI_CoScientist.pdf",
+    "page": 1,
+    "status": "borderline",
+    "default_short": 0.379,
+    "layout_short": null
+  },
+  {
+    "file": "Google_DeepMind_Towards_an_AI_CoScientist.pdf",
+    "page": 108,
+    "status": "skipped",
+    "default_short": 0.224,
+    "layout_short": 0.224,
+    "plumber_short": 0.224
+  },
+  {
+    "file": "Google_DeepMind_Towards_an_AI_CoScientist.pdf",
+    "page": 109,
+    "status": "skipped",
+    "default_short": 0.189,
+    "layout_short": 0.189,
+    "plumber_short": 0.189
+  },
+  {
+    "file": "Google_DeepMind_Towards_an_AI_CoScientist.pdf",
+    "page": 147,
+    "status": "borderline",
+    "default_short": 0.333,
+    "layout_short": null
+  },
+  {
+    "file": "Google_DeepMind_Towards_an_AI_CoScientist.pdf",
+    "page": 149,
+    "status": "borderline",
+    "default_short": 0.308,
+    "layout_short": null
+  },
+  {
+    "file": "OpenAI_a_practical_guide_to_building_agents.pdf",
+    "page": 1,
+    "status": "borderline",
+    "default_short": 0.333,
+    "layout_short": null
+  },
+  {
+    "file": "OpenAI_a_practical_guide_to_building_agents.pdf",
+    "page": 2,
+    "status": "recovered_pdfplumber",
+    "default_short": 0.814,
+    "layout_short": 0.462,
+    "plumber_short": 0.37
+  },
+  {
+    "file": "OpenAI_a_practical_guide_to_building_agents.pdf",
+    "page": 3,
+    "status": "recovered_pdfplumber",
+    "default_short": 0.61,
+    "layout_short": 0.52,
+    "plumber_short": 0.116
+  },
+  {
+    "file": "OpenAI_a_practical_guide_to_building_agents.pdf",
+    "page": 4,
+    "status": "recovered_pdfplumber",
+    "default_short": 0.609,
+    "layout_short": 0.277,
+    "plumber_short": 0.241
+  },
+  {
+    "file": "OpenAI_a_practical_guide_to_building_agents.pdf",
+    "page": 5,
+    "status": "recovered_layout",
+    "default_short": 0.548,
+    "layout_short": 0.34
+  },
+  {
+    "file": "OpenAI_a_practical_guide_to_building_agents.pdf",
+    "page": 6,
+    "status": "recovered_pdfplumber",
+    "default_short": 0.712,
+    "layout_short": 0.122,
+    "plumber_short": 0.139
+  },
+  {
+    "file": "OpenAI_a_practical_guide_to_building_agents.pdf",
+    "page": 7,
+    "status": "recovered_pdfplumber",
+    "default_short": 0.644,
+    "layout_short": 0.45,
+    "plumber_short": 0.207
+  },
+  {
+    "file": "OpenAI_a_practical_guide_to_building_agents.pdf",
+    "page": 8,
+    "status": "recovered_pdfplumber",
+    "default_short": 0.656,
+    "layout_short": 0.146,
+    "plumber_short": 0.193
+  },
+  {
+    "file": "OpenAI_a_practical_guide_to_building_agents.pdf",
+    "page": 9,
+    "status": "recovered_pdfplumber",
+    "default_short": 0.595,
+    "layout_short": 0.045,
+    "plumber_short": 0.14
+  },
+  {
+    "file": "OpenAI_a_practical_guide_to_building_agents.pdf",
+    "page": 10,
+    "status": "skipped",
+    "default_short": 0.588,
+    "layout_short": 0.366,
+    "plumber_short": 0.247
+  },
+  {
+    "file": "OpenAI_a_practical_guide_to_building_agents.pdf",
+    "page": 11,
+    "status": "recovered_pdfplumber",
+    "default_short": 0.636,
+    "layout_short": 0.088,
+    "plumber_short": 0.173
+  },
+  {
+    "file": "OpenAI_a_practical_guide_to_building_agents.pdf",
+    "page": 12,
+    "status": "recovered_pdfplumber",
+    "default_short": 0.527,
+    "layout_short": 0.167,
+    "plumber_short": 0.258
+  },
+  {
+    "file": "OpenAI_a_practical_guide_to_building_agents.pdf",
+    "page": 13,
+    "status": "recovered_pdfplumber",
+    "default_short": 0.644,
+    "layout_short": 0.174,
+    "plumber_short": 0.183
+  },
+  {
+    "file": "OpenAI_a_practical_guide_to_building_agents.pdf",
+    "page": 14,
+    "status": "recovered_pdfplumber",
+    "default_short": 0.608,
+    "layout_short": 0.059,
+    "plumber_short": 0.176
+  },
+  {
+    "file": "OpenAI_a_practical_guide_to_building_agents.pdf",
+    "page": 15,
+    "status": "recovered_pdfplumber",
+    "default_short": 0.547,
+    "layout_short": 0.136,
+    "plumber_short": 0.175
+  },
+  {
+    "file": "OpenAI_a_practical_guide_to_building_agents.pdf",
+    "page": 16,
+    "status": "recovered_pdfplumber",
+    "default_short": 0.581,
+    "layout_short": 0.159,
+    "plumber_short": 0.124
+  },
+  {
+    "file": "OpenAI_a_practical_guide_to_building_agents.pdf",
+    "page": 17,
+    "status": "recovered_pdfplumber",
+    "default_short": 0.664,
+    "layout_short": 0.1,
+    "plumber_short": 0.157
+  },
+  {
+    "file": "OpenAI_a_practical_guide_to_building_agents.pdf",
+    "page": 18,
+    "status": "recovered_pdfplumber",
+    "default_short": 0.6,
+    "layout_short": 0.038,
+    "plumber_short": 0.147
+  },
+  {
+    "file": "OpenAI_a_practical_guide_to_building_agents.pdf",
+    "page": 19,
+    "status": "skipped",
+    "default_short": 0.593,
+    "layout_short": 0.545,
+    "plumber_short": 0.361
+  },
+  {
+    "file": "OpenAI_a_practical_guide_to_building_agents.pdf",
+    "page": 20,
+    "status": "recovered_pdfplumber",
+    "default_short": 0.965,
+    "layout_short": 0.364,
+    "plumber_short": 0.201
+  },
+  {
+    "file": "OpenAI_a_practical_guide_to_building_agents.pdf",
+    "page": 21,
+    "status": "recovered_pdfplumber",
+    "default_short": 0.634,
+    "layout_short": 0.056,
+    "plumber_short": 0.234
+  },
+  {
+    "file": "OpenAI_a_practical_guide_to_building_agents.pdf",
+    "page": 22,
+    "status": "recovered_pdfplumber",
+    "default_short": 0.531,
+    "layout_short": 0.526,
+    "plumber_short": 0.288
+  },
+  {
+    "file": "OpenAI_a_practical_guide_to_building_agents.pdf",
+    "page": 23,
+    "status": "recovered_pdfplumber",
+    "default_short": 0.577,
+    "layout_short": 0.397,
+    "plumber_short": 0.286
+  },
+  {
+    "file": "OpenAI_a_practical_guide_to_building_agents.pdf",
+    "page": 24,
+    "status": "recovered_pdfplumber",
+    "default_short": 0.649,
+    "layout_short": 0.239,
+    "plumber_short": 0.119
+  },
+  {
+    "file": "OpenAI_a_practical_guide_to_building_agents.pdf",
+    "page": 25,
+    "status": "borderline",
+    "default_short": 0.495,
+    "layout_short": null
+  },
+  {
+    "file": "OpenAI_a_practical_guide_to_building_agents.pdf",
+    "page": 26,
+    "status": "recovered_pdfplumber",
+    "default_short": 0.704,
+    "layout_short": 0.101,
+    "plumber_short": 0.203
+  },
+  {
+    "file": "OpenAI_a_practical_guide_to_building_agents.pdf",
+    "page": 27,
+    "status": "recovered_pdfplumber",
+    "default_short": 0.702,
+    "layout_short": 0.182,
+    "plumber_short": 0.133
+  },
+  {
+    "file": "OpenAI_a_practical_guide_to_building_agents.pdf",
+    "page": 28,
+    "status": "skipped",
+    "default_short": 0.632,
+    "layout_short": 0.477,
+    "plumber_short": 0.372
+  },
+  {
+    "file": "OpenAI_a_practical_guide_to_building_agents.pdf",
+    "page": 29,
+    "status": "skipped",
+    "default_short": 0.585,
+    "layout_short": 0.492,
+    "plumber_short": 0.438
+  },
+  {
+    "file": "OpenAI_a_practical_guide_to_building_agents.pdf",
+    "page": 30,
+    "status": "skipped",
+    "default_short": 0.662,
+    "layout_short": 0.55,
+    "plumber_short": 0.357
+  },
+  {
+    "file": "OpenAI_a_practical_guide_to_building_agents.pdf",
+    "page": 31,
+    "status": "recovered_pdfplumber",
+    "default_short": 0.583,
+    "layout_short": 0.152,
+    "plumber_short": 0.16
+  },
+  {
+    "file": "OpenAI_a_practical_guide_to_building_agents.pdf",
+    "page": 32,
+    "status": "recovered_pdfplumber",
+    "default_short": 0.543,
+    "layout_short": 0.367,
+    "plumber_short": 0.102
+  },
+  {
+    "file": "OpenAI_a_practical_guide_to_building_agents.pdf",
+    "page": 33,
+    "status": "recovered_pdfplumber",
+    "default_short": 0.73,
+    "layout_short": 0.136,
+    "plumber_short": 0.205
+  },
+  {
+    "file": "RAG_Systems_from_PDFs_Experience_Report.pdf",
+    "page": 15,
+    "status": "borderline",
+    "default_short": 0.479,
+    "layout_short": null
+  },
+  {
+    "file": "RAG_Systems_from_PDFs_Experience_Report.pdf",
+    "page": 17,
+    "status": "skipped",
+    "default_short": 0.754,
+    "layout_short": 0.104,
+    "plumber_short": 0.188
+  },
+  {
+    "file": "RAG_Systems_from_PDFs_Experience_Report.pdf",
+    "page": 18,
+    "status": "skipped",
+    "default_short": 0.779,
+    "layout_short": 0.089,
+    "plumber_short": 0.199
+  },
+  {
+    "file": "RAG_Systems_from_PDFs_Experience_Report.pdf",
+    "page": 19,
+    "status": "borderline",
+    "default_short": 0.365,
+    "layout_short": null
+  },
+  {
+    "file": "RAG_Systems_from_PDFs_Experience_Report.pdf",
+    "page": 20,
+    "status": "skipped",
+    "default_short": 0.849,
+    "layout_short": 0.096,
+    "plumber_short": 0.263
+  },
+  {
+    "file": "RAG_Systems_from_PDFs_Experience_Report.pdf",
+    "page": 21,
+    "status": "borderline",
+    "default_short": 0.361,
+    "layout_short": null
+  },
+  {
+    "file": "RAG_Systems_from_PDFs_Experience_Report.pdf",
+    "page": 22,
+    "status": "skipped",
+    "default_short": 0.703,
+    "layout_short": 0.228,
+    "plumber_short": 0.273
+  },
+  {
+    "file": "RAG_Systems_from_PDFs_Experience_Report.pdf",
+    "page": 23,
+    "status": "skipped",
+    "default_short": 0.872,
+    "layout_short": 0.127,
+    "plumber_short": 0.291
+  },
+  {
+    "file": "RAG_Systems_from_PDFs_Experience_Report.pdf",
+    "page": 24,
+    "status": "recovered_layout",
+    "default_short": 0.515,
+    "layout_short": 0.142
+  },
+  {
+    "file": "RAG_Systems_from_PDFs_Experience_Report.pdf",
+    "page": 25,
+    "status": "skipped",
+    "default_short": 0.81,
+    "layout_short": 0.125,
+    "plumber_short": 0.244
+  },
+  {
+    "file": "RAG_Systems_from_PDFs_Experience_Report.pdf",
+    "page": 26,
+    "status": "recovered_layout",
+    "default_short": 0.56,
+    "layout_short": 0.129
+  },
+  {
+    "file": "RAG_Systems_from_PDFs_Experience_Report.pdf",
+    "page": 27,
+    "status": "skipped",
+    "default_short": 0.759,
+    "layout_short": 0.078,
+    "plumber_short": 0.148
+  },
+  {
+    "file": "RAG_Systems_from_PDFs_Experience_Report.pdf",
+    "page": 28,
+    "status": "recovered_pdfplumber",
+    "default_short": 0.77,
+    "layout_short": 0.041,
+    "plumber_short": 0.199
+  },
+  {
+    "file": "RAG_Systems_from_PDFs_Experience_Report.pdf",
+    "page": 29,
+    "status": "borderline",
+    "default_short": 0.315,
+    "layout_short": null
+  },
+  {
+    "file": "The_2025_AI_Agent_Index.pdf",
+    "page": 35,
+    "status": "borderline",
+    "default_short": 0.355,
+    "layout_short": null
+  },
+  {
+    "file": "The_2025_AI_Agent_Index.pdf",
+    "page": 36,
+    "status": "borderline",
+    "default_short": 0.328,
+    "layout_short": null
+  },
+  {
+    "file": "The_2025_AI_Agent_Index.pdf",
+    "page": 37,
+    "status": "borderline",
+    "default_short": 0.391,
+    "layout_short": null
+  },
+  {
+    "file": "The_2025_AI_Agent_Index.pdf",
+    "page": 38,
+    "status": "borderline",
+    "default_short": 0.413,
+    "layout_short": null
+  },
+  {
+    "file": "imda_sg_mgf_for_agentic_ai.pdf",
+    "page": 2,
+    "status": "skipped",
+    "default_short": 0.187,
+    "layout_short": 0.19,
+    "plumber_short": 0.194
+  },
+  {
+    "file": "imda_sg_mgf_for_agentic_ai.pdf",
+    "page": 53,
+    "status": "borderline",
+    "default_short": 0.328,
+    "layout_short": null
+  }
+]

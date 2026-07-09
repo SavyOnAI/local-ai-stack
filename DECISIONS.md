@@ -368,6 +368,119 @@ Fixed by changing the filter to `v is not None and not math.isnan(v)`, and added
 
 ---
 
+### DEC-019 — ChromaDB Metadata Silently Dropped Since Day 3
+
+**Date:** July 2026
+**Phase:** 2
+**Decision:** Fixed `add_chunks()` in `vector_store.py` to pass `metadatas=` to `collection.add()`.
+
+**Alternatives considered:**
+- None — this was a straightforward omission, not a design choice with tradeoffs.
+
+**Reason chosen:**
+`collection.add()` was being called with `ids`, `documents`, and `embeddings` only — no `metadatas` argument existed in the call at all. ChromaDB doesn't error on a missing optional parameter; it silently stores chunks with no metadata. This meant every chunk indexed since Day 3, across two full corpora, had `source` and `chunk_index` computed correctly upstream and then discarded the moment they reached this function. Undetected until a post-reindex file-inventory check (comparing files on disk against distinct `source` values in the collection) came back with every chunk showing `None` metadata.
+
+**Lesson:** The original smoke test for `add_chunks()` used flat fake chunks (`id`/`text`/`embedding` only) with no `source` field at all — it could not have caught this bug even in principle, because it never exercised the metadata path. Fixed the smoke test alongside the bug: fake chunks now include a `metadata` dict matching the real pipeline's shape, so a future regression here would fail loudly instead of silently.
+
+---
+
+### DEC-020 — File-Swap Incident: chunker.py / vector_store.py Content Mixup
+
+**Date:** July 2026
+**Phase:** 2
+**Decision:** No process change beyond reinforcing the existing `grep -r "^def " src/` session-start check — this was caught by that check, as intended.
+
+**What happened:**
+During iterative fixes to `add_chunks()`, the corrected `vector_store.py` content was pasted into `chunker.py`, overwriting the original chunking logic entirely, while the old unfixed `vector_store.py` content remained in its own file untouched. Surfaced as an `ImportError: cannot import name 'chunk_document'` — the function genuinely no longer existed in that file. Confirmed via direct file upload and comparison rather than guessing at the cause.
+
+**Reason for no process change:**
+This is the second file-swap incident this project (see original two-incident count in project history). Both were caught by the standing `grep -r "^def " src/` requirement before further code changes — the check is working as designed. The actual fix is discipline, not tooling: confirm file contents directly (`cat`) when a traceback contradicts what should be on disk, rather than assuming the file matches the last message sent.
+
+---
+
+### DEC-021 — Corpus Swap: Nutrition → AI/Agentic AI Domain
+
+**Date:** July 2026
+**Phase:** 2
+**Decision:** Replaced the nutrition-domain corpus with a 31-file AI/agentic-AI domain corpus spanning all 8 supported formats (PDF, DOCX, PPTX, XLSX, CSV, HTML, MD, TXT).
+
+**Alternatives considered:**
+- Keep the nutrition corpus and add AI-domain documents alongside it (rejected — dilutes the portfolio narrative, doubles indexing/eval cost for no benefit).
+
+**Reason chosen:**
+The original nutrition corpus was a placeholder for pipeline development, not the intended final domain. AI/agentic AI content directly supports the project's own narrative (a RAG system about RAG and agents). Sourced from a mix of arXiv papers, vendor documentation (AWS, Cisco, Microsoft, OpenAI), governance frameworks, and self-authored reference material — deliberately including all 8 formats to exercise every extractor built in Phase 2, including three (docx, pptx, xlsx) that had never been run against real files before this swap.
+
+**Result:** 4,869 chunks initially indexed; later reduced to 4,788 after PDF corruption remediation (DEC-023) permanently excluded 53 unrecoverable pages.
+
+---
+
+### DEC-022 — GitHub Actions Runner: Self-Hosted, Not Cloud-Hosted
+
+**Date:** July 2026
+**Phase:** 2
+**Decision:** Self-hosted GitHub Actions runner on local M1 Max hardware, restricted to `push`-to-`main` triggers only (never `pull_request`).
+
+**Alternatives considered:**
+- GitHub-hosted runners (`ubuntu-latest`) — standard, zero setup.
+- Precompute eval results locally, have CI check a committed JSON threshold instead of running the pipeline live.
+- Use a smaller cloud-callable model as a CI-only stand-in judge.
+
+**Reason chosen:**
+The CI eval gate needs to run `evaluator.py`, which calls Ollama for both `gemma4:26b` generation and the RAGAS judge. GitHub's hosted runners have no GPU and insufficient RAM to run a 26B local model — this isn't a tuning problem, it's a structural mismatch with DEC-002's fully-local premise. A self-hosted runner on the same Mac that already runs Ollama is the only option that preserves "no cloud APIs" while actually running the real pipeline in CI, not a stand-in.
+
+**Security consideration:** Self-hosted runners on public repositories are a documented attack vector — a stranger's pull request can trigger a workflow that executes on the runner's actual machine. Mitigated by scoping the workflow to `push: branches: [main]` only; PRs from anyone else never touch the runner, since only the repo owner can push directly to `main`. Additionally requires an explicit `permissions: contents: read` block to prevent the workflow's `GITHUB_TOKEN` from having broader-than-necessary default permissions.
+
+**Tradeoff accepted:** CI only runs when the Mac is on and the runner service is active — unlike a cloud runner, this isn't always-available. Acceptable for a solo portfolio project; would need revisiting with a second contributor or a requirement for CI to run on arbitrary infrastructure.
+
+---
+
+### DEC-023 — PDF Extraction Corruption: Detection Heuristic and Three-Tier Fallback
+
+**Date:** July 2026
+**Phase:** 2
+**Decision:** Added tail-fraction-based corruption detection to `pdf_extractor.py`, with automatic fallback through three extraction methods: pypdf default → pypdf layout mode → pdfplumber. Pages failing all three are skipped rather than ingested corrupted.
+
+**Alternatives considered:**
+- Average word length as the sole corruption signal — tested first, rejected. Could not reliably separate corrupted pages from clean pages with normal short-word density (citations, section numbers); a single number can't distinguish fragmentation (words split apart) from fusion (words wrongly merged), since both move the average in different directions.
+- Global switch to `extraction_mode="layout"` for all PDFs — rejected. Fixed some files, actively degraded others that were already extracting correctly (word-fusion corruption on previously-clean multi-column academic PDFs), confirmed via direct before/after comparison on both bad and clean pages before deciding against it.
+- Dictionary-word-ratio check (e.g. against `/usr/share/dict/words`) — considered, not implemented. Rejected because this corpus's own vocabulary (RAGAS, LangGraph, reranker, embeddings) would register as false positives against a general English dictionary.
+- Structural/layout-based detection (identify multi-column or table-heavy PDF sections before extraction, rather than scoring extracted text after the fact) — theoretically more targeted, deferred as future work; larger scope than justified for the immediate problem.
+
+**Reason chosen:**
+Root cause: several corpus PDFs (marketing-deck style exports, notably `OpenAI_a_practical_guide_to_building_agents.pdf`) use embedded/subsetted fonts with corrupted or non-standard glyph-advance-width data. Both pypdf extraction modes rely on this width data to decide word boundaries and inherit the same corruption, misfiring in opposite directions (fragmentation vs. fusion) depending on page content density. `pdfplumber` reconstructs words from measured character bounding boxes instead of trusting the font's declared widths, sidestepping the corrupted data entirely — confirmed by direct text inspection (not just the numeric heuristic) on multiple previously-unreadable pages, which came back as clean, grammatically correct English after the pdfplumber fallback.
+
+**Detection method:** `_tail_fraction()` measures the proportion of words at each length extreme (≤2 chars for fragmentation, ≥15 chars for fusion) rather than a single average — calibrated against ~30 sampled pages from 7 confirmed-clean files, then validated against known-bad pages before any threshold was trusted. Two-tier response: high-confidence corruption (`short_frac > 0.5` or `long_frac > 0.065`) triggers automatic fallback through layout mode then pdfplumber; borderline corruption (`short_frac` 0.30–0.5) is logged for manual review but not auto-fixed, since this range could not be reliably separated from normal clean-page noise at full-corpus scale.
+
+**Result:** Total permanently-skipped pages across the corpus dropped from 83 to 53 after the pdfplumber tier was added. `OpenAI_a_practical_guide_to_building_agents.pdf` specifically went from 30 skipped/1 recovered to 5 skipped/26 recovered — the single largest improvement, on the file that motivated this entire investigation.
+
+**Known unresolved case:** `Engineering_the_RAG_Stack_Architecture_&_Trust.pdf` pages 67–86 remain fully skipped under all three extraction methods (0 recovered of 20 flagged). Manually inspected — this is a clean, correctly-formatted bibliography/reference section, not corrupted text. The tail-fraction heuristic cannot distinguish a citation-dense reference list (short author initials, page-range abbreviations, bracketed numbers) from genuine fragmentation. Accepted as a reasonable outcome rather than pursued further: a reference list's retrieval value for grounding RAG answers is low regardless of extraction quality.
+
+**Result vs. context_precision:** This fix improved faithfulness substantially (0.886 → 0.9626 on the full 30-question eval) by making previously garbled or entirely-missing content available and correctly grounded. It did **not** meaningfully move context_precision (0.4369 → 0.4387) — see DEC-024, since that metric turned out to be capped by a different, unrelated cause.
+
+**To revisit:** Evaluate PyMuPDF (fitz) more broadly as an alternative or additional extraction tier — tested informally alongside pdfplumber for this investigation and performed near-identically on the specific pages checked, but not adopted since pdfplumber alone was sufficient and has a lighter dependency footprint. Worth a fuller comparison if extraction issues recur on future corpus additions.
+
+---
+
+### DEC-024 — context_precision Ceiling: Retrieval Specificity, Not Extraction Quality
+
+**Date:** July 2026
+**Phase:** 2
+**Decision:** No code change made. Documented as a known, accepted limitation of the current fixed-`top_k=5` retrieval design; not pursued further this phase.
+
+**Investigation:** After DEC-023's extraction fix, context_precision on the full 30-question eval moved only from 0.4369 to 0.4387 — essentially flat, despite faithfulness improving substantially. Diagnosed directly from `eval_results_per_question.csv` rather than assumption:
+
+- **`OpenAI_a_practical_guide_to_building_agents.pdf` table-of-contents question** scored context_precision = 0.0 both before and after the extraction fix. Post-fix, the retrieved chunk (chunk 47) contained clean, correctly extracted, genuinely on-topic content from the same document (Instructions, model selection, guardrails) — but not the specific page-1 table-of-contents chunk the ground truth needed. Content availability was fixed; retrieval's ability to find the *one specific* chunk matching a narrow question, among many legitimately-relevant chunks in a large document, was not.
+- **LlamaIndex MCP-server-tools question** (`LlamaIndex_Introduction_to_RAG_Developer_Documentation.html`, unaffected by any PDF extraction work) showed the identical failure shape: retrieval returned a clean, on-topic chunk about LlamaIndex's general purpose instead of the specific chunk listing the four MCP server tools the question asked about. Confirms the pattern is general to the retrieval/reranking pipeline, not specific to PDFs or to any one document.
+
+**Reason chosen (for not pursuing a fix this phase):**
+Root cause is architectural: `top_k=5` is fixed regardless of question narrowness or document size. A single-fact question against a small document (5–8 chunks total) or a large one (600+ chunks) both receive exactly 5 retrieved chunks, most of which are necessarily "extra" for a narrow answer — this is what context_precision penalizes by design. Fixing it properly means tuning `top_k` width or adding a dynamic reranker-score cutoff, which is real, separate engineering work with its own tradeoffs (risk of reducing context_recall if `top_k` is narrowed too aggressively), not a bug fix.
+
+The Phase 2 PRD's own evaluation table (§10) sets context_precision's threshold as a CI **warning**, not a build-blocking gate — only faithfulness (≥0.75) blocks merges. With faithfulness now at 0.9626, the CI gate itself is unaffected by this finding.
+
+**To revisit:** Tune `top_k` and/or add a reranker-score-gap cutoff (return fewer chunks when the reranker's top result clearly outscores the rest) to improve context_precision without degrading recall. Natural fit for Phase 3 or 4, alongside the observability work that will make latency/quality tradeoffs from such a change directly measurable.
+
+---
+
 ## Decisions Pending
 
 The following decisions are noted but not yet made. They will be logged here when resolved.
@@ -383,9 +496,8 @@ The following decisions are noted but not yet made. They will be logged here whe
 | Speed-tier benchmark model for Phase 3 | 3 | Gemma 3 4B likely — pull with `ollama pull gemma3` when Phase 3 begins |
 | OCR for scanned/image-only PDFs | 2+ | Deferred to Phase 3+. pypdf skips image-only pages and returns empty string. loader.py warns and skips these files. Manual conversion via macOS Preview or Acrobat as interim workaround. Tesseract OCR is the likely solution when addressed. |
 | Slide images and shapes in PPTX files | 2+ | Images and flowchart relationships are not extractable with python-pptx alone. Text inside shapes is extracted but arrow relationships and flow direction are lost. Images skipped silently. Pytesseract OCR on exported slide images is the likely solution for image text. Flowchart relationships may never be worth addressing for a RAG use case. |
-| Corpus swap — nutrition → AI/agentic AI domain | 2 | Curated link list saved to Notion ("🗂️ AI Corpus — New Test Dataset Links"). Pending: download files, delete chroma_db/ and bm25_index.pkl, re-index, rewrite eval_set.json with 20 AI-domain questions, re-run full evaluator. |
-| Q11 faithfulness=0.0 investigation | 2 | One genuine (non-timeout) faithfulness failure on the nutrition eval set — fruit/vegetable portions question. Worth checking whether this is a real model hallucination or a ground_truth mismatch against the source PDF before the corpus swap. |
-
+| Tune top_k / add reranker-score cutoff for context_precision | 2+ | See DEC-024. Risk of reducing context_recall if done carelessly — needs measurement, not a blind parameter change. |
+| Evaluate PyMuPDF more broadly as extraction tier | 2+ | See DEC-023. Performed near-identically to pdfplumber on tested pages; not adopted for lack of need, not lack of merit. |
 ---
 
 ## What I'd Do Differently (Running Notes)
@@ -407,6 +519,7 @@ The following decisions are noted but not yet made. They will be logged here whe
 | 1.3 | June 2026 | Fixed stale Phase Overview table — Phase 1 marked Complete, Phase 2 marked In Progress |
 | 1.4 | June 2026 | Added DEC-017 — RAGAS faithfulness `nan` bug traced to `np.nan` not being filtered in `_mean()`; added corpus swap and Q11 investigation to Decisions Pending |
 | 1.5 | June 2026 | Added DEC-018 — `.gitignore` extended to exclude `.DS_Store`, `chroma_db/`, `bm25_index.pkl` beyond the Phase 1 baseline |
+| 1.6 | July 2026 | Added DEC-019 through DEC-024 — metadata bug, file-swap incident, corpus swap, self-hosted CI runner decision, PDF extraction corruption fix, context_precision root-cause finding |
 
 ---
 

@@ -22,17 +22,19 @@ def get_collection(persist_dir: str = "chroma_db", collection_name: str = "docum
 
 def add_chunks(collection, chunks: list[dict]) -> None:
     """
-    Store a list of chunks in ChromaDB with their embeddings.
+    Store a list of chunks in ChromaDB with their embeddings and metadata.
 
     Args:
         collection: The ChromaDB collection to add to.
-        chunks: List of dicts, each with keys: 'id' (str), 'text' (str), 'embedding' (list[float]).
+        chunks: List of dicts, each with keys: 'id' (str), 'text' (str),
+                'embedding' (list[float]), 'metadata' (dict with 'source' and 'chunk_index').
     """
     ids = [chunk["id"] for chunk in chunks]  # unique identifier per chunk
     texts = [chunk["text"] for chunk in chunks]  # raw text stored alongside vector
     embeddings = [chunk["embedding"] for chunk in chunks]  # the vectors
+    metadatas = [chunk["metadata"] for chunk in chunks]  # already-built source + chunk_index dict
 
-    collection.add(ids=ids, documents=texts, embeddings=embeddings)
+    collection.add(ids=ids, documents=texts, embeddings=embeddings, metadatas=metadatas)
     logger.info(f"Added {len(chunks)} chunks to ChromaDB")
 
 
@@ -53,7 +55,6 @@ def query_collection(collection, query_vector: list[float], n_results: int = 5) 
         n_results=n_results,
     )
 
-    # reformat ChromaDB's nested response into a clean flat list
     chunks = []
     for i in range(len(results["ids"][0])):
         chunks.append({
@@ -67,32 +68,31 @@ def query_collection(collection, query_vector: list[float], n_results: int = 5) 
 
 
 if __name__ == "__main__":
-    import os
-    import sys
-    sys.path.append(os.path.join(os.path.dirname(__file__), "..", "ingestion"))
-    from embedder import embed_text
+    from src.ingestion.embedder import embed_text
 
-    # set up collection
     collection = get_collection()
 
-    # create two fake chunks and embed them
     sample_chunks = [
-        {"id": "chunk_001", "text": "RAG stands for Retrieval-Augmented Generation."},
-        {"id": "chunk_002", "text": "ChromaDB stores vectors and enables semantic search."},
-        {"id": "chunk_003", "text": "The M1 Max has 64 GB of unified memory."},
+        {"id": "chunk_001", "text": "RAG stands for Retrieval-Augmented Generation.",
+         "metadata": {"source": "smoke_test.txt", "chunk_index": 0}},
+        {"id": "chunk_002", "text": "ChromaDB stores vectors and enables semantic search.",
+         "metadata": {"source": "smoke_test.txt", "chunk_index": 1}},
+        {"id": "chunk_003", "text": "The M1 Max has 64 GB of unified memory.",
+         "metadata": {"source": "smoke_test.txt", "chunk_index": 2}},
     ]
 
     for chunk in sample_chunks:
-        chunk["embedding"] = embed_text(chunk["text"], mode="document")  # chunks are documents
-
+        chunk["embedding"] = embed_text(chunk["text"], mode="document")
 
     add_chunks(collection, sample_chunks)
 
-    # query with something semantically similar to chunk_001
     query = "What does RAG stand for?"
-    query_vector = embed_text(query, mode="query")  # queries use query prefix
+    query_vector = embed_text(query, mode="query")
     results = query_collection(collection, query_vector, n_results=3)
 
     print("\nQuery:", query)
     for r in results:
         print(f"  [{r['distance']:.4f}] {r['text']}")
+
+    meta_check = collection.get(ids=[r["id"] for r in results], include=["metadatas"])
+    print("\nMetadata check:", meta_check["metadatas"])

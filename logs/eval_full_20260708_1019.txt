@@ -1,0 +1,313 @@
+2026-07-08 10:19:48.647 | INFO     | src.retrieval.bm25_index:load_bm25_index:72 - BM25 index loaded ← bm25_index.pkl (4788 chunks)
+2026-07-08 10:19:48.708 | INFO     | src.retrieval.vector_store:get_collection:19 - Connected to collection 'documents' at 'chroma_db'
+/Users/saravanansankar/Developer/local-ai-stack/src/evaluation/evaluator.py:54: LangChainDeprecationWarning: The class `Ollama` was deprecated in LangChain 0.3.1 and will be removed in 1.0.0. An updated version of the class exists in the `langchain-ollama package and should be used instead. To use it run `pip install -U `langchain-ollama` and import as `from `langchain_ollama import OllamaLLM``.
+  ollama_llm = Ollama(model=JUDGE_MODEL, temperature=0)  # temp=0 for consistent scoring
+/Users/saravanansankar/Developer/local-ai-stack/src/evaluation/evaluator.py:55: DeprecationWarning: LangchainLLMWrapper is deprecated and will be removed in a future version. Use llm_factory instead: from openai import OpenAI; from ragas.llms import llm_factory; llm = llm_factory('gpt-4o-mini', client=OpenAI(api_key='...'))
+  return LangchainLLMWrapper(ollama_llm)
+2026-07-08 10:19:48.726 | DEBUG    | src.retrieval.bm25_index:query_bm25:108 - BM25 top-1 score: 24.2289 | query: 'According to 'Attention Is All You Need,' what did the authors observe when inspecting attention distributions from their models?'
+2026-07-08 10:19:48.789 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 129 chars (query) → vector of 768 dimensions
+2026-07-08 10:19:48.828 | INFO     | src.retrieval.hybrid_retriever:hybrid_retrieve:90 - Hybrid retrieve — BM25: 15 | Vector: 15 | Fused: 28
+2026-07-08 10:19:48.829 | INFO     | src.retrieval.reranker:get_reranker:20 - Loading cross-encoder model...
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading indexes...
+Indexes loaded.
+
+Loading eval set...
+Running 30 questions through pipeline...
+
+  [1/30] According to 'Attention Is All You Need,' what did the authors observe...
+Loading weights:   0%|          | 0/105 [00:00<?, ?it/s]Loading weights: 100%|██████████| 105/105 [00:00<00:00, 9042.23it/s]
+[1mBertForSequenceClassification LOAD REPORT[0m from: cross-encoder/ms-marco-MiniLM-L6-v2
+Key                          | Status     |  | 
+-----------------------------+------------+--+-
+bert.embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+2026-07-08 10:19:51.925 | INFO     | src.retrieval.reranker:get_reranker:22 - ✓ Cross-encoder loaded
+2026-07-08 10:19:52.112 | INFO     | src.retrieval.reranker:rerank:60 - Reranker — in: 15 candidates | out: 5 | top score: 2.4779
+2026-07-08 10:20:11.554 | DEBUG    | src.retrieval.bm25_index:query_bm25:108 - BM25 top-1 score: 14.8414 | query: 'LangGraph's README describes it as what kind of framework?'
+2026-07-08 10:20:12.139 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 58 chars (query) → vector of 768 dimensions
+2026-07-08 10:20:12.155 | INFO     | src.retrieval.hybrid_retriever:hybrid_retrieve:90 - Hybrid retrieve — BM25: 15 | Vector: 15 | Fused: 30
+2026-07-08 10:20:12.387 | INFO     | src.retrieval.reranker:rerank:60 - Reranker — in: 15 candidates | out: 5 | top score: 3.7621
+2026-07-08 10:20:23.093 | DEBUG    | src.retrieval.bm25_index:query_bm25:108 - BM25 top-1 score: 13.8736 | query: 'What is LangSmith used for, according to LangGraph's documentation?'
+2026-07-08 10:20:23.125 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 67 chars (query) → vector of 768 dimensions
+2026-07-08 10:20:23.128 | INFO     | src.retrieval.hybrid_retriever:hybrid_retrieve:90 - Hybrid retrieve — BM25: 15 | Vector: 15 | Fused: 26
+2026-07-08 10:20:23.235 | INFO     | src.retrieval.reranker:rerank:60 - Reranker — in: 15 candidates | out: 5 | top score: 4.3016
+2026-07-08 10:20:55.257 | DEBUG    | src.retrieval.bm25_index:query_bm25:108 - BM25 top-1 score: 25.9915 | query: 'Name a vector store integration supported by LlamaIndex, per its documentation.'
+2026-07-08 10:20:55.287 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 79 chars (query) → vector of 768 dimensions
+2026-07-08 10:20:55.290 | INFO     | src.retrieval.hybrid_retriever:hybrid_retrieve:90 - Hybrid retrieve — BM25: 15 | Vector: 15 | Fused: 23
+2026-07-08 10:20:55.418 | INFO     | src.retrieval.reranker:rerank:60 - Reranker — in: 15 candidates | out: 5 | top score: 2.5750
+2026-07-08 10:21:17.059 | DEBUG    | src.retrieval.bm25_index:query_bm25:108 - BM25 top-1 score: 33.9117 | query: 'What four tools does the LlamaIndex documentation MCP server provide?'
+2026-07-08 10:21:17.089 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 69 chars (query) → vector of 768 dimensions
+2026-07-08 10:21:17.093 | INFO     | src.retrieval.hybrid_retriever:hybrid_retrieve:90 - Hybrid retrieve — BM25: 15 | Vector: 15 | Fused: 26
+2026-07-08 10:21:17.200 | INFO     | src.retrieval.reranker:rerank:60 - Reranker — in: 15 candidates | out: 5 | top score: 4.4935
+2026-07-08 10:21:27.807 | DEBUG    | src.retrieval.bm25_index:query_bm25:108 - BM25 top-1 score: 48.9372 | query: 'What analogy does the Model Context Protocol documentation use to explain what MCP does?'
+2026-07-08 10:21:27.840 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 88 chars (query) → vector of 768 dimensions
+2026-07-08 10:21:27.847 | INFO     | src.retrieval.hybrid_retriever:hybrid_retrieve:90 - Hybrid retrieve — BM25: 15 | Vector: 15 | Fused: 27
+2026-07-08 10:21:27.944 | INFO     | src.retrieval.reranker:rerank:60 - Reranker — in: 15 candidates | out: 5 | top score: 5.8730
+2026-07-08 10:21:39.733 | DEBUG    | src.retrieval.bm25_index:query_bm25:108 - BM25 top-1 score: 28.0220 | query: 'What three things does the MCP documentation say you can build?'
+2026-07-08 10:21:39.764 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 63 chars (query) → vector of 768 dimensions
+2026-07-08 10:21:39.767 | INFO     | src.retrieval.hybrid_retriever:hybrid_retrieve:90 - Hybrid retrieve — BM25: 15 | Vector: 15 | Fused: 23
+2026-07-08 10:21:39.881 | INFO     | src.retrieval.reranker:rerank:60 - Reranker — in: 15 candidates | out: 5 | top score: 2.4731
+2026-07-08 10:22:50.578 | DEBUG    | src.retrieval.bm25_index:query_bm25:108 - BM25 top-1 score: 20.3533 | query: 'According to the 'Agentic AI Frameworks' survey's comparison table, how does LangGraph implement agent memory?'
+2026-07-08 10:22:50.620 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 110 chars (query) → vector of 768 dimensions
+2026-07-08 10:22:50.622 | INFO     | src.retrieval.hybrid_retriever:hybrid_retrieve:90 - Hybrid retrieve — BM25: 15 | Vector: 15 | Fused: 26
+2026-07-08 10:22:50.766 | INFO     | src.retrieval.reranker:rerank:60 - Reranker — in: 15 candidates | out: 5 | top score: 3.6696
+2026-07-08 10:23:19.265 | DEBUG    | src.retrieval.bm25_index:query_bm25:108 - BM25 top-1 score: 24.6667 | query: 'How does the OpenAI SDK handle agent memory, according to the same survey?'
+2026-07-08 10:23:19.301 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 74 chars (query) → vector of 768 dimensions
+2026-07-08 10:23:19.304 | INFO     | src.retrieval.hybrid_retriever:hybrid_retrieve:90 - Hybrid retrieve — BM25: 15 | Vector: 15 | Fused: 25
+2026-07-08 10:23:19.405 | INFO     | src.retrieval.reranker:rerank:60 - Reranker — in: 15 candidates | out: 5 | top score: 3.8516
+2026-07-08 10:23:34.702 | DEBUG    | src.retrieval.bm25_index:query_bm25:108 - BM25 top-1 score: 15.3147 | query: 'According to 'Engineering the RAG Stack,' what is reasoning misalignment?'
+2026-07-08 10:23:34.737 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 73 chars (query) → vector of 768 dimensions
+2026-07-08 10:23:34.742 | INFO     | src.retrieval.hybrid_retriever:hybrid_retrieve:90 - Hybrid retrieve — BM25: 15 | Vector: 15 | Fused: 26
+2026-07-08 10:23:34.851 | INFO     | src.retrieval.reranker:rerank:60 - Reranker — in: 15 candidates | out: 5 | top score: 4.1019
+2026-07-08 10:23:46.451 | DEBUG    | src.retrieval.bm25_index:query_bm25:108 - BM25 top-1 score: 44.3635 | query: 'According to AWS's agentic AI frameworks guidance, which framework is recommended for projects needing explicit role-based autonomous collaboration between specialized agents?'
+2026-07-08 10:23:46.562 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 175 chars (query) → vector of 768 dimensions
+2026-07-08 10:23:46.568 | INFO     | src.retrieval.hybrid_retriever:hybrid_retrieve:90 - Hybrid retrieve — BM25: 15 | Vector: 15 | Fused: 24
+2026-07-08 10:23:46.680 | INFO     | src.retrieval.reranker:rerank:60 - Reranker — in: 15 candidates | out: 5 | top score: 6.7105
+2026-07-08 10:24:04.065 | DEBUG    | src.retrieval.bm25_index:query_bm25:108 - BM25 top-1 score: 36.8301 | query: 'What kind of data structure does the 'RAG Systems from PDFs' experience report describe as being used for storing and querying high-dimensional vectors?'
+2026-07-08 10:24:04.105 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 152 chars (query) → vector of 768 dimensions
+2026-07-08 10:24:04.109 | INFO     | src.retrieval.hybrid_retriever:hybrid_retrieve:90 - Hybrid retrieve — BM25: 15 | Vector: 15 | Fused: 27
+2026-07-08 10:24:04.292 | INFO     | src.retrieval.reranker:rerank:60 - Reranker — in: 15 candidates | out: 5 | top score: 3.8323
+2026-07-08 10:24:18.391 | DEBUG    | src.retrieval.bm25_index:query_bm25:108 - BM25 top-1 score: 30.6143 | query: 'In 'Synergizing RAG and Reasoning,' what section topic follows directly after the discussion of evaluation and efficiency metrics?'
+2026-07-08 10:24:18.425 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 130 chars (query) → vector of 768 dimensions
+2026-07-08 10:24:18.428 | INFO     | src.retrieval.hybrid_retriever:hybrid_retrieve:90 - Hybrid retrieve — BM25: 15 | Vector: 15 | Fused: 28
+2026-07-08 10:24:18.551 | INFO     | src.retrieval.reranker:rerank:60 - Reranker — in: 15 candidates | out: 5 | top score: 3.0094
+2026-07-08 10:24:31.208 | DEBUG    | src.retrieval.bm25_index:query_bm25:108 - BM25 top-1 score: 21.7722 | query: 'What example agent product's Model Card does 'The 2025 AI Agent Index' reference as a screenshot example?'
+2026-07-08 10:24:31.246 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 105 chars (query) → vector of 768 dimensions
+2026-07-08 10:24:31.251 | INFO     | src.retrieval.hybrid_retriever:hybrid_retrieve:90 - Hybrid retrieve — BM25: 15 | Vector: 15 | Fused: 27
+2026-07-08 10:24:31.370 | INFO     | src.retrieval.reranker:rerank:60 - Reranker — in: 15 candidates | out: 5 | top score: 2.8761
+2026-07-08 10:24:41.154 | DEBUG    | src.retrieval.bm25_index:query_bm25:108 - BM25 top-1 score: 18.4995 | query: 'What authentication measures does the framework recommend for agent security?'
+2026-07-08 10:24:41.190 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 77 chars (query) → vector of 768 dimensions
+2026-07-08 10:24:41.195 | INFO     | src.retrieval.hybrid_retriever:hybrid_retrieve:90 - Hybrid retrieve — BM25: 15 | Vector: 15 | Fused: 28
+2026-07-08 10:24:41.269 | INFO     | src.retrieval.reranker:rerank:60 - Reranker — in: 15 candidates | out: 5 | top score: 2.7320
+2026-07-08 10:25:15.996 | DEBUG    | src.retrieval.bm25_index:query_bm25:108 - BM25 top-1 score: 24.8843 | query: 'What three layers make up the unified framework proposed in Microsoft's Human-Agent Collaboration paper?'
+2026-07-08 10:25:16.031 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 104 chars (query) → vector of 768 dimensions
+2026-07-08 10:25:16.035 | INFO     | src.retrieval.hybrid_retriever:hybrid_retrieve:90 - Hybrid retrieve — BM25: 15 | Vector: 15 | Fused: 22
+2026-07-08 10:25:16.153 | INFO     | src.retrieval.reranker:rerank:60 - Reranker — in: 15 candidates | out: 5 | top score: 5.4282
+2026-07-08 10:25:28.679 | DEBUG    | src.retrieval.bm25_index:query_bm25:108 - BM25 top-1 score: 30.5059 | query: 'What is described as a key property of the 'Process' layer in Microsoft's Human-Agent Collaboration framework?'
+2026-07-08 10:25:28.715 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 110 chars (query) → vector of 768 dimensions
+2026-07-08 10:25:28.717 | INFO     | src.retrieval.hybrid_retriever:hybrid_retrieve:90 - Hybrid retrieve — BM25: 15 | Vector: 15 | Fused: 23
+2026-07-08 10:25:28.823 | INFO     | src.retrieval.reranker:rerank:60 - Reranker — in: 15 candidates | out: 5 | top score: 6.7745
+2026-07-08 10:25:45.828 | DEBUG    | src.retrieval.bm25_index:query_bm25:108 - BM25 top-1 score: 25.9639 | query: 'What topics does OpenAI's practical guide to building agents cover?'
+2026-07-08 10:25:45.865 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 67 chars (query) → vector of 768 dimensions
+2026-07-08 10:25:45.868 | INFO     | src.retrieval.hybrid_retriever:hybrid_retrieve:90 - Hybrid retrieve — BM25: 15 | Vector: 15 | Fused: 25
+2026-07-08 10:25:46.011 | INFO     | src.retrieval.reranker:rerank:60 - Reranker — in: 15 candidates | out: 5 | top score: 5.8285
+2026-07-08 10:26:07.612 | DEBUG    | src.retrieval.bm25_index:query_bm25:108 - BM25 top-1 score: 32.4426 | query: 'In OpenAI's practical guide, how does a 'manager' pattern agent coordinate specialized agents without losing context?'
+2026-07-08 10:26:07.659 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 117 chars (query) → vector of 768 dimensions
+2026-07-08 10:26:07.663 | INFO     | src.retrieval.hybrid_retriever:hybrid_retrieve:90 - Hybrid retrieve — BM25: 15 | Vector: 15 | Fused: 27
+2026-07-08 10:26:07.857 | INFO     | src.retrieval.reranker:rerank:60 - Reranker — in: 15 candidates | out: 5 | top score: 4.9761
+2026-07-08 10:26:22.020 | DEBUG    | src.retrieval.bm25_index:query_bm25:108 - BM25 top-1 score: 21.2653 | query: 'Which three decorators does CrewAI's README mention that can be combined with 'or'/'and' condition operators?'
+2026-07-08 10:26:22.075 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 109 chars (query) → vector of 768 dimensions
+2026-07-08 10:26:22.078 | INFO     | src.retrieval.hybrid_retriever:hybrid_retrieve:90 - Hybrid retrieve — BM25: 15 | Vector: 15 | Fused: 27
+2026-07-08 10:26:22.226 | INFO     | src.retrieval.reranker:rerank:60 - Reranker — in: 15 candidates | out: 5 | top score: 0.9680
+2026-07-08 10:26:30.511 | DEBUG    | src.retrieval.bm25_index:query_bm25:108 - BM25 top-1 score: 28.0523 | query: 'Does CrewAI support human-in-the-loop workflows, according to its README FAQ?'
+2026-07-08 10:26:30.547 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 77 chars (query) → vector of 768 dimensions
+2026-07-08 10:26:30.549 | INFO     | src.retrieval.hybrid_retriever:hybrid_retrieve:90 - Hybrid retrieve — BM25: 15 | Vector: 15 | Fused: 23
+2026-07-08 10:26:30.649 | INFO     | src.retrieval.reranker:rerank:60 - Reranker — in: 15 candidates | out: 5 | top score: 8.7503
+2026-07-08 10:26:39.687 | DEBUG    | src.retrieval.bm25_index:query_bm25:108 - BM25 top-1 score: 31.7275 | query: 'According to the OpenAI Agents SDK docs, what do 'Sandbox agents' allow you to do?'
+2026-07-08 10:26:39.737 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 82 chars (query) → vector of 768 dimensions
+2026-07-08 10:26:39.739 | INFO     | src.retrieval.hybrid_retriever:hybrid_retrieve:90 - Hybrid retrieve — BM25: 15 | Vector: 15 | Fused: 24
+2026-07-08 10:26:39.881 | INFO     | src.retrieval.reranker:rerank:60 - Reranker — in: 15 candidates | out: 5 | top score: 4.4112
+2026-07-08 10:26:51.945 | DEBUG    | src.retrieval.bm25_index:query_bm25:108 - BM25 top-1 score: 33.7756 | query: 'What three-stage pipeline does the OpenAI Agents SDK's voice quickstart describe?'
+2026-07-08 10:26:51.979 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 81 chars (query) → vector of 768 dimensions
+2026-07-08 10:26:51.981 | INFO     | src.retrieval.hybrid_retriever:hybrid_retrieve:90 - Hybrid retrieve — BM25: 15 | Vector: 15 | Fused: 25
+2026-07-08 10:26:52.105 | INFO     | src.retrieval.reranker:rerank:60 - Reranker — in: 15 candidates | out: 5 | top score: 1.3767
+2026-07-08 10:27:00.787 | DEBUG    | src.retrieval.bm25_index:query_bm25:108 - BM25 top-1 score: 44.3095 | query: 'How do this project's own agentic AI notes define the core difference between a plain LLM call and an agent?'
+2026-07-08 10:27:00.827 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 108 chars (query) → vector of 768 dimensions
+2026-07-08 10:27:00.830 | INFO     | src.retrieval.hybrid_retriever:hybrid_retrieve:90 - Hybrid retrieve — BM25: 15 | Vector: 15 | Fused: 27
+2026-07-08 10:27:00.953 | INFO     | src.retrieval.reranker:rerank:60 - Reranker — in: 15 candidates | out: 5 | top score: 5.8140
+2026-07-08 10:27:15.554 | DEBUG    | src.retrieval.bm25_index:query_bm25:108 - BM25 top-1 score: 50.5249 | query: 'According to this project's own model benchmark CSV, what MMLU score and Arena Elo does Gemma 3 27B have?'
+2026-07-08 10:27:15.591 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 105 chars (query) → vector of 768 dimensions
+2026-07-08 10:27:15.597 | INFO     | src.retrieval.hybrid_retriever:hybrid_retrieve:90 - Hybrid retrieve — BM25: 15 | Vector: 15 | Fused: 23
+2026-07-08 10:27:15.756 | INFO     | src.retrieval.reranker:rerank:60 - Reranker — in: 15 candidates | out: 5 | top score: 6.6974
+2026-07-08 10:27:29.571 | DEBUG    | src.retrieval.bm25_index:query_bm25:108 - BM25 top-1 score: 46.7125 | query: 'Per this project's own RAG vs Fine-Tuning memo, why is RAG a better fit than fine-tuning for a corpus that changes over time?'
+2026-07-08 10:27:29.612 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 125 chars (query) → vector of 768 dimensions
+2026-07-08 10:27:29.616 | INFO     | src.retrieval.hybrid_retriever:hybrid_retrieve:90 - Hybrid retrieve — BM25: 15 | Vector: 15 | Fused: 22
+2026-07-08 10:27:29.699 | INFO     | src.retrieval.reranker:rerank:60 - Reranker — in: 15 candidates | out: 5 | top score: 4.0772
+2026-07-08 10:27:48.201 | DEBUG    | src.retrieval.bm25_index:query_bm25:108 - BM25 top-1 score: 20.9813 | query: 'Per this project's own architecture slide deck, why is retrieval split into two stages instead of reranking everything directly?'
+2026-07-08 10:27:48.237 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 128 chars (query) → vector of 768 dimensions
+2026-07-08 10:27:48.240 | INFO     | src.retrieval.hybrid_retriever:hybrid_retrieve:90 - Hybrid retrieve — BM25: 15 | Vector: 15 | Fused: 24
+2026-07-08 10:27:48.406 | INFO     | src.retrieval.reranker:rerank:60 - Reranker — in: 15 candidates | out: 5 | top score: 0.6432
+2026-07-08 10:28:01.975 | DEBUG    | src.retrieval.bm25_index:query_bm25:108 - BM25 top-1 score: 27.4149 | query: 'Which two DeepSeek models appear in this project's AI Model Comparison spreadsheet?'
+2026-07-08 10:28:02.016 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 83 chars (query) → vector of 768 dimensions
+2026-07-08 10:28:02.021 | INFO     | src.retrieval.hybrid_retriever:hybrid_retrieve:90 - Hybrid retrieve — BM25: 15 | Vector: 15 | Fused: 26
+2026-07-08 10:28:02.166 | INFO     | src.retrieval.reranker:rerank:60 - Reranker — in: 15 candidates | out: 5 | top score: 4.3882
+2026-07-08 10:28:14.387 | DEBUG    | src.retrieval.bm25_index:query_bm25:108 - BM25 top-1 score: 23.1864 | query: 'What does Claude 3's model card report about its bias score in ambiguous contexts?'
+2026-07-08 10:28:14.421 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 82 chars (query) → vector of 768 dimensions
+2026-07-08 10:28:14.427 | INFO     | src.retrieval.hybrid_retriever:hybrid_retrieve:90 - Hybrid retrieve — BM25: 15 | Vector: 15 | Fused: 26
+2026-07-08 10:28:14.570 | INFO     | src.retrieval.reranker:rerank:60 - Reranker — in: 15 candidates | out: 5 | top score: 6.3200
+2026-07-08 10:28:48.152 | DEBUG    | src.retrieval.bm25_index:query_bm25:108 - BM25 top-1 score: 47.4728 | query: 'What did Claude Opus 4.6 do when asked to tag an issue in a nonexistent Git repository, per its system card?'
+2026-07-08 10:28:48.207 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 108 chars (query) → vector of 768 dimensions
+2026-07-08 10:28:48.212 | INFO     | src.retrieval.hybrid_retriever:hybrid_retrieve:90 - Hybrid retrieve — BM25: 15 | Vector: 15 | Fused: 25
+2026-07-08 10:28:48.355 | INFO     | src.retrieval.reranker:rerank:60 - Reranker — in: 15 candidates | out: 5 | top score: 5.7931
+  [2/30] LangGraph's README describes it as what kind of framework?...
+  [3/30] What is LangSmith used for, according to LangGraph's documentation?...
+  [4/30] Name a vector store integration supported by LlamaIndex, per its docum...
+  [5/30] What four tools does the LlamaIndex documentation MCP server provide?...
+  [6/30] What analogy does the Model Context Protocol documentation use to expl...
+  [7/30] What three things does the MCP documentation say you can build?...
+  [8/30] According to the 'Agentic AI Frameworks' survey's comparison table, ho...
+  [9/30] How does the OpenAI SDK handle agent memory, according to the same sur...
+  [10/30] According to 'Engineering the RAG Stack,' what is reasoning misalignme...
+  [11/30] According to AWS's agentic AI frameworks guidance, which framework is ...
+  [12/30] What kind of data structure does the 'RAG Systems from PDFs' experienc...
+  [13/30] In 'Synergizing RAG and Reasoning,' what section topic follows directl...
+  [14/30] What example agent product's Model Card does 'The 2025 AI Agent Index'...
+  [15/30] What authentication measures does the framework recommend for agent se...
+  [16/30] What three layers make up the unified framework proposed in Microsoft'...
+  [17/30] What is described as a key property of the 'Process' layer in Microsof...
+  [18/30] What topics does OpenAI's practical guide to building agents cover?...
+  [19/30] In OpenAI's practical guide, how does a 'manager' pattern agent coordi...
+  [20/30] Which three decorators does CrewAI's README mention that can be combin...
+  [21/30] Does CrewAI support human-in-the-loop workflows, according to its READ...
+  [22/30] According to the OpenAI Agents SDK docs, what do 'Sandbox agents' allo...
+  [23/30] What three-stage pipeline does the OpenAI Agents SDK's voice quickstar...
+  [24/30] How do this project's own agentic AI notes define the core difference ...
+  [25/30] According to this project's own model benchmark CSV, what MMLU score a...
+  [26/30] Per this project's own RAG vs Fine-Tuning memo, why is RAG a better fi...
+  [27/30] Per this project's own architecture slide deck, why is retrieval split...
+  [28/30] Which two DeepSeek models appear in this project's AI Model Comparison...
+  [29/30] What does Claude 3's model card report about its bias score in ambiguo...
+  [30/30] What did Claude Opus 4.6 do when asked to tag an issue in a nonexisten...
+
+Pipeline calls done in 579.6s. Running RAGAS scoring...
+
+Evaluating:   0%|          | 0/120 [00:00<?, ?it/s]Evaluating:   1%|          | 1/120 [01:54<3:46:41, 114.30s/it]2026-07-08 10:31:56.191 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 129 chars (query) → vector of 768 dimensions
+2026-07-08 10:31:56.221 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 87 chars (document) → vector of 768 dimensions
+2026-07-08 10:31:56.251 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 87 chars (document) → vector of 768 dimensions
+2026-07-08 10:31:56.277 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 87 chars (document) → vector of 768 dimensions
+Evaluating:   2%|▏         | 2/120 [02:25<2:08:59, 65.59s/it] Evaluating:   2%|▎         | 3/120 [03:10<1:48:53, 55.84s/it]Evaluating:   3%|▎         | 4/120 [03:23<1:15:36, 39.11s/it]Evaluating:   4%|▍         | 5/120 [05:12<2:03:01, 64.18s/it]2026-07-08 10:35:15.909 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 58 chars (query) → vector of 768 dimensions
+2026-07-08 10:35:15.936 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 40 chars (document) → vector of 768 dimensions
+2026-07-08 10:35:15.962 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 49 chars (document) → vector of 768 dimensions
+2026-07-08 10:35:15.986 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 53 chars (document) → vector of 768 dimensions
+Evaluating:   5%|▌         | 6/120 [05:45<1:42:02, 53.70s/it]Evaluating:   6%|▌         | 7/120 [07:15<2:03:42, 65.69s/it]Evaluating:   7%|▋         | 8/120 [07:32<1:33:12, 49.93s/it]Evaluating:   8%|▊         | 9/120 [10:12<2:36:26, 84.56s/it]2026-07-08 10:40:15.921 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 67 chars (query) → vector of 768 dimensions
+2026-07-08 10:40:15.961 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 52 chars (document) → vector of 768 dimensions
+2026-07-08 10:40:15.992 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 31 chars (document) → vector of 768 dimensions
+2026-07-08 10:40:16.025 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 52 chars (document) → vector of 768 dimensions
+Evaluating:   8%|▊         | 10/120 [10:45<2:05:43, 68.58s/it]Evaluating:   9%|▉         | 11/120 [11:33<1:53:07, 62.27s/it]Evaluating:  10%|█         | 12/120 [11:53<1:29:04, 49.48s/it]Evaluating:  11%|█         | 13/120 [13:13<1:44:28, 58.59s/it]2026-07-08 10:43:10.118 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 79 chars (query) → vector of 768 dimensions
+2026-07-08 10:43:10.161 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 47 chars (document) → vector of 768 dimensions
+2026-07-08 10:43:10.201 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 47 chars (document) → vector of 768 dimensions
+2026-07-08 10:43:10.241 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 47 chars (document) → vector of 768 dimensions
+Evaluating:  12%|█▏        | 14/120 [13:39<1:26:21, 48.89s/it]Evaluating:  12%|█▎        | 15/120 [14:49<1:36:39, 55.23s/it]Evaluating:  13%|█▎        | 16/120 [15:23<1:24:45, 48.90s/it]Evaluating:  14%|█▍        | 17/120 [16:42<1:39:06, 57.73s/it]2026-07-08 10:47:29.680 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 69 chars (query) → vector of 768 dimensions
+2026-07-08 10:47:29.714 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 72 chars (document) → vector of 768 dimensions
+2026-07-08 10:47:29.745 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 81 chars (document) → vector of 768 dimensions
+2026-07-08 10:47:29.780 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 65 chars (document) → vector of 768 dimensions
+Evaluating:  15%|█▌        | 18/120 [17:59<1:48:03, 63.56s/it]Evaluating:  16%|█▌        | 19/120 [18:39<1:35:25, 56.69s/it]Evaluating:  17%|█▋        | 20/120 [19:02<1:17:36, 46.56s/it]Evaluating:  18%|█▊        | 21/120 [20:34<1:39:06, 60.07s/it]2026-07-08 10:50:38.078 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 88 chars (query) → vector of 768 dimensions
+2026-07-08 10:50:38.105 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 109 chars (document) → vector of 768 dimensions
+2026-07-08 10:50:38.132 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 109 chars (document) → vector of 768 dimensions
+2026-07-08 10:50:38.162 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 109 chars (document) → vector of 768 dimensions
+Evaluating:  18%|█▊        | 22/120 [21:07<1:24:56, 52.01s/it]Evaluating:  19%|█▉        | 23/120 [21:45<1:17:11, 47.74s/it]Evaluating:  20%|██        | 24/120 [22:17<1:09:02, 43.15s/it]Evaluating:  21%|██        | 25/120 [23:17<1:16:00, 48.01s/it]2026-07-08 10:53:17.227 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 63 chars (query) → vector of 768 dimensions
+2026-07-08 10:53:17.255 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 46 chars (document) → vector of 768 dimensions
+2026-07-08 10:53:17.282 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 78 chars (document) → vector of 768 dimensions
+2026-07-08 10:53:17.312 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 78 chars (document) → vector of 768 dimensions
+Evaluating:  22%|██▏       | 26/120 [23:46<1:06:32, 42.47s/it]Evaluating:  22%|██▎       | 27/120 [24:37<1:09:47, 45.02s/it]Evaluating:  23%|██▎       | 28/120 [25:22<1:08:43, 44.82s/it]Evaluating:  24%|██▍       | 29/120 [26:22<1:15:01, 49.47s/it]2026-07-08 10:56:23.541 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 110 chars (query) → vector of 768 dimensions
+2026-07-08 10:56:23.591 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 67 chars (document) → vector of 768 dimensions
+2026-07-08 10:56:23.622 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 67 chars (document) → vector of 768 dimensions
+2026-07-08 10:56:23.656 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 67 chars (document) → vector of 768 dimensions
+Evaluating:  25%|██▌       | 30/120 [26:53<1:05:45, 43.84s/it]Evaluating:  26%|██▌       | 31/120 [28:26<1:27:10, 58.77s/it]Evaluating:  27%|██▋       | 32/120 [28:40<1:06:34, 45.40s/it]Evaluating:  28%|██▊       | 33/120 [30:08<1:24:16, 58.12s/it]2026-07-08 11:00:07.369 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 74 chars (query) → vector of 768 dimensions
+2026-07-08 11:00:07.408 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 91 chars (document) → vector of 768 dimensions
+2026-07-08 11:00:07.437 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 37 chars (document) → vector of 768 dimensions
+2026-07-08 11:00:07.470 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 37 chars (document) → vector of 768 dimensions
+Evaluating:  28%|██▊       | 34/120 [30:36<1:10:26, 49.15s/it]Evaluating:  29%|██▉       | 35/120 [31:46<1:18:15, 55.24s/it]Evaluating:  30%|███       | 36/120 [32:04<1:01:42, 44.07s/it]Evaluating:  31%|███       | 37/120 [33:34<1:20:13, 57.99s/it]2026-07-08 11:03:33.529 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 73 chars (query) → vector of 768 dimensions
+2026-07-08 11:03:33.559 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 31 chars (document) → vector of 768 dimensions
+2026-07-08 11:03:33.588 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 31 chars (document) → vector of 768 dimensions
+2026-07-08 11:03:33.619 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 31 chars (document) → vector of 768 dimensions
+Evaluating:  32%|███▏      | 38/120 [34:03<1:07:02, 49.06s/it]Evaluating:  32%|███▎      | 39/120 [34:41<1:02:05, 45.99s/it]Evaluating:  33%|███▎      | 40/120 [34:55<48:11, 36.15s/it]  Exception raised in Job[40]: TimeoutError()
+Evaluating:  34%|███▍      | 41/120 [39:55<2:31:49, 115.31s/it]2026-07-08 11:10:00.626 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 175 chars (query) → vector of 768 dimensions
+2026-07-08 11:10:00.665 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 90 chars (document) → vector of 768 dimensions
+2026-07-08 11:10:00.699 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 57 chars (document) → vector of 768 dimensions
+2026-07-08 11:10:00.733 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 103 chars (document) → vector of 768 dimensions
+Evaluating:  35%|███▌      | 42/120 [40:30<1:58:36, 91.24s/it] Evaluating:  36%|███▌      | 43/120 [41:08<1:36:35, 75.27s/it]Evaluating:  37%|███▋      | 44/120 [41:33<1:16:11, 60.16s/it]Evaluating:  38%|███▊      | 45/120 [43:15<1:31:00, 72.80s/it]2026-07-08 11:13:15.437 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 152 chars (query) → vector of 768 dimensions
+2026-07-08 11:13:15.468 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 83 chars (document) → vector of 768 dimensions
+2026-07-08 11:13:15.497 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 94 chars (document) → vector of 768 dimensions
+2026-07-08 11:13:15.523 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 94 chars (document) → vector of 768 dimensions
+Evaluating:  38%|███▊      | 46/120 [43:45<1:13:47, 59.84s/it]Evaluating:  39%|███▉      | 47/120 [44:33<1:08:40, 56.44s/it]Evaluating:  40%|████      | 48/120 [44:46<51:59, 43.33s/it]  Evaluating:  41%|████      | 49/120 [46:57<1:22:21, 69.59s/it]2026-07-08 11:16:55.905 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 130 chars (query) → vector of 768 dimensions
+2026-07-08 11:16:56.059 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 106 chars (document) → vector of 768 dimensions
+2026-07-08 11:16:56.093 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 94 chars (document) → vector of 768 dimensions
+2026-07-08 11:16:56.124 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 94 chars (document) → vector of 768 dimensions
+Evaluating:  42%|████▏     | 50/120 [47:25<1:06:48, 57.26s/it]Evaluating:  42%|████▎     | 51/120 [48:11<1:01:44, 53.69s/it]Evaluating:  43%|████▎     | 52/120 [48:28<48:35, 42.88s/it]  Evaluating:  44%|████▍     | 53/120 [49:47<59:49, 53.57s/it]2026-07-08 11:20:00.477 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 105 chars (query) → vector of 768 dimensions
+2026-07-08 11:20:00.519 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 44 chars (document) → vector of 768 dimensions
+2026-07-08 11:20:00.555 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 78 chars (document) → vector of 768 dimensions
+2026-07-08 11:20:00.586 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 78 chars (document) → vector of 768 dimensions
+Evaluating:  45%|████▌     | 54/120 [50:30<55:24, 50.38s/it]Evaluating:  46%|████▌     | 55/120 [51:09<50:53, 46.97s/it]Evaluating:  47%|████▋     | 56/120 [51:25<40:15, 37.75s/it]Evaluating:  48%|████▊     | 57/120 [54:20<1:22:54, 78.96s/it]2026-07-08 11:24:19.367 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 77 chars (query) → vector of 768 dimensions
+2026-07-08 11:24:19.397 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 94 chars (document) → vector of 768 dimensions
+2026-07-08 11:24:19.426 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 89 chars (document) → vector of 768 dimensions
+2026-07-08 11:24:19.466 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 94 chars (document) → vector of 768 dimensions
+Evaluating:  48%|████▊     | 58/120 [54:48<1:05:57, 63.82s/it]Evaluating:  49%|████▉     | 59/120 [55:40<1:01:11, 60.18s/it]Evaluating:  50%|█████     | 60/120 [56:01<48:21, 48.36s/it]  Evaluating:  51%|█████     | 61/120 [57:00<50:46, 51.64s/it]2026-07-08 11:26:56.901 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 104 chars (query) → vector of 768 dimensions
+2026-07-08 11:26:56.931 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 75 chars (document) → vector of 768 dimensions
+2026-07-08 11:26:56.960 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 75 chars (document) → vector of 768 dimensions
+2026-07-08 11:26:56.987 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 75 chars (document) → vector of 768 dimensions
+Evaluating:  52%|█████▏    | 62/120 [57:26<42:25, 43.88s/it]Evaluating:  52%|█████▎    | 63/120 [58:23<45:24, 47.80s/it]Evaluating:  53%|█████▎    | 64/120 [58:39<35:36, 38.16s/it]Evaluating:  54%|█████▍    | 65/120 [1:00:15<51:03, 55.70s/it]2026-07-08 11:30:14.390 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 110 chars (query) → vector of 768 dimensions
+2026-07-08 11:30:14.429 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 49 chars (document) → vector of 768 dimensions
+2026-07-08 11:30:14.458 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 63 chars (document) → vector of 768 dimensions
+2026-07-08 11:30:14.488 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 63 chars (document) → vector of 768 dimensions
+Evaluating:  55%|█████▌    | 66/120 [1:00:43<42:43, 47.47s/it]Evaluating:  56%|█████▌    | 67/120 [1:01:33<42:26, 48.05s/it]Evaluating:  57%|█████▋    | 68/120 [1:01:56<35:01, 40.42s/it]Evaluating:  57%|█████▊    | 69/120 [1:03:42<51:19, 60.39s/it]2026-07-08 11:33:43.069 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 67 chars (query) → vector of 768 dimensions
+2026-07-08 11:33:43.100 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 71 chars (document) → vector of 768 dimensions
+2026-07-08 11:33:43.127 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 67 chars (document) → vector of 768 dimensions
+2026-07-08 11:33:43.153 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 71 chars (document) → vector of 768 dimensions
+Evaluating:  58%|█████▊    | 70/120 [1:04:12<42:38, 51.17s/it]Evaluating:  59%|█████▉    | 71/120 [1:05:06<42:21, 51.87s/it]Evaluating:  60%|██████    | 72/120 [1:06:43<52:18, 65.39s/it]Evaluating:  61%|██████    | 73/120 [1:08:11<56:38, 72.30s/it]2026-07-08 11:38:16.055 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 117 chars (query) → vector of 768 dimensions
+2026-07-08 11:38:16.082 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 83 chars (document) → vector of 768 dimensions
+2026-07-08 11:38:16.110 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 83 chars (document) → vector of 768 dimensions
+2026-07-08 11:38:16.139 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 81 chars (document) → vector of 768 dimensions
+Evaluating:  62%|██████▏   | 74/120 [1:08:45<46:38, 60.85s/it]Evaluating:  62%|██████▎   | 75/120 [1:10:01<48:56, 65.26s/it]Evaluating:  63%|██████▎   | 76/120 [1:10:19<37:30, 51.16s/it]Evaluating:  64%|██████▍   | 77/120 [1:12:00<47:22, 66.10s/it]2026-07-08 11:42:30.006 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 109 chars (query) → vector of 768 dimensions
+2026-07-08 11:42:30.036 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 107 chars (document) → vector of 768 dimensions
+2026-07-08 11:42:30.065 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 107 chars (document) → vector of 768 dimensions
+2026-07-08 11:42:30.093 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 107 chars (document) → vector of 768 dimensions
+Evaluating:  65%|██████▌   | 78/120 [1:12:59<44:49, 64.03s/it]Evaluating:  66%|██████▌   | 79/120 [1:13:40<38:56, 56.98s/it]Evaluating:  67%|██████▋   | 80/120 [1:13:50<28:44, 43.12s/it]Evaluating:  68%|██████▊   | 81/120 [1:14:37<28:42, 44.17s/it]2026-07-08 11:44:35.275 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 77 chars (query) → vector of 768 dimensions
+2026-07-08 11:44:35.309 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 48 chars (document) → vector of 768 dimensions
+2026-07-08 11:44:35.341 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 48 chars (document) → vector of 768 dimensions
+2026-07-08 11:44:35.372 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 48 chars (document) → vector of 768 dimensions
+Evaluating:  68%|██████▊   | 82/120 [1:15:04<24:46, 39.12s/it]Evaluating:  69%|██████▉   | 83/120 [1:15:47<24:51, 40.30s/it]Evaluating:  70%|███████   | 84/120 [1:16:07<20:29, 34.15s/it]Evaluating:  71%|███████   | 85/120 [1:17:02<23:36, 40.47s/it]2026-07-08 11:47:02.835 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 82 chars (query) → vector of 768 dimensions
+2026-07-08 11:47:02.865 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 41 chars (document) → vector of 768 dimensions
+2026-07-08 11:47:02.893 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 41 chars (document) → vector of 768 dimensions
+2026-07-08 11:47:02.922 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 41 chars (document) → vector of 768 dimensions
+Evaluating:  72%|███████▏  | 86/120 [1:17:32<21:03, 37.17s/it]Evaluating:  72%|███████▎  | 87/120 [1:18:15<21:27, 39.02s/it]Evaluating:  73%|███████▎  | 88/120 [1:18:44<19:13, 36.06s/it]Evaluating:  74%|███████▍  | 89/120 [1:20:28<29:04, 56.29s/it]2026-07-08 11:50:28.418 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 81 chars (query) → vector of 768 dimensions
+2026-07-08 11:50:28.451 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 69 chars (document) → vector of 768 dimensions
+2026-07-08 11:50:28.479 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 69 chars (document) → vector of 768 dimensions
+2026-07-08 11:50:28.509 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 69 chars (document) → vector of 768 dimensions
+Evaluating:  75%|███████▌  | 90/120 [1:20:58<24:08, 48.29s/it]Evaluating:  76%|███████▌  | 91/120 [1:22:39<31:06, 64.38s/it]Evaluating:  77%|███████▋  | 92/120 [1:22:51<22:35, 48.40s/it]Evaluating:  78%|███████▊  | 93/120 [1:24:38<29:44, 66.11s/it]2026-07-08 11:54:38.491 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 108 chars (query) → vector of 768 dimensions
+2026-07-08 11:54:38.522 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 61 chars (document) → vector of 768 dimensions
+2026-07-08 11:54:38.551 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 61 chars (document) → vector of 768 dimensions
+2026-07-08 11:54:38.581 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 61 chars (document) → vector of 768 dimensions
+Evaluating:  78%|███████▊  | 94/120 [1:25:08<23:54, 55.16s/it]Evaluating:  79%|███████▉  | 95/120 [1:26:21<25:17, 60.70s/it]Evaluating:  80%|████████  | 96/120 [1:26:52<20:38, 51.61s/it]Evaluating:  81%|████████  | 97/120 [1:28:12<23:04, 60.19s/it]2026-07-08 11:58:14.242 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 105 chars (query) → vector of 768 dimensions
+2026-07-08 11:58:14.272 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 70 chars (document) → vector of 768 dimensions
+2026-07-08 11:58:14.303 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 70 chars (document) → vector of 768 dimensions
+2026-07-08 11:58:14.340 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 70 chars (document) → vector of 768 dimensions
+Evaluating:  82%|████████▏ | 98/120 [1:28:43<18:55, 51.59s/it]Evaluating:  82%|████████▎ | 99/120 [1:30:07<21:26, 61.26s/it]Evaluating:  83%|████████▎ | 100/120 [1:30:29<16:28, 49.43s/it]Evaluating:  84%|████████▍ | 101/120 [1:33:31<28:17, 89.32s/it]2026-07-08 12:03:41.890 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 125 chars (query) → vector of 768 dimensions
+2026-07-08 12:03:41.923 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 103 chars (document) → vector of 768 dimensions
+2026-07-08 12:03:41.956 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 85 chars (document) → vector of 768 dimensions
+2026-07-08 12:03:41.989 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 103 chars (document) → vector of 768 dimensions
+Evaluating:  85%|████████▌ | 102/120 [1:34:11<22:19, 74.41s/it]Evaluating:  86%|████████▌ | 103/120 [1:36:43<27:38, 97.57s/it]Evaluating:  87%|████████▋ | 104/120 [1:37:02<19:44, 74.02s/it]Evaluating:  88%|████████▊ | 105/120 [1:38:11<18:07, 72.48s/it]2026-07-08 12:08:16.092 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 128 chars (query) → vector of 768 dimensions
+2026-07-08 12:08:16.124 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 69 chars (document) → vector of 768 dimensions
+2026-07-08 12:08:16.154 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 77 chars (document) → vector of 768 dimensions
+2026-07-08 12:08:16.187 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 69 chars (document) → vector of 768 dimensions
+Evaluating:  88%|████████▊ | 106/120 [1:38:45<14:15, 61.12s/it]Evaluating:  89%|████████▉ | 107/120 [1:40:31<16:07, 74.40s/it]Evaluating:  90%|█████████ | 108/120 [1:40:47<11:24, 57.05s/it]Evaluating:  91%|█████████ | 109/120 [1:43:09<15:07, 82.48s/it]2026-07-08 12:13:49.656 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 83 chars (query) → vector of 768 dimensions
+2026-07-08 12:13:49.719 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 72 chars (document) → vector of 768 dimensions
+2026-07-08 12:13:49.766 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 72 chars (document) → vector of 768 dimensions
+2026-07-08 12:13:49.804 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 72 chars (document) → vector of 768 dimensions
+Evaluating:  92%|█████████▏| 110/120 [1:44:19<13:06, 78.69s/it]Evaluating:  92%|█████████▎| 111/120 [1:44:56<09:56, 66.32s/it]Evaluating:  93%|█████████▎| 112/120 [1:45:19<07:07, 53.38s/it]Evaluating:  94%|█████████▍| 113/120 [1:46:46<07:23, 63.41s/it]2026-07-08 12:16:56.508 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 82 chars (query) → vector of 768 dimensions
+2026-07-08 12:16:56.554 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 121 chars (document) → vector of 768 dimensions
+2026-07-08 12:16:56.590 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 121 chars (document) → vector of 768 dimensions
+2026-07-08 12:16:56.624 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 118 chars (document) → vector of 768 dimensions
+Evaluating:  95%|█████████▌| 114/120 [1:47:26<05:37, 56.20s/it]Evaluating:  96%|█████████▌| 115/120 [1:50:45<08:15, 99.19s/it]Evaluating:  97%|█████████▋| 116/120 [1:50:59<04:54, 73.58s/it]Evaluating:  98%|█████████▊| 117/120 [1:52:59<04:22, 87.50s/it]2026-07-08 12:23:02.856 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 108 chars (query) → vector of 768 dimensions
+2026-07-08 12:23:02.895 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 89 chars (document) → vector of 768 dimensions
+2026-07-08 12:23:02.926 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 89 chars (document) → vector of 768 dimensions
+2026-07-08 12:23:02.957 | DEBUG    | src.ingestion.embedder:embed_text:30 - Embedded 89 chars (document) → vector of 768 dimensions
+Evaluating:  98%|█████████▊| 118/120 [1:53:32<02:22, 71.16s/it]Evaluating:  99%|█████████▉| 119/120 [1:54:19<01:03, 63.87s/it]Evaluating: 100%|██████████| 120/120 [1:54:40<00:00, 51.08s/it]Evaluating: 100%|██████████| 120/120 [1:54:40<00:00, 57.34s/it]
+    ⚠ 1 question(s) had no valid score for this metric — excluded from average
+==================================================
+RAGAS EVALUATION RESULTS
+==================================================
+  faithfulness              0.9626  ✅
+  answer_relevancy          0.7581  ✅
+  context_precision         0.4387  ✅
+  context_recall            0.8083  ✅
+==================================================
+Questions evaluated: 30
+Pipeline time:       579.6s
+RAGAS scoring time:  6882.7s
+
+Results saved to src/evaluation/eval_results.json
+Per-question results saved to src/evaluation/eval_results_per_question.csv

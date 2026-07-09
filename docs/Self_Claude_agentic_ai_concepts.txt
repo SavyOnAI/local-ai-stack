@@ -1,0 +1,94 @@
+Agentic AI -- Core Concepts Quick Reference
+
+WHAT IS AN AI AGENT
+An AI agent is an LLM given the ability to take actions, not just generate text.
+A plain LLM call is a single question-answer round trip: you ask, it answers,
+done. An agent instead runs a loop -- it can call tools, look at the result,
+decide what to do next, and keep going until the task is finished or it gives up.
+The core difference is autonomy over multiple steps, not just a longer prompt.
+
+TOOL USE
+Tool use means the model can call external functions instead of only generating
+text. A tool might search the web, query a database, run code, or call an API.
+The model does not execute the tool itself -- it outputs a structured request
+("call search_docs with query=X"), the surrounding application runs that
+function, and the result is fed back into the model's context for the next step.
+This is the same pattern as this project's FastAPI /query endpoint accepting a
+structured request and returning a structured response, just one level up:
+the LLM is now the one deciding which endpoint to call and when.
+
+THE REACT PATTERN
+ReAct stands for Reason + Act. Instead of jumping straight to an answer, the
+model alternates between explaining its reasoning ("I need to check the
+inventory before I can answer this") and taking an action (calling a tool).
+The loop looks like: Thought -> Action -> Observation -> Thought -> Action ...
+until the model decides it has enough information to produce a final answer.
+This is the most common pattern underneath agent frameworks like LangGraph
+and CrewAI, even when the framework hides the raw loop from the developer.
+
+PLANNING VS REACTING
+Reactive agents decide one step at a time, with no fixed plan -- similar to
+how retrieve -> generate works in a standard RAG pipeline. Planning agents
+first sketch a multi-step plan before executing anything, then work through
+the plan step by step, adjusting if something fails. Planning tends to be
+more reliable on complex, multi-part tasks but costs more tokens and more
+latency because the model is doing extra reasoning work before ever calling
+a tool. Most production agent systems mix both: rough plan up front, reactive
+adjustments as it executes.
+
+MEMORY
+Agents distinguish between two kinds of memory. Short-term memory is just the
+current conversation's context window -- it disappears when the session ends,
+the same way this project's main.py conversation loop forgets everything on
+restart. Long-term memory persists across sessions, usually backed by a
+vector store or database, so the agent can recall a fact from a conversation
+that happened days ago. A RAG pipeline is, in a sense, a form of long-term
+memory for facts that were never even in a conversation to begin with --
+they came from documents instead.
+
+MULTI-AGENT ORCHESTRATION
+Rather than one agent doing everything, some systems split work across
+multiple specialized agents -- one for research, one for writing, one for
+review -- coordinated by an orchestrator agent that assigns tasks and
+combines results. This mirrors a team structure: a manager (orchestrator)
+delegates to specialists rather than doing every task personally. The
+tradeoff is coordination overhead -- more agents means more communication,
+more places for context to get lost, and more latency, in exchange for each
+agent needing a shorter, more focused system prompt.
+
+MODEL CONTEXT PROTOCOL (MCP)
+MCP is an open protocol, originally introduced by Anthropic, that standardizes
+how an LLM application connects to external tools and data sources. Before
+MCP, every application had to write custom integration code for every tool it
+wanted an LLM to use. MCP defines a common interface -- an MCP server exposes
+a set of tools and resources in a standard format, and any MCP-compatible
+client (an LLM application) can discover and call them without custom
+glue code per integration. It is similar in spirit to how a REST API
+standardizes how a frontend talks to a backend, except the client here is an
+LLM deciding at runtime which tool to call and why.
+
+AGENT2AGENT PROTOCOL (A2A)
+A2A is an open protocol, introduced by Google, for letting AI agents built
+on different frameworks or by different vendors communicate with each other
+directly. Where MCP standardizes how one agent talks to tools, A2A
+standardizes how one agent talks to another agent -- discovering what a
+remote agent can do, sending it a task, and getting a result back, without
+both agents needing to be built on the same framework or by the same team.
+The two protocols are complementary, not competing: an agent might use MCP
+to call its own tools and A2A to delegate part of a task to a different agent
+entirely.
+
+COMMON AGENT FAILURE MODES
+Tool misuse -- the model calls a real tool with malformed or nonsensical
+arguments, often because the tool's description was ambiguous.
+Infinite loops -- the model keeps calling the same tool with the same
+arguments because it never recognizes the task is stuck.
+Hallucinated tool calls -- the model calls a tool that does not exist, or
+invents parameters the tool never accepts, because it is pattern-matching to
+tools it saw during training rather than the ones actually available.
+Lost context -- in long-running multi-step tasks, early instructions get
+pushed out of the context window and the agent quietly drifts off task.
+These failure modes are the agentic-AI equivalent of this project's citation
+validator problem: the system can look like it is working while quietly
+doing the wrong thing, and the only way to catch it is to check the actual
+steps taken, not just the final answer.
