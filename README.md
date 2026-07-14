@@ -240,6 +240,14 @@ A quick index of every function in the codebase. Updated as new files are added.
 | `main.py` | `answer_question(query, chunks)` | Run full RAG pipeline for a single question |
 | `main.py` | `run()` | Start the terminal Q&A conversation loop |
 
+### ui/
+| File | Function | Purpose |
+|---|---|---|
+| `app.py` | `call_api(question)` | POST a question to the FastAPI `/query` endpoint, return parsed JSON |
+| `app.py` | `format_sources(chunk_ids)` | Strip `_chunk_N` suffix and dedupe chunk IDs into unique source filenames |
+| `app.py` | `format_response(result)` | Assemble answer + sources + citation warning into one markdown string |
+| `app.py` | `chat_fn(message, history)` | Gradio callback — calls the API, handles connection/HTTP errors, returns formatted response |
+
 ---
 
 *github.com/SavyOnAI/local-ai-stack · Python · Ollama · Apple Silicon · 2026*

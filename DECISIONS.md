@@ -481,6 +481,65 @@ The Phase 2 PRD's own evaluation table (§10) sets context_precision's threshold
 
 ---
 
+### DEC-025 — Structured Logging: Custom Flat Sink over Loguru's `serialize=True`
+
+**Date:** July 2026
+**Phase:** 2
+**Decision:** Replaced Loguru's built-in `serialize=True` JSON output with a custom `_flat_json_sink()` function in `query_pipeline.py`.
+
+**Alternatives considered:**
+- `logger.add("logs/pipeline.jsonl", serialize=True, rotation="10 MB")` — Loguru's documented one-line approach.
+
+**Reason chosen:**
+`serialize=True` wraps every log call in a nested envelope (`text` + `record`, with custom fields buried under `record.extra`), which is correct but awkward to query — `json.loads(line)["record"]["extra"]["retrieval_ms"]` versus `json.loads(line)["retrieval_ms"]`. A custom sink writes flat objects instead: `time`, `level`, `message` at the top level, plus whatever keyword fields the log call passed (e.g. `retrieval_ms`, `prompt_tokens`). Easier to read by eye and easier to load into pandas/a dashboard later without an unwrapping step. Trade-off: lost Loguru's built-in `rotation` handling — the custom sink has no file-size rotation yet. Acceptable for a solo portfolio project's current log volume; would need revisiting if `pipeline.jsonl` starts growing fast (Phase 3 benchmarking, or moving off a single dev machine).
+
+**Lesson:** First version of the custom sink only pulled `record["time"]` and `record["level"]` — forgot `record["message"]`, so every log line without explicit keyword fields (i.e. every line except the final `query_complete`/`http_request` summary) wrote as content-empty JSON. Caught by inspecting the actual file rather than trusting the code looked right. Any custom Loguru sink should be smoke-tested against a call with a plain string message, not just against the structured summary call it was written for.
+
+**To revisit:** Add size-based rotation to `_flat_json_sink()` if log volume grows meaningfully in Phase 3+.
+
+---
+
+### DEC-026 — Reranker Warm-Up Moved to Startup, Not First Query
+
+**Date:** July 2026
+**Phase:** 2
+**Decision:** Call `get_reranker()` inside `load_indexes()` so the cross-encoder model loads once at process startup, rather than lazily on the first call to `rerank()`.
+
+**Alternatives considered:**
+- Leave lazy-loading as-is and treat the first query's inflated latency as a known one-time cost.
+
+**Reason chosen:**
+`get_reranker()` was being called for the first time inside `rerank()`, meaning the ~2.4s cross-encoder model load was measured as part of that query's `rerank_ms`. First observed: `rerank_ms = 2654.3` on a cold process versus `rerank_ms = 191–603ms` on a warm one — over 10x inflation. Since `load_indexes()` already exists as the designated startup routine (loads BM25 and connects to ChromaDB before any query runs), warming the reranker there keeps all fixed one-time costs in one place and keeps `rerank_ms` an honest per-query number from the very first request onward.
+
+**Result:** `rerank_ms` dropped from ~2400–2650ms (cold, contaminated) to ~190–600ms (warm, real) on identical queries.
+
+**Lesson:** Any per-stage latency metric that wraps a lazily-initialized resource (model load, DB connection, cache warm-up) will silently inflate its first measurement unless that resource is forced to initialize before timing starts. Worth checking every stage in the pipeline for this pattern before trusting p50/p95 numbers in Phase 3/4 — this was caught only because the first-query number looked implausibly high next to the second.
+
+---
+
+### DEC-027 — Gradio UI: HTTP Client to FastAPI, Not Direct Pipeline Import
+
+**Date:** July 2026
+**Phase:** 2
+**Decision:** `ui/app.py` calls the FastAPI `/query` endpoint over HTTP via `requests`, rather than importing `query_pipeline.query()` directly. Citation display splits raw chunk IDs from deduped source filenames: the answer text keeps raw `[filename_chunk_N]` citations as returned by the pipeline; the Sources list below it shows deduped filenames only.
+
+**Alternatives considered:**
+- Gradio importing `query_pipeline.py` functions directly, bypassing FastAPI entirely.
+- Cleaning chunk IDs to plain filenames in both the answer text and the Sources list (fully "polished" display).
+
+**Reason chosen:**
+Direct import would create two code paths to the same pipeline logic (FastAPI's `/query` and Gradio's direct calls), risking drift between them. Routing through HTTP keeps the API as the single contract, consistent with the Phase 2 PRD's folder structure treating `ui/` as a sibling to `api/`, not a component of it. This also matches how the system would actually be deployed — UI and backend as separate processes.
+
+On citation display: keeping the raw chunk ID (e.g. `[self_claude_model_benchmarks_chunk_0]`) inline in the answer preserves visibility into the citation mechanism itself — useful for demonstrating per-claim grounding in a technical interview, which is the actual point of DEC-016's citation validator. The Sources list is deduped to filenames only (via regex stripping `_chunk_\d+$` and preserving first-seen order) since a viewer doesn't need to see the same file listed 4 times.
+
+**Verification approach:** The `citations_valid: False` warning branch in `format_response()` was tested in isolation with hand-constructed fake pipeline output, not a real hallucinated citation from the live model — DEC-016's validator has proven robust enough that a live failure case wasn't readily reproducible in testing. This confirms the Gradio display logic renders the warning correctly if the pipeline ever returns that state, but does not confirm the pipeline can currently produce it.
+
+**Result:** Two-terminal workflow (`uvicorn` + `python ui/app.py`) verified end-to-end: grounded question → answer with sources; weak-retrieval question → graceful "could not find"; API down → friendly connection-error message instead of a raw traceback.
+
+**To revisit:** If a real `citations_valid: False` case surfaces in production use, confirm the warning renders correctly against real (not fake) pipeline output.
+
+---
+
 ## Decisions Pending
 
 The following decisions are noted but not yet made. They will be logged here when resolved.
@@ -520,6 +579,8 @@ The following decisions are noted but not yet made. They will be logged here whe
 | 1.4 | June 2026 | Added DEC-017 — RAGAS faithfulness `nan` bug traced to `np.nan` not being filtered in `_mean()`; added corpus swap and Q11 investigation to Decisions Pending |
 | 1.5 | June 2026 | Added DEC-018 — `.gitignore` extended to exclude `.DS_Store`, `chroma_db/`, `bm25_index.pkl` beyond the Phase 1 baseline |
 | 1.6 | July 2026 | Added DEC-019 through DEC-024 — metadata bug, file-swap incident, corpus swap, self-hosted CI runner decision, PDF extraction corruption fix, context_precision root-cause finding |
+| 1.7 | July 2026 | Added DEC-024 and DEC-025 - Structured logging and reranker warmup moving to startup |
+| 1.8 | July 2026 | Added DEC-027 — Gradio UI wired to FastAPI over HTTP; citation display strategy (raw chunk ID in answer, deduped filename in Sources) |
 
 ---
 

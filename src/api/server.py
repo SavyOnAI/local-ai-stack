@@ -1,16 +1,51 @@
+"""
+server.py — FastAPI layer for local-ai-stack.
+
+Exposes /health, /query, /index. Indexes are loaded once at startup, not
+per-request. A logging middleware wraps every request with total latency,
+status code, and path — separate from the per-stage timing already logged
+inside query_pipeline.query().
+"""
+
+import os
+import time
+
 from fastapi import FastAPI, HTTPException
+from loguru import logger
+
 from src.api.schemas import (
     QueryRequest, QueryResponse,
     IndexRequest, IndexResponse, HealthResponse
 )
 from src.generation.query_pipeline import query as run_query, load_indexes
 from src.ingestion.index_documents import index_documents
-import os
 
 app = FastAPI(title="local-ai-stack RAG API")
 
-# load indexes once at startup, not per-request
+# load indexes once at startup, not per-request — this also warms the
+# reranker (see query_pipeline.load_indexes), so the first real request
+# doesn't pay the cross-encoder load cost
 bm25_index, bm25_chunks, collection = load_indexes()
+
+
+@app.middleware("http")
+async def log_requests(request, call_next):
+    """
+    Logs one line per HTTP request: method, path, status code, total latency.
+    Runs for every endpoint automatically — no per-route logging needed.
+    """
+    start = time.perf_counter()
+    response = await call_next(request)
+    total_ms = (time.perf_counter() - start) * 1000
+
+    logger.info(
+        "http_request",
+        method=request.method,
+        path=request.url.path,
+        status_code=response.status_code,
+        total_ms=round(total_ms, 1),
+    )
+    return response
 
 
 @app.get("/health")
