@@ -1,3 +1,10 @@
+"""
+schemas.py — Pydantic request/response models for the FastAPI server.
+
+Defines the typed shape of every request body and response for
+/health, /query, and /index. No logic here — validation only.
+"""
+
 from pydantic import BaseModel
 from typing import List
 
