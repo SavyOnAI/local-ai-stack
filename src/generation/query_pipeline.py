@@ -17,6 +17,7 @@ from src.retrieval.hybrid_retriever import hybrid_retrieve
 from src.retrieval.reranker import rerank, get_reranker
 from src.generation.prompt_builder import build_prompt
 from src.generation.llm import ask_ollama
+from src.generation.llm import MODEL_NAME
 from src.generation.citation_validator import validate_citations
 
 def _flat_json_sink(message):
@@ -55,6 +56,8 @@ def query(
     bm25_chunks: list[dict],
     collection,
     top_k: int = 5,
+    model: str | None = None,
+    timeout: int = 120,
 ) -> dict:
     """
     Run a single question through the full RAG pipeline.
@@ -65,6 +68,9 @@ def query(
         bm25_chunks: Chunks associated with the BM25 index.
         collection:  ChromaDB collection.
         top_k:       Number of chunks to pass to the LLM.
+        model:       Ollama model name to use for generation. Defaults to
+                     MODEL_NAME from .env if not given — pass this to
+                     override for benchmarking.
     Returns:
         Dict with answer, citation validity, sources, and token counts.
     """
@@ -90,7 +96,7 @@ def query(
     # build prompt and call the model
     stage_start = time.perf_counter()
     prompt = build_prompt(question, reranked)
-    llm_result = ask_ollama(prompt)
+    llm_result = ask_ollama(prompt, model=model, timeout=timeout)
     generation_ms = (time.perf_counter() - stage_start) * 1000
 
     # validate citations in the response
@@ -115,6 +121,7 @@ def query(
     logger.info(
         "query_complete",
         question=question,
+        model=model or MODEL_NAME,
         retrieval_ms=round(retrieval_ms, 1),
         rerank_ms=round(rerank_ms, 1),
         generation_ms=round(generation_ms, 1),

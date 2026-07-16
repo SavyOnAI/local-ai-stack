@@ -9,6 +9,7 @@ Per-question breakdown is saved to eval_results_per_question.csv.
 
 import json
 import time
+import math
 from pathlib import Path
 
 from datasets import Dataset
@@ -112,6 +113,8 @@ def run_pipeline_for_question(
     bm25_index,
     bm25_chunks: list[dict],
     collection,
+    model: str | None = None,
+    timeout: int = 120,
 ) -> dict:
     """
     Run one question through the full RAG pipeline and return what RAGAS needs.
@@ -132,6 +135,8 @@ def run_pipeline_for_question(
         bm25_index=bm25_index,
         bm25_chunks=bm25_chunks,
         collection=collection,
+        model=model,
+        timeout=timeout,
     )
 
     # match chunk IDs back to their text
@@ -154,6 +159,8 @@ def build_ragas_dataset(
     bm25_chunks: list[dict],
     collection,
     limit: int | None = None,
+    model: str | None = None,
+    timeout: int = 120,
 ) -> Dataset:
     """
     Run the pipeline for every eval question and assemble a RAGAS Dataset.
@@ -186,6 +193,8 @@ def build_ragas_dataset(
                 bm25_index=bm25_index,
                 bm25_chunks=bm25_chunks,
                 collection=collection,
+                model=model,
+                timeout=timeout,
             )
             questions.append(item["question"])
             answers.append(pipeline_result["answer"])
@@ -204,6 +213,20 @@ def build_ragas_dataset(
 
 
 # ── Section 6: run RAGAS and save results ─────────────────────────────────────
+
+def _mean(values) -> float:
+    """
+    Average a list of RAGAS per-question scores, filtering both None and
+    NaN — RAGAS uses np.nan (not None) for failed/timed-out scores, so a
+    plain `v is not None` filter lets one bad value poison the whole
+    average. See DEC-017.
+    """
+    vals = [v for v in values if v is not None and not math.isnan(v)]
+    skipped = len(values) - len(vals)
+    if skipped:
+        print(f"    ⚠ {skipped} question(s) had no valid score for this metric — excluded from average")
+    return round(sum(vals) / len(vals), 4) if vals else 0.0
+
 
 def evaluate_pipeline(limit: int | None = None) -> dict:
     """
@@ -256,17 +279,6 @@ def evaluate_pipeline(limit: int | None = None) -> dict:
     )
     elapsed_ragas = time.time() - start
 
-    import math
-
-    def _mean(values) -> float:
-        # result[metric] is a list of per-question scores — average them.
-        # RAGAS uses np.nan (not None) for failed/timed-out scores, so we
-        # must filter both None and NaN or one bad value poisons the average.
-        vals = [v for v in values if v is not None and not math.isnan(v)]
-        skipped = len(values) - len(vals)
-        if skipped:
-            print(f"    ⚠ {skipped} question(s) had no valid score for this metric — excluded from average")
-        return round(sum(vals) / len(vals), 4) if vals else 0.0
 
     scores = {
         "faithfulness":       _mean(result["faithfulness"]),

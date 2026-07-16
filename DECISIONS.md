@@ -540,6 +540,59 @@ On citation display: keeping the raw chunk ID (e.g. `[self_claude_model_benchmar
 
 ---
 
+### DEC-028 — Llama 3.3 70B Excluded from Day 13 Benchmark: Memory Pressure on 64GB
+
+**Date:** July 2026
+**Phase:** 2
+**Decision:** Excluded Llama 3.3 70B from the Day 13 benchmark run rather than swapping in a different large model or forcing a same-day fix.
+
+**Alternatives considered:**
+- Swap in a different large model between Gemma 4 26B and Llama 3.3 70B — rejected. Same memory ceiling, no time budget to chase it under today's session.
+- Force a fix same-day — rejected. Risk of burning remaining Day 13 time with no guarantee of success.
+
+**Reason chosen:**
+Attempted Gemma 4 26B / Ministral 3B / Llama 3.3 70B three-way benchmark. Llama 3.3 70B failed with a request timeout during RAGAS scoring after succeeding in isolated warm-up. Confirmed via observed RAM usage: memory stayed elevated for the duration of the llama3.3 attempt and dropped immediately upon its failure/completion — llama3.3's ~43GB footprint, combined with the RAGAS judge (gemma4:26b, ~17GB) and embedder needing to run concurrently or in close succession during scoring, exceeded comfortable headroom on 64GB unified memory alongside ChromaDB and OS overhead. `ollama ps` checked post-failure showed nothing resident — inconclusive on the exact mechanism (single large model vs. repeated model-swap churn), since the model had already been evicted by the time the check ran.
+
+**Result:** Ministral 3B and Gemma 4 26B benchmarks completed successfully; results in `benchmark_results.json`. Llama 3.3 70B excluded from this benchmark cycle.
+
+**To revisit:** If retried, run `ollama ps` *during* the RAGAS scoring phase (not after) to see whether it's one model straining the ceiling or repeated eviction/reload between judge and generator. Consider a lighter judge model as a structural fix, since judge and 70B-class generator competing for the same memory will resurface with any large candidate model, not just Llama 3.3.
+
+---
+
+### DEC-029 — Generation Model and Timeout Made Runtime-Configurable for Benchmarking
+
+**Date:** July 2026
+**Phase:** 2
+**Decision:** Added optional `model` and `timeout` parameters to `ask_ollama()`, threaded through `query_pipeline.query()` and `evaluator.py`'s `run_pipeline_for_question()` / `build_ragas_dataset()`.
+
+**Alternatives considered:**
+- Duplicate `llm.py` / `query_pipeline.py` / `evaluator.py` per model for benchmarking — rejected. Creates drift risk, same problem DEC-027 already avoided by routing the Gradio UI through the shared API instead of a second code path.
+
+**Reason chosen:**
+`ask_ollama()` had `MODEL_NAME` and a fixed 120s timeout hardcoded from `.env` at import time, with no way to override per-call. `benchmark.py` needs to run three different models through the identical pipeline. Both new parameters default to `None`/`120`, so every existing caller (`main.py`, `server.py`, `evaluator.py`'s CI path) is unaffected.
+
+**Result:** 120s default confirmed too short for Llama 3.3 70B's cold model load alone, separate from generation time — `benchmark.py` passes higher timeouts (300–600s) for large models.
+
+---
+
+### DEC-030 — main.py Silently Running Stale Phase 1 Pipeline Since Phase 2 Refactor
+
+**Date:** July 2026
+**Phase:** 2
+**Decision:** Rewrote `main.py`'s `initialise()` to call `load_indexes()` and `answer_question()` to call `query_pipeline.query()`, matching how `server.py` and `benchmark.py` already use the pipeline.
+
+**Alternatives considered:**
+- None — straightforward drift, not a design tradeoff. Same shape as DEC-019/DEC-020.
+
+**Reason chosen:**
+`main.py` still imported from flat Phase 1 modules (`loader`, `chunker`, `retriever`, `prompt`, `llm` — no `src.` prefix) and never called `query_pipeline.query()`. Every terminal question skipped hybrid retrieval, reranking, and citation validation entirely, running keyword-only Phase 1 logic instead — undetected because `main.py` isn't exercised by `evaluator.py`, `server.py`, or `benchmark.py`, which all call `query_pipeline.query()` directly.
+
+**Lesson:** Caught while asking for a file docstring, not via any test — `main.py` has no automated coverage. Worth a pytest smoke test in Day 14 that actually imports and exercises `main.py`, not just the modules it's supposed to call.
+
+**To revisit:** `README.md`'s Function Reference table (`initialise`/`answer_question` rows) is now stale against this rewrite — update alongside Day 15's README pass.
+
+---
+
 ## Decisions Pending
 
 The following decisions are noted but not yet made. They will be logged here when resolved.
@@ -581,6 +634,7 @@ The following decisions are noted but not yet made. They will be logged here whe
 | 1.6 | July 2026 | Added DEC-019 through DEC-024 — metadata bug, file-swap incident, corpus swap, self-hosted CI runner decision, PDF extraction corruption fix, context_precision root-cause finding |
 | 1.7 | July 2026 | Added DEC-024 and DEC-025 - Structured logging and reranker warmup moving to startup |
 | 1.8 | July 2026 | Added DEC-027 — Gradio UI wired to FastAPI over HTTP; citation display strategy (raw chunk ID in answer, deduped filename in Sources) |
+| 1.9 | July 2026 | Added DEC-028 through DEC-030 — Llama 3.3 70B excluded from Day 13 benchmark (memory pressure), model/timeout made runtime-configurable for benchmarking, main.py Phase 1/Phase 2 pipeline drift fixed |
 
 ---
 
