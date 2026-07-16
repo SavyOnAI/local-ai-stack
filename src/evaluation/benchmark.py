@@ -179,7 +179,7 @@ def run_benchmark(limit: int | None = None) -> dict:
 
         except Exception as e:
             print(f"\n  ⚠ {label} FAILED — {e}")
-            print(f"  Continuing to next model. Results so far are already saved.")
+            print("  Continuing to next model. Results so far are already saved.")
             all_results[label] = {"tag": tag, "error": str(e)}
 
         # save after every model, not just at the end — a failure on model 3
