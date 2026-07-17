@@ -77,6 +77,10 @@ local-ai-stack/
 ├── .github/workflows/eval_gate.yml      # CI: fail if faithfulness < 0.75
 ├── chroma_db/                           # Auto-created, gitignored
 ├── logs/                                # Auto-created, gitignored
+├── tests/                               # pytest suite
+│   ├── test_chunker.py
+│   ├── test_citation_validator.py
+│   └── test_hybrid_retriever.py
 ├── .env
 ├── .gitignore
 ├── requirements.txt
@@ -184,6 +188,18 @@ escalation to human review when confidence is low.
 - Slide images and flowchart relationships in PPTX not extracted — text only (deferred to Phase 3+)
 - Llama 3.3 70B currently excluded from benchmarking — memory pressure on 64GB during RAGAS scoring (DEC-028)
 - Self-hosted CI runner only runs when the Mac is on (DEC-022) — acceptable for a solo project
+
+---
+
+## Testing
+
+pytest coverage as of Day 14: `chunker.py`, `citation_validator.py`, `hybrid_retriever.py`.
+Not yet covered: `bm25_index.py`, `vector_store.py`, `reranker.py`, `query_pipeline.py`,
+`server.py` (API integration tests). Run with:
+
+\`\`\`bash
+python -m pytest tests/ -v
+\`\`\`
 
 ---
 

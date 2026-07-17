@@ -88,3 +88,26 @@ def test_hybrid_retrieve_fuses_bm25_and_vector_results(bm25_setup):
     assert "c3" in result_ids
     # no id duplicated
     assert len(results) == len(result_ids)
+
+
+def test_rrf_k_controls_score_smoothing():
+    # c1 at rank 0, c2 at rank 1 — same list, so there's a real rank gap to smooth
+    bm25_results = [
+        {"id": "c1", "text": "one"},
+        {"id": "c2", "text": "two"},
+    ]
+    vector_results = []
+
+    fused_small_k = reciprocal_rank_fusion(bm25_results, vector_results, k=1)
+    fused_large_k = reciprocal_rank_fusion(bm25_results, vector_results, k=1000)
+
+    scores_small = {c["id"]: c["rrf_score"] for c in fused_small_k}
+    scores_large = {c["id"]: c["rrf_score"] for c in fused_large_k}
+
+    gap_small_k = scores_small["c1"] - scores_small["c2"]
+    gap_large_k = scores_large["c1"] - scores_large["c2"]
+
+    # small k = rank-1 vs rank-2 matters a lot = big gap
+    # large k = rank barely matters = tiny gap
+    assert gap_small_k > gap_large_k
+    assert gap_large_k == pytest.approx(0, abs=1e-4)

@@ -591,6 +591,7 @@ Attempted Gemma 4 26B / Ministral 3B / Llama 3.3 70B three-way benchmark. Llama 
 
 **To revisit:** `README.md`'s Function Reference table (`initialise`/`answer_question` rows) is now stale against this rewrite — update alongside Day 15's README pass.
 
+**Follow-up (Day 14):** `retriever.py` (the Phase 1 keyword-only module `main.py` was silently calling before this fix) confirmed unreferenced via `grep -r "from.*retriever import\|import retriever" src/` — no imports found — and deleted. History preserved in git log; not removed from the repository's timeline, only from the active codebase.
 ---
 
 ## Decisions Pending
@@ -635,6 +636,7 @@ The following decisions are noted but not yet made. They will be logged here whe
 | 1.7 | July 2026 | Added DEC-024 and DEC-025 - Structured logging and reranker warmup moving to startup |
 | 1.8 | July 2026 | Added DEC-027 — Gradio UI wired to FastAPI over HTTP; citation display strategy (raw chunk ID in answer, deduped filename in Sources) |
 | 1.9 | July 2026 | Added DEC-028 through DEC-030 — Llama 3.3 70B excluded from Day 13 benchmark (memory pressure), model/timeout made runtime-configurable for benchmarking, main.py Phase 1/Phase 2 pipeline drift fixed |
+| 2.0 | July 2026 | Day 14: added pytest coverage for chunker, citation_validator, hybrid_retriever; confirmed and removed dead Phase 1 `retriever.py`, noted as a follow-up under DEC-030 |
 
 ---
 
