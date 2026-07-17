@@ -48,8 +48,8 @@ def validate_citations(response: str, chunks: list[dict]) -> dict:
 
 if __name__ == "__main__":
     test_chunks = [
-        {"chunk_id": "notes_md__chunk_001", "text": "RAG stands for Retrieval-Augmented Generation."},
-        {"chunk_id": "notes_md__chunk_002", "text": "ChromaDB is a local vector database."},
+        {"id": "notes_md__chunk_001", "text": "RAG stands for Retrieval-Augmented Generation."},
+        {"id": "notes_md__chunk_002", "text": "ChromaDB is a local vector database."},
     ]
 
     # good response — cites real IDs
