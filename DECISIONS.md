@@ -93,6 +93,8 @@ Gemma 4 26B is the newer generation model at the same size tier as the originall
 
 **To revisit:** Swap Gemma 4 26B for Llama 3.3 70B in Phase 2 once the pipeline is stable, and measure the quality delta on the eval set.
 
+**Update (Day 14):** Ministral 3B and Gemma 4 26B benchmarked on real hardware (`benchmark_results.json`). Gemma 4 26B's quality edge is narrower than assumed — faithfulness +16% relative (0.818 → 0.950), but answer_relevancy, context_precision, and context_recall are statistically flat between the two models. The gain costs ~8x generation latency (2.4s → 19.7s avg). Ministral 3B alone clears the CI gate (0.818 ≥ 0.75). Kept Gemma 4 26B as primary — faithfulness is the CI-gated and most interview-visible metric — but this is a narrower justification than "bigger model wins across the board." Llama 3.3 70B still has no real benchmark numbers (timed out, DEC-028) and is no longer on local disk; the original three-way comparison remains incomplete.
+
 ---
 
 ### DEC-004 — Embedding Model Selection
@@ -557,6 +559,8 @@ Attempted Gemma 4 26B / Ministral 3B / Llama 3.3 70B three-way benchmark. Llama 
 
 **To revisit:** If retried, run `ollama ps` *during* the RAGAS scoring phase (not after) to see whether it's one model straining the ceiling or repeated eviction/reload between judge and generator. Consider a lighter judge model as a structural fix, since judge and 70B-class generator competing for the same memory will resurface with any large candidate model, not just Llama 3.3.
 
+**Update (Day 14):** `llama3.3` removed from local disk (`ollama rm llama3.3`) to reclaim ~43GB — would need re-pulling before any retry of the above.
+
 ---
 
 ### DEC-029 — Generation Model and Timeout Made Runtime-Configurable for Benchmarking
@@ -592,6 +596,43 @@ Attempted Gemma 4 26B / Ministral 3B / Llama 3.3 70B three-way benchmark. Llama 
 **To revisit:** `README.md`'s Function Reference table (`initialise`/`answer_question` rows) is now stale against this rewrite — update alongside Day 15's README pass.
 
 **Follow-up (Day 14):** `retriever.py` (the Phase 1 keyword-only module `main.py` was silently calling before this fix) confirmed unreferenced via `grep -r "from.*retriever import\|import retriever" src/` — no imports found — and deleted. History preserved in git log; not removed from the repository's timeline, only from the active codebase.
+
+---
+
+### DEC-031 — Model Benchmark Scoped to Two Models; Hybrid vs. BM25-Only Empirically Mixed, Not a Clean Win
+
+**Date:** July 2026
+**Phase:** 2
+
+**Decision (part 1 — benchmark scope):** Formally scoped the Phase 2 model benchmark down from three models to two (Ministral 3B, Gemma 4 26B). Llama 3.3 70B is excluded, not deferred-and-pending — it is no longer being pursued for Phase 2 close-out.
+
+**Decision (part 2 — hybrid retrieval):** Logged the empirical hybrid-vs-BM25-only comparison honestly: hybrid retrieval does **not** uniformly outperform keyword-only retrieval on this eval set. It underperforms on context_precision and outperforms on context_recall. The Phase 2 PRD §12 criterion "hybrid retrieval outperforms keyword-only" is **not checked off as a pass** — it is logged as a partial, mixed result.
+
+**Alternatives considered:**
+- Re-pull `llama3.3` and force a third benchmark run before Phase 2 close-out — rejected. DEC-028 already identified the root cause as a structural memory-ceiling problem (judge model + 70B-class generator competing for the same 64GB), not a transient failure; re-pulling ~43GB to re-attempt the same contention without a structural fix (e.g., a lighter judge model) has low expected success and no time budget left in Phase 2.
+- Round the hybrid-vs-BM25 result up to a qualitative "pass" since hybrid wins on the metric more directly tied to answer completeness (recall) — rejected. The PRD criterion is unqualified ("hybrid retrieval outperforms keyword-only"), and rounding up here would repeat the same failure mode DEC-017 and DEC-024 were explicit about avoiding: reporting a convenient number instead of the actual one.
+- Treat the initial n=29/30 result (context_precision 0.4287 vs 0.4692, context_recall 0.8000 vs 0.7672) as final — rejected. One question (Q7, "What three things does the MCP documentation say you can build?") dropped to a generation-stage Ollama timeout during the `bm25_only` run, not a retrieval-quality failure. Re-ran the full comparison end-to-end with `timeout=300` (up from the 120s default) rather than hand-patching the single question's score into the aggregate, per DEC-017's precedent against manual data patching.
+
+**Reason chosen:**
+Both findings follow the same principle: report what the eval set actually shows, not what the architecture doc assumed it would show going in.
+
+*Benchmark scope:* Three-model benchmarking was always aspirational given DEC-028's identified memory ceiling. Formally closing the scope to two models — rather than leaving it open as "pending" — avoids carrying a known-unlikely-to-succeed task into Phase 3 close-out documentation as if it's still active.
+
+*Hybrid vs. BM25-only:* Ran `benchmark_retrieval.py`, a new comparison script built on top of the existing `evaluator.py`/RAGAS scoring machinery. Added a `retrieval_mode` parameter (`"hybrid"` | `"bm25_only"`) to `query_pipeline.query()`, `evaluator.py`'s `run_pipeline_for_question()`, and `build_ragas_dataset()`, defaulting to `"hybrid"` so all existing callers — including the CI-gated `evaluate_pipeline()` — are unaffected. Scored only `context_precision` and `context_recall` (retrieval-quality metrics) across both modes on the full 30-question eval set, with reranking held identical in both arms so the comparison isolates the retrieval stage specifically, not retrieval+reranking as two different pipelines.
+
+**Final result (n=30, both arms):**
+
+| Metric | Hybrid | BM25-only | Delta |
+|---|---|---|---|
+| context_precision | 0.4301 | 0.4421 | −0.0120 (hybrid worse) |
+| context_recall | 0.8000 | 0.7333 | +0.0667 (hybrid better) |
+
+The recall gap is roughly 5x the size of the precision gap. Read together with DEC-024 (context_precision is capped by fixed `top_k=5` regardless of retrieval method, not by retrieval quality itself), the more defensible interpretation is: hybrid retrieval pulls in a broader, more complete set of relevant chunks — catching material BM25's keyword-matching misses — at a small precision cost that is itself already understood to be a `top_k` artifact affecting both modes equally. This is a real, explainable tradeoff, not a failure of the hybrid approach, but it is not the unqualified "outperforms" result the PRD's §12 criterion and DEC-006's original justification implied.
+
+**Lesson:** An architectural decision being well-reasoned (DEC-006's semantic/keyword complementarity argument is still sound) is not the same as that decision being empirically validated on your specific corpus and eval set. The two are separate claims and should be logged separately — DEC-006 stays as the design rationale; DEC-031 is the empirical check against it, and they don't have to agree to both be true and worth keeping.
+
+**To revisit:** If `top_k` tuning is pursued in Phase 3/4 per DEC-024, re-run this comparison afterward — a narrower, reranker-score-gated `top_k` may close or change the precision gap in a way that's currently invisible under the fixed `top_k=5` ceiling.
+
 ---
 
 ## Decisions Pending
@@ -609,8 +650,11 @@ The following decisions are noted but not yet made. They will be logged here whe
 | Speed-tier benchmark model for Phase 3 | 3 | Gemma 3 4B likely — pull with `ollama pull gemma3` when Phase 3 begins |
 | OCR for scanned/image-only PDFs | 2+ | Deferred to Phase 3+. pypdf skips image-only pages and returns empty string. loader.py warns and skips these files. Manual conversion via macOS Preview or Acrobat as interim workaround. Tesseract OCR is the likely solution when addressed. |
 | Slide images and shapes in PPTX files | 2+ | Images and flowchart relationships are not extractable with python-pptx alone. Text inside shapes is extracted but arrow relationships and flow direction are lost. Images skipped silently. Pytesseract OCR on exported slide images is the likely solution for image text. Flowchart relationships may never be worth addressing for a RAG use case. |
-| Tune top_k / add reranker-score cutoff for context_precision | 2+ | See DEC-024. Risk of reducing context_recall if done carelessly — needs measurement, not a blind parameter change. |
+| Tune top_k / add reranker-score cutoff for context_precision | 2+ | See DEC-024. Risk of reducing context_recall if done carelessly — needs measurement, not a blind parameter change. DEC-031's hybrid-vs-BM25 comparison should be re-run after any top_k change.|
 | Evaluate PyMuPDF more broadly as extraction tier | 2+ | See DEC-023. Performed near-identically to pdfplumber on tested pages; not adopted for lack of need, not lack of merit. |
+| `test_api.py` — FastAPI integration tests for server.py | 2+ | Deferred from Phase 2. Unit coverage (chunker, citation_validator, hybrid_retriever) and manual end-to-end verification (DEC-027) exist; integration tests for `/health`, `/query`, `/index` deferred to Phase 4, where `server.py` will already be under load-testing scrutiny for observability work. |
+| Chunking strategy (size/overlap) empirical revisit | 3+ | 800/150 defaults never compared against an alternate config on the real eval set — current data confirms DEC-024's context_precision diagnosis (narrow questions vs. large docs) but doesn't test whether different chunk_size/overlap would help. Requires a second full corpus re-index + eval run — deferred as genuine Phase 3/4 scope. |
+
 ---
 
 ## What I'd Do Differently (Running Notes)
@@ -636,7 +680,8 @@ The following decisions are noted but not yet made. They will be logged here whe
 | 1.7 | July 2026 | Added DEC-024 and DEC-025 - Structured logging and reranker warmup moving to startup |
 | 1.8 | July 2026 | Added DEC-027 — Gradio UI wired to FastAPI over HTTP; citation display strategy (raw chunk ID in answer, deduped filename in Sources) |
 | 1.9 | July 2026 | Added DEC-028 through DEC-030 — Llama 3.3 70B excluded from Day 13 benchmark (memory pressure), model/timeout made runtime-configurable for benchmarking, main.py Phase 1/Phase 2 pipeline drift fixed |
-| 2.0 | July 2026 | Day 14: added pytest coverage for chunker, citation_validator, hybrid_retriever; confirmed and removed dead Phase 1 `retriever.py`, noted as a follow-up under DEC-030 |
+| 2.0 | July 2026 | Added pytest coverage for chunker, citation_validator, hybrid_retriever; confirmed and removed dead Phase 1 `retriever.py`, noted as a follow-up under DEC-030 |
+| 2.1 | July 2026 | Added DEC-031 — Llama 3.3 70B formally scoped out of model benchmark (two-model final); hybrid vs. BM25-only retrieval comparison logged as empirically mixed (recall improves, precision slightly worse), not a uniform pass against Phase 2 PRD §12's "hybrid outperforms keyword-only" criterion |
 
 ---
 

@@ -11,3 +11,4 @@ chroma_db/
 bm25_index.pkl
 reindex_log_*.txt
 logs/
+debug/

@@ -111,3 +111,11 @@ def test_rrf_k_controls_score_smoothing():
     # large k = rank barely matters = tiny gap
     assert gap_small_k > gap_large_k
     assert gap_large_k == pytest.approx(0, abs=1e-4)
+
+
+def test_rrf_uses_default_k_of_60():
+    bm25_results = [{"id": "c1", "text": "one"}]
+    vector_results = []
+    # no k passed — exercises the function's actual default
+    fused = reciprocal_rank_fusion(bm25_results, vector_results)
+    assert fused[0]["rrf_score"] == pytest.approx(1 / 61)

@@ -2,7 +2,7 @@
 
 **A six-phase production AI system built entirely on open-source models running locally on Apple Silicon. No cloud APIs. No managed services. Every architectural decision documented.**
 
-> Phase 2 of 6 — In Progress (Day 13/15)
+> Phase 2 of 6 — In Progress (Day 15/15, close-out gate pending — see Roadmap)
 
 ---
 
@@ -17,34 +17,45 @@ Each phase extends the previous one. Nothing gets thrown away.
 ## What It Does (Phase 2 — current)
 
 - Ingests 8 file formats: `.txt`, `.md`, `.pdf`, `.docx`, `.pptx`, `.xlsx`, `.csv`, `.html`
-- Hybrid retrieval: BM25 keyword search + ChromaDB semantic vector search, fused with Reciprocal Rank Fusion
+- Hybrid retrieval: BM25 keyword search + ChromaDB semantic vector search, fused with Reciprocal Rank Fusion — retrieval mode is switchable per call (`hybrid` / `bm25_only`) for A/B evaluation
 - Cross-encoder reranking on every query
 - Citation enforcement — every claim traces back to a source chunk ID, validated before the response is returned
 - FastAPI backend (`/health`, `/query`, `/index`) + Gradio web interface
 - RAGAS evaluation harness (faithfulness, answer relevancy, context precision, context recall)
 - GitHub Actions CI gate — blocks merges to `main` if faithfulness drops below 0.75
 - Structured JSON logging with per-stage latency and token counts
-- Benchmark script comparing generation models on the same eval set and hardware
+- Benchmark scripts: generation-model comparison (`benchmark.py`) and retrieval-strategy comparison (`benchmark_retrieval.py`)
 
 ## Architecture
 
-User Question
-│
-▼
-query_pipeline.py
-│
-├─► hybrid_retriever.py  (BM25 + ChromaDB, RRF fusion)
-├─► reranker.py          (cross-encoder, top-k trim)
-├─► prompt_builder.py    (system + context + question)
-├─► llm.py               (Ollama — model/timeout overridable)
-└─► citation_validator.py (verifies every cited chunk ID exists)
+```mermaid
+flowchart TD
+    A[User Question] --> B[query_pipeline.py]
+    B --> C[hybrid_retriever.py<br/>BM25 + ChromaDB, RRF fusion]
+    C --> D[reranker.py<br/>cross-encoder, top-k trim]
+    D --> E[prompt_builder.py<br/>system + context + question]
+    E --> F[llm.py<br/>Ollama — model/timeout overridable]
+    F --> G[citation_validator.py<br/>verifies every cited chunk ID exists]
+    G --> H[Answer + Sources]
 
-Entry points into the pipeline: `main.py` (terminal), `server.py` (FastAPI `/query`), `ui/app.py` (Gradio, via FastAPI), `evaluator.py` / `benchmark.py` (RAGAS scoring).
+    subgraph Entry Points
+        I[main.py — terminal]
+        J[server.py — FastAPI /query]
+        K[ui/app.py — Gradio, via FastAPI]
+        L[evaluator.py / benchmark.py / benchmark_retrieval.py — RAGAS scoring]
+    end
+
+    I --> B
+    J --> B
+    K --> J
+    L --> B
+```
 
 ---
 
 ## Project Structure
 
+```
 local-ai-stack/
 ├── docs/                                # Source documents (all 8 formats)
 ├── src/
@@ -70,7 +81,8 @@ local-ai-stack/
 │   ├── evaluation/
 │   │   ├── eval_set.json
 │   │   ├── evaluator.py
-│   │   └── benchmark.py
+│   │   ├── benchmark.py
+│   │   └── benchmark_retrieval.py
 │   └── main.py                          # Terminal Q&A loop
 ├── ui/
 │   └── app.py                           # Gradio web interface
@@ -81,10 +93,12 @@ local-ai-stack/
 │   ├── test_chunker.py
 │   ├── test_citation_validator.py
 │   └── test_hybrid_retriever.py
+├── setup.sh                             # One-command environment setup
 ├── .env
 ├── .gitignore
 ├── requirements.txt
 └── README.md
+```
 
 ---
 
@@ -112,13 +126,24 @@ local-ai-stack/
 
 Apple M1 Max · 64 GB Unified Memory · macOS
 
-All models run locally. Metal GPU acceleration via Ollama — no configuration needed. Gemma 4 26B runs at ~20–35 tokens/sec on this hardware. See `benchmark_results.json` for real numbers across model sizes (Ministral 3B, Gemma 4 26B — Llama 3.3 70B currently excluded due to memory pressure, see DEC-028).
+All models run locally. Metal GPU acceleration via Ollama — no configuration needed. Gemma 4 26B runs at ~20–35 tokens/sec on this hardware. See `benchmark_results.json` for real numbers across model sizes (Ministral 3B, Gemma 4 26B — Llama 3.3 70B excluded due to memory pressure and since removed from local disk to reclaim space, see DEC-028 and DEC-031).
 
 ---
 
 ## Setup
 
-**Prerequisites:** Ollama installed and running. Python 3.12 via pyenv.
+**One-command setup** (after installing [Ollama](https://ollama.com/download) and Python 3.12 via pyenv):
+
+```bash
+git clone https://github.com/SavyOnAI/local-ai-stack.git
+cd local-ai-stack
+chmod +x setup.sh
+./setup.sh
+```
+
+This pulls both models, creates the virtual environment, installs dependencies, and indexes any documents already in `docs/`. Add your own files to `docs/` first if you want them indexed automatically.
+
+**Manual steps** (if you'd rather run each stage yourself, or `setup.sh` doesn't fit your environment):
 
 ```bash
 # 1. Clone the repo
@@ -165,10 +190,13 @@ All config lives in `.env` — never hardcoded.
 | `DOCS_DIR` | `docs` | Folder containing source documents |
 | `TOP_K` | `5` | Number of chunks passed to the LLM per query |
 
+**Chunking defaults note:** 800/150 have never been benchmarked against an alternate configuration on the real eval set — the current numbers confirm DEC-024's context_precision diagnosis (narrow questions vs. large documents) but don't test whether a different chunk size/overlap would help. Deferred to Phase 3/4.
+
 ---
 
 ## Example
 
+```
 === local-ai-stack — RAG Pipeline ===
 Type your question and press Enter. Type 'quit' to exit.
 Loading indexes...
@@ -178,28 +206,32 @@ Answer: According to OpenAI_a_practical_guide_to_building_agents.pdf
 [chunk_47], guardrails are the mechanisms that keep agent behavior within
 defined bounds — including input validation, output filtering, and
 escalation to human review when confidence is low.
+```
 
 ---
 
 ## Known Limitations (Current — Phase 2)
 
-- context_precision capped around 0.44 — fixed `top_k=5` retrieves more chunks than a narrow question needs (DEC-024). CI-warning-level only, not build-blocking.
+- **Hybrid retrieval vs. BM25-only is a mixed result on this eval set, not a clean win.** A direct comparison (`benchmark_retrieval.py`, full n=30 run) showed hybrid *losing* on context_precision (0.4301 vs. 0.4421) and *winning* on context_recall (0.8000 vs. 0.7333). The recall gap (+0.067) is over 5x the precision gap (-0.012) — hybrid appears to trade a small precision cost for a meaningfully broader, more complete retrieval. The Phase 2 PRD §12 criterion "hybrid retrieval outperforms keyword-only" is therefore **not confirmed as a uniform win** — it's confirmed as a recall improvement with a small precision tradeoff. Hybrid retrieval remains architecturally justified independent of this result (BM25 and vector search fail on different query types — see DEC-006). Full writeup in DEC-031.
+- context_precision capped around 0.43–0.47 in both retrieval modes — fixed `top_k=5` retrieves more chunks than a narrow question needs (DEC-024). CI-warning-level only, not build-blocking.
 - OCR for scanned/image-only PDFs not implemented — pypdf/pdfplumber skip image-only pages (deferred to Phase 3+)
 - Slide images and flowchart relationships in PPTX not extracted — text only (deferred to Phase 3+)
-- Llama 3.3 70B currently excluded from benchmarking — memory pressure on 64GB during RAGAS scoring (DEC-028)
+- Llama 3.3 70B excluded from benchmarking — memory pressure on 64GB during RAGAS scoring (DEC-028); three-model benchmark formally scoped down to two models (DEC-031)
 - Self-hosted CI runner only runs when the Mac is on (DEC-022) — acceptable for a solo project
+- `setup.sh` has not yet been verified end-to-end on a clean machine — test before relying on it
 
 ---
 
 ## Testing
 
 pytest coverage as of Day 14: `chunker.py`, `citation_validator.py`, `hybrid_retriever.py`.
-Not yet covered: `bm25_index.py`, `vector_store.py`, `reranker.py`, `query_pipeline.py`,
-`server.py` (API integration tests). Run with:
+Not yet covered: `bm25_index.py`, `vector_store.py`, `reranker.py`, `query_pipeline.py`, `server.py` (API integration tests — deferred to Phase 4, see DECISIONS.md Decisions Pending)
 
-\`\`\`bash
+Run with:
+
+```bash
 python -m pytest tests/ -v
-\`\`\`
+```
 
 ---
 
@@ -208,7 +240,7 @@ python -m pytest tests/ -v
 | Phase | Name | Status |
 |-------|------|--------|
 | 1 | Local RAG Pipeline | ✅ Complete |
-| 2 | Production RAG Application | 🔄 In Progress (Day 13/15) |
+| 2 | Production RAG Application | 🔄 In Progress — Day 15, §12 success-criteria gate check pending |
 | 3 | Local SLM Benchmarking | ⬜ Planned |
 | 4 | Monitoring & Observability | ⬜ Planned |
 | 5 | Fine-Tuning with LoRA & DPO | ⬜ Planned |
@@ -257,11 +289,11 @@ A quick index of every function in the codebase. Updated as new files are added.
 | `bm25_index.py` | `build_bm25_index(chunks)` | Build BM25 keyword index from list of chunk dicts |
 | `bm25_index.py` | `save_bm25_index(index, chunks, path)` | Persist BM25 index and chunks to disk |
 | `bm25_index.py` | `load_bm25_index(path)` | Load BM25 index and chunks from disk |
-| `bm25_index.py` | `query_bm25(...)` | Search BM25 index by keyword |
-| `hybrid_retriever.py` | `reciprocal_rank_fusion(...)` | Merge BM25 and vector ranked lists using RRF scoring |
-| `hybrid_retriever.py` | `hybrid_retrieve(...)` | Run full hybrid retrieval: BM25 + vector + RRF fusion |
+| `bm25_index.py` | `query_bm25(index, chunks, query, top_k)` | Search BM25 index by keyword |
+| `hybrid_retriever.py` | `reciprocal_rank_fusion(bm25_results, vector_results, k)` | Merge BM25 and vector ranked lists using RRF scoring |
+| `hybrid_retriever.py` | `hybrid_retrieve(query, bm25_index, bm25_chunks, chroma_collection, embed_fn, top_k)` | Run full hybrid retrieval: BM25 + vector + RRF fusion |
 | `reranker.py` | `get_reranker()` | Load the cross-encoder model (warmed at startup — DEC-026) |
-| `reranker.py` | `rerank(...)` | Score and reorder candidate chunks against the query |
+| `reranker.py` | `rerank(query, candidates, top_k)` | Score and reorder candidate chunks against the query |
 
 ### src/generation/
 | File | Function | Purpose |
@@ -272,7 +304,7 @@ A quick index of every function in the codebase. Updated as new files are added.
 | `citation_validator.py` | `extract_cited_ids(response)` | Parse chunk IDs from citation brackets, including multi-ID brackets (DEC-016) |
 | `citation_validator.py` | `validate_citations(response, chunks)` | Verify every cited chunk ID exists |
 | `query_pipeline.py` | `load_indexes()` | Load BM25 index, ChromaDB collection, warm the reranker |
-| `query_pipeline.py` | `query(question, ..., model=None, timeout=120)` | Run full pipeline for one question; `model`/`timeout` optional overrides for benchmarking |
+| `query_pipeline.py` | `query(question, ..., model=None, timeout=120, retrieval_mode="hybrid")` | Run full pipeline for one question; `model`/`timeout` optional overrides for benchmarking; `retrieval_mode` selects `hybrid` or `bm25_only` for retrieval A/B testing |
 
 ### src/api/
 | File | Function | Purpose |
@@ -287,13 +319,15 @@ A quick index of every function in the codebase. Updated as new files are added.
 | `evaluator.py` | `_mean(values)` | Average RAGAS per-question scores, filtering None and NaN (DEC-017) |
 | `evaluator.py` | `build_ragas_llm()` | Wrap local Ollama model as the RAGAS judge |
 | `evaluator.py` | `load_eval_set(path)` | Load eval_set.json Q&A pairs |
-| `evaluator.py` | `run_pipeline_for_question(..., model=None, timeout=120)` | Run one question through the pipeline, return answer + contexts for RAGAS |
-| `evaluator.py` | `build_ragas_dataset(..., model=None, timeout=120)` | Run all eval questions, assemble RAGAS Dataset |
-| `evaluator.py` | `evaluate_pipeline(limit=None)` | Full CI evaluation run — gemma4:26b generation, gemma4:26b judge |
+| `evaluator.py` | `run_pipeline_for_question(..., model=None, timeout=120, retrieval_mode="hybrid")` | Run one question through the pipeline, return answer + contexts for RAGAS |
+| `evaluator.py` | `build_ragas_dataset(..., model=None, timeout=120, retrieval_mode="hybrid")` | Run all eval questions, assemble RAGAS Dataset |
+| `evaluator.py` | `evaluate_pipeline(limit=None)` | Full CI evaluation run — gemma4:26b generation, gemma4:26b judge, hybrid retrieval only |
 | `benchmark.py` | `warm_up(model_tag, ...)` | Force a model's weights into memory before timing starts |
 | `benchmark.py` | `time_model_on_eval_set(model_tag, ...)` | Time generation latency and tokens/sec per model |
 | `benchmark.py` | `score_model_with_ragas(model_tag, ...)` | Run RAGAS scoring for one model, judge fixed to gemma4:26b |
 | `benchmark.py` | `run_benchmark(limit=None)` | Full benchmark across all models in MODELS, saves incrementally, continues past per-model failures |
+| `benchmark_retrieval.py` | `score_mode(mode, eval_items, ...)` | Run the eval set through one retrieval mode, score context_precision and context_recall |
+| `benchmark_retrieval.py` | `run_comparison(limit=None)` | Full hybrid vs. bm25_only comparison, saves results to `retrieval_comparison.json` |
 
 ### src/
 | File | Function | Purpose |
@@ -328,6 +362,8 @@ Day 10 — GitHub Actions CI workflow: self-hosted runner, faithfulness gate liv
 Day 11 — Loguru structured JSON logging wired into query_pipeline.py and server.py
 Day 12 — Gradio UI built and wired to FastAPI over HTTP
 Day 13 — Benchmark script built; Ministral 3B and Gemma 4 26B benchmarked successfully, Llama 3.3 70B excluded due to memory pressure (DEC-028). Fixed llm.py/query_pipeline.py/evaluator.py to support per-call model + timeout overrides (DEC-029). Discovered and fixed main.py running stale Phase 1 pipeline since Phase 2 refactor (DEC-030).
+Day 14 — Added pytest coverage for chunker.py, citation_validator.py, and hybrid_retriever.py (10 tests + 5 tests). Deleted retriever.py (dead Phase 1 module) — history preserved in git, follow-up logged under DEC-030.
+Day 15 (in progress) — Formally scoped Llama 3.3 70B out of the model benchmark (DEC-031). Added `retrieval_mode` parameter to query_pipeline.py and evaluator.py for hybrid-vs-BM25-only comparison. Ran benchmark_retrieval.py to completion (n=30/30, after resolving one generation-stage timeout): hybrid retrieval underperforms BM25-only on context_precision (0.4301 vs 0.4421) and outperforms on context_recall (0.8000 vs 0.7333) — a mixed result, logged honestly in DEC-031 rather than checked off as a clean §12 pass. README architecture diagram and one-command setup script added. Phase 2 §12 success-criteria gate check still pending final line-by-line pass — see Roadmap.
 
 ---
 

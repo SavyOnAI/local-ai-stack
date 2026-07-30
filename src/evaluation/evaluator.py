@@ -115,6 +115,7 @@ def run_pipeline_for_question(
     collection,
     model: str | None = None,
     timeout: int = 120,
+    retrieval_mode: str = "hybrid",
 ) -> dict:
     """
     Run one question through the full RAG pipeline and return what RAGAS needs.
@@ -137,6 +138,7 @@ def run_pipeline_for_question(
         collection=collection,
         model=model,
         timeout=timeout,
+        retrieval_mode=retrieval_mode,
     )
 
     # match chunk IDs back to their text
@@ -161,6 +163,7 @@ def build_ragas_dataset(
     limit: int | None = None,
     model: str | None = None,
     timeout: int = 120,
+    retrieval_mode: str = "hybrid",
 ) -> Dataset:
     """
     Run the pipeline for every eval question and assemble a RAGAS Dataset.
@@ -195,6 +198,7 @@ def build_ragas_dataset(
                 collection=collection,
                 model=model,
                 timeout=timeout,
+                retrieval_mode=retrieval_mode,
             )
             questions.append(item["question"])
             answers.append(pipeline_result["answer"])

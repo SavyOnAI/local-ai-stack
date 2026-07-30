@@ -11,7 +11,7 @@ import json
 
 from loguru import logger
 from src.ingestion.embedder import embed_text
-from src.retrieval.bm25_index import load_bm25_index
+from src.retrieval.bm25_index import load_bm25_index, query_bm25
 from src.retrieval.vector_store import get_collection
 from src.retrieval.hybrid_retriever import hybrid_retrieve
 from src.retrieval.reranker import rerank, get_reranker
@@ -58,6 +58,7 @@ def query(
     top_k: int = 5,
     model: str | None = None,
     timeout: int = 120,
+    retrieval_mode: str = "hybrid",  # "hybrid" or "bm25_only"
 ) -> dict:
     """
     Run a single question through the full RAG pipeline.
@@ -78,14 +79,20 @@ def query(
 
     # retrieve candidates from both indexes
     stage_start = time.perf_counter()
-    candidates = hybrid_retrieve(
-        query=question,
-        bm25_index=bm25_index,
-        bm25_chunks=bm25_chunks,
-        chroma_collection=collection,
-        embed_fn=embed_text,
-        top_k=top_k * 3,  # fetch wide, reranker trims
-    )
+    if retrieval_mode == "hybrid":
+        candidates = hybrid_retrieve(
+            query=question,
+            bm25_index=bm25_index,
+            bm25_chunks=bm25_chunks,
+            chroma_collection=collection,
+            embed_fn=embed_text,
+            top_k=top_k * 3,  # fetch wide, reranker trims
+        )
+    elif retrieval_mode == "bm25_only":
+        # skip fusion entirely — pure keyword retrieval
+        candidates = query_bm25(bm25_index, bm25_chunks, question, top_k=top_k * 3)
+    else:
+        raise ValueError(f"Unknown retrieval_mode: {retrieval_mode}")
     retrieval_ms = (time.perf_counter() - stage_start) * 1000
 
     # rerank and keep best top_k
@@ -121,6 +128,7 @@ def query(
     logger.info(
         "query_complete",
         question=question,
+        retrieval_mode=retrieval_mode,
         model=model or MODEL_NAME,
         retrieval_ms=round(retrieval_ms, 1),
         rerank_ms=round(rerank_ms, 1),
