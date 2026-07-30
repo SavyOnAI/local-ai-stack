@@ -2,8 +2,10 @@
 # setup.sh — one-command environment setup for local-ai-stack
 # Usage: ./setup.sh
 #
-# NOTE: This script has not been run end-to-end against a clean machine yet.
-# Test it once before relying on it for the README's "one-command setup" claim.
+# After the script finishes, activate the venv yourself before running
+# anything — a script's venv activation does not persist into your shell
+# once it exits (bash subshell scope). The script prints this reminder
+# at the end too.
 
 set -e  # stop on first error
 
@@ -38,7 +40,15 @@ else
 fi
 
 echo ""
-echo "Setup complete. Next steps:"
+echo "Setup complete."
+echo ""
+echo "IMPORTANT: this script's virtual environment does NOT stay active in your"
+echo "shell once the script exits (bash subshell limitation — every venv-based"
+echo "setup script has this). You must activate it yourself before running anything:"
+echo ""
+echo "  source local-ai-stack-venv/bin/activate"
+echo ""
+echo "Then:"
 echo "  Terminal interface:  python -m src.main"
 echo "  API + Web UI:         uvicorn src.api.server:app --reload   (terminal 1)"
 echo "                        python ui/app.py                     (terminal 2)"
