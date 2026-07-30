@@ -28,7 +28,7 @@
 | Phase | Name | Status | Started | Completed |
 |---|---|---|---|---|
 | 1 | Local RAG Pipeline | ✅ Complete | April 2026 | April 2026 |
-| 2 | Production RAG Application | 🟡 In Progress | April 2026 | — |
+| 2 | Production RAG Application | ✅ Complete | April 2026 | July 2026 |
 | 3 | Local SLM Benchmarking | ⬜ Planned | — | — |
 | 4 | Monitoring & Observability | ⬜ Planned | — | — |
 | 5 | Fine-Tuning with LoRA & DPO | ⬜ Planned | — | — |
@@ -461,6 +461,8 @@ Root cause: several corpus PDFs (marketing-deck style exports, notably `OpenAI_a
 
 **To revisit:** Evaluate PyMuPDF (fitz) more broadly as an alternative or additional extraction tier — tested informally alongside pdfplumber for this investigation and performed near-identically on the specific pages checked, but not adopted since pdfplumber alone was sufficient and has a lighter dependency footprint. Worth a fuller comparison if extraction issues recur on future corpus additions.
 
+**Update (Day 15):** Faithfulness re-measured at 0.9056 on a full n=30 CI-equivalent run (evaluator.py --full), down from 0.9626. Still comfortably clears the 0.75 CI gate. Delta is unexplained — no corresponding code change to pdf_extractor.py, the corpus, or the judge model was made between the two measurements that would account for a ~6-point drop. Logged rather than dismissed, per DEC-017's own lesson: an unexplained metric delta is worth a paper trail even when it isn't blocking, in case it's the start of a trend visible only in hindsight. Revisit if faithfulness moves further in Phase 3.
+
 ---
 
 ### DEC-024 — context_precision Ceiling: Retrieval Specificity, Not Extraction Quality
@@ -635,6 +637,32 @@ The recall gap is roughly 5x the size of the precision gap. Read together with D
 
 ---
 
+## Phase 2 Close-Out — §12 Success Criteria Final Check
+
+**Date:** July 2026
+**Checked against:** Phase2_PRD_Production_RAG.docx §12
+
+| # | Criterion | Status | Evidence |
+|---|---|---|---|
+| 1 | Hybrid retrieval outperforms keyword-only | ⚠️ PARTIAL | DEC-031: mixed (recall +0.067, precision −0.012). Architecturally justified, not a uniform empirical win. |
+| 2 | Every response includes traceable citations | ✅ PASS | DEC-016. Failure-display path tested with synthetic data only (DEC-027), not a live case. |
+| 3 | CI blocks merges on quality regression | ✅ PASS | DEC-022. Gates `push: main` only, not PRs — correct for a solo repo. |
+| 4 | RAGAS faithfulness ≥ 0.75 | ✅ PASS | 0.9056, n=30, Day 15 full run. See DEC-023 update re: delta from 0.9626. |
+| 5 | FastAPI /query returns correct JSON with citations | ✅ PASS | Day 7 build, DEC-016, DEC-027 verification. |
+| 6 | Gradio UI usable by a non-technical person | ⚠️ PARTIAL — accepted as Phase 2 limitation | Functionally verified end-to-end (DEC-027). No non-technical user test performed; not pursued further this phase. |
+| 7 | Latency tracked per stage for every request | ✅ PASS | DEC-025, DEC-026. |
+| 8 | Benchmark documents real numbers for all model tiers | ✅ PASS — scope revised to 2 tiers | DEC-031/DEC-028. Llama 3.3 70B formally excluded, not deferred. |
+| 9 | All 8 file formats index and retrieve correctly | ✅ PASS — 1 documented exception | DEC-023: 20 bibliography pages in one PDF unrecoverable, accepted as low retrieval-value. |
+| 10 | README includes architecture diagram and one-command setup | ✅ PASS | Mermaid diagram added. `setup.sh` verified end-to-end in a genuinely clean clone on Day 15 — initial version had a venv-activation bug (script's activation doesn't persist to the parent shell); fixed and re-verified. |
+
+**Result: 8 PASS, 2 PARTIAL (documented, accepted), 0 pending, 0 fail.**
+
+Phase 2 is closed on this basis — not a clean sweep, two accepted limitations carried forward rather than resolved. Both partials (#1, #6) are candidates to revisit in Phase 3/4 if time allows, but neither blocks close-out.
+
+Note: the PRD's own §12 lists an 11th item ("You can explain every architectural decision in a 30-minute interview") — omitted here as a self-assessment criterion, not a documentation or code artifact. Not forgotten, just not a checklist line.
+
+---
+
 ## Decisions Pending
 
 The following decisions are noted but not yet made. They will be logged here when resolved.
@@ -682,6 +710,7 @@ The following decisions are noted but not yet made. They will be logged here whe
 | 1.9 | July 2026 | Added DEC-028 through DEC-030 — Llama 3.3 70B excluded from Day 13 benchmark (memory pressure), model/timeout made runtime-configurable for benchmarking, main.py Phase 1/Phase 2 pipeline drift fixed |
 | 2.0 | July 2026 | Added pytest coverage for chunker, citation_validator, hybrid_retriever; confirmed and removed dead Phase 1 `retriever.py`, noted as a follow-up under DEC-030 |
 | 2.1 | July 2026 | Added DEC-031 — Llama 3.3 70B formally scoped out of model benchmark (two-model final); hybrid vs. BM25-only retrieval comparison logged as empirically mixed (recall improves, precision slightly worse), not a uniform pass against Phase 2 PRD §12's "hybrid outperforms keyword-only" criterion |
+| 2.2 | July 2026 | Phase 2 closed — §12 final checklist (8 PASS, 2 documented PARTIAL); faithfulness delta (0.9626→0.9056) logged under DEC-023; setup.sh venv-activation bug found and fixed via clean-clone test; Phase Overview marked Complete |
 
 ---
 

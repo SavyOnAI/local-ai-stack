@@ -213,12 +213,12 @@ escalation to human review when confidence is low.
 ## Known Limitations (Current — Phase 2)
 
 - **Hybrid retrieval vs. BM25-only is a mixed result on this eval set, not a clean win.** A direct comparison (`benchmark_retrieval.py`, full n=30 run) showed hybrid *losing* on context_precision (0.4301 vs. 0.4421) and *winning* on context_recall (0.8000 vs. 0.7333). The recall gap (+0.067) is over 5x the precision gap (-0.012) — hybrid appears to trade a small precision cost for a meaningfully broader, more complete retrieval. The Phase 2 PRD §12 criterion "hybrid retrieval outperforms keyword-only" is therefore **not confirmed as a uniform win** — it's confirmed as a recall improvement with a small precision tradeoff. Hybrid retrieval remains architecturally justified independent of this result (BM25 and vector search fail on different query types — see DEC-006). Full writeup in DEC-031.
+- **Gradio UI has not been tested by a non-technical user.** Functionally verified end-to-end by the developer (grounded question, weak-retrieval case, API-down case), but §12's usability criterion specifically asks for a non-technical tester — not performed this phase, accepted as a documented limitation.
 - context_precision capped around 0.43–0.47 in both retrieval modes — fixed `top_k=5` retrieves more chunks than a narrow question needs (DEC-024). CI-warning-level only, not build-blocking.
 - OCR for scanned/image-only PDFs not implemented — pypdf/pdfplumber skip image-only pages (deferred to Phase 3+)
 - Slide images and flowchart relationships in PPTX not extracted — text only (deferred to Phase 3+)
 - Llama 3.3 70B excluded from benchmarking — memory pressure on 64GB during RAGAS scoring (DEC-028); three-model benchmark formally scoped down to two models (DEC-031)
 - Self-hosted CI runner only runs when the Mac is on (DEC-022) — acceptable for a solo project
-- `setup.sh` has not yet been verified end-to-end on a clean machine — test before relying on it
 
 ---
 
@@ -240,7 +240,7 @@ python -m pytest tests/ -v
 | Phase | Name | Status |
 |-------|------|--------|
 | 1 | Local RAG Pipeline | ✅ Complete |
-| 2 | Production RAG Application | 🔄 In Progress — Day 15, §12 success-criteria gate check pending |
+| 2 | Production RAG Application | ✅ Complete (2 documented partial items — see DECISIONS.md §12 Close-Out) |
 | 3 | Local SLM Benchmarking | ⬜ Planned |
 | 4 | Monitoring & Observability | ⬜ Planned |
 | 5 | Fine-Tuning with LoRA & DPO | ⬜ Planned |
@@ -363,7 +363,7 @@ Day 11 — Loguru structured JSON logging wired into query_pipeline.py and serve
 Day 12 — Gradio UI built and wired to FastAPI over HTTP
 Day 13 — Benchmark script built; Ministral 3B and Gemma 4 26B benchmarked successfully, Llama 3.3 70B excluded due to memory pressure (DEC-028). Fixed llm.py/query_pipeline.py/evaluator.py to support per-call model + timeout overrides (DEC-029). Discovered and fixed main.py running stale Phase 1 pipeline since Phase 2 refactor (DEC-030).
 Day 14 — Added pytest coverage for chunker.py, citation_validator.py, and hybrid_retriever.py (10 tests + 5 tests). Deleted retriever.py (dead Phase 1 module) — history preserved in git, follow-up logged under DEC-030.
-Day 15 (in progress) — Formally scoped Llama 3.3 70B out of the model benchmark (DEC-031). Added `retrieval_mode` parameter to query_pipeline.py and evaluator.py for hybrid-vs-BM25-only comparison. Ran benchmark_retrieval.py to completion (n=30/30, after resolving one generation-stage timeout): hybrid retrieval underperforms BM25-only on context_precision (0.4301 vs 0.4421) and outperforms on context_recall (0.8000 vs 0.7333) — a mixed result, logged honestly in DEC-031 rather than checked off as a clean §12 pass. README architecture diagram and one-command setup script added. Phase 2 §12 success-criteria gate check still pending final line-by-line pass — see Roadmap.
+Day 15 — Phase 2 closed. Scoped Llama 3.3 70B out of model benchmark (DEC-031). Added retrieval_mode A/B comparison (hybrid vs BM25-only) — mixed result, not a uniform win, logged honestly. Reconfirmed faithfulness gate: 0.9056 on full n=30 (down from 0.9626, unexplained, still passing — see DEC-023 update). Fixed a real bug in setup.sh (venv activation doesn't persist post-script) caught via genuine clean-clone testing. README: Mermaid architecture diagram, verified one-command setup. Ran full §12 success-criteria check: 6 PASS, 2 PARTIAL (hybrid-vs-BM25 mixed result, no non-technical UI tester available) — both accepted as documented Phase 2 limitations, not blockers.
 
 ---
 
